@@ -94,7 +94,7 @@ final class Refund_Integration {
 				'actor_type' => 'system',
 				'message'    => sprintf(
 					/* translators: %d: WooCommerce refund ID */
-					__( 'WooCommerce refund #%d completed. Withdrawal marked as refunded.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					__( 'WooCommerce refund #%d completed. Withdrawal marked as refunded.', 'eu-withdrawal-for-woocommerce' ),
 					$refund_id
 				),
 				'meta_json'  => wp_json_encode(

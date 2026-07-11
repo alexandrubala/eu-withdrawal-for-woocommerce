@@ -161,7 +161,7 @@ final class Withdrawal_Service {
 				'request_id'  => $request_id,
 				'event_type'  => 'request_submitted',
 				'actor_type'  => 'customer',
-				'message'     => __( 'Withdrawal request submitted by customer.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+				'message'     => __( 'Withdrawal request submitted by customer.', 'eu-withdrawal-for-woocommerce' ),
 				'meta_json'   => wp_json_encode(
 					array(
 						'request_uuid' => $request_uuid,
@@ -191,7 +191,7 @@ final class Withdrawal_Service {
 					'request_id' => $request_id,
 					'event_type' => 'email_failed',
 					'actor_type' => 'system',
-					'message'    => __( 'Customer confirmation email could not be sent.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					'message'    => __( 'Customer confirmation email could not be sent.', 'eu-withdrawal-for-woocommerce' ),
 				)
 			);
 		}

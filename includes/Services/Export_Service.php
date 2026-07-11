@@ -52,6 +52,7 @@ final class Export_Service {
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		$output = fopen( 'php://output', 'w' );
 
 		if ( false === $output ) {
@@ -59,21 +60,22 @@ final class Export_Service {
 		}
 
 		// UTF-8 BOM for Excel compatibility.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
 		fwrite( $output, "\xEF\xBB\xBF" );
 
 		fputcsv(
 			$output,
 			array(
-				__( 'ID', EU_WITHDRAWAL_TEXT_DOMAIN ),
-				__( 'UUID', EU_WITHDRAWAL_TEXT_DOMAIN ),
-				__( 'Customer Name', EU_WITHDRAWAL_TEXT_DOMAIN ),
-				__( 'Customer Email', EU_WITHDRAWAL_TEXT_DOMAIN ),
-				__( 'Customer Phone', EU_WITHDRAWAL_TEXT_DOMAIN ),
-				__( 'Order Number', EU_WITHDRAWAL_TEXT_DOMAIN ),
-				__( 'Status', EU_WITHDRAWAL_TEXT_DOMAIN ),
-				__( 'Reason', EU_WITHDRAWAL_TEXT_DOMAIN ),
-				__( 'Products', EU_WITHDRAWAL_TEXT_DOMAIN ),
-				__( 'Submitted At', EU_WITHDRAWAL_TEXT_DOMAIN ),
+				__( 'ID', 'eu-withdrawal-for-woocommerce' ),
+				__( 'UUID', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Customer Name', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Customer Email', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Customer Phone', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Order Number', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Status', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Reason', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Products', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Submitted At', 'eu-withdrawal-for-woocommerce' ),
 			)
 		);
 
@@ -97,6 +99,7 @@ final class Export_Service {
 			);
 		}
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		fclose( $output );
 	}
 
@@ -125,7 +128,7 @@ final class Export_Service {
 	 */
 	public function generate_print_html( array $items ): string {
 		$site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
-		$title     = __( 'Contract Withdrawals', EU_WITHDRAWAL_TEXT_DOMAIN );
+		$title     = __( 'Contract Withdrawals', 'eu-withdrawal-for-woocommerce' );
 		$generated = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ) );
 
 		ob_start();
@@ -152,7 +155,7 @@ final class Export_Service {
 </head>
 <body>
 	<div class="no-print">
-		<button type="button" onclick="window.print();"><?php esc_html_e( 'Print', EU_WITHDRAWAL_TEXT_DOMAIN ); ?></button>
+		<button type="button" onclick="window.print();"><?php esc_html_e( 'Print', 'eu-withdrawal-for-woocommerce' ); ?></button>
 	</div>
 	<h1><?php echo esc_html( $title ); ?></h1>
 	<p class="meta">
@@ -160,7 +163,7 @@ final class Export_Service {
 		echo esc_html(
 			sprintf(
 				/* translators: 1: site name, 2: generation datetime, 3: item count */
-				__( '%1$s — Generated on %2$s (%3$d requests)', EU_WITHDRAWAL_TEXT_DOMAIN ),
+				__( '%1$s — Generated on %2$s (%3$d requests)', 'eu-withdrawal-for-woocommerce' ),
 				$site_name,
 				$generated,
 				count( $items )
@@ -171,18 +174,18 @@ final class Export_Service {
 	<table>
 		<thead>
 			<tr>
-				<th><?php esc_html_e( 'ID', EU_WITHDRAWAL_TEXT_DOMAIN ); ?></th>
-				<th><?php esc_html_e( 'UUID', EU_WITHDRAWAL_TEXT_DOMAIN ); ?></th>
-				<th><?php esc_html_e( 'Customer', EU_WITHDRAWAL_TEXT_DOMAIN ); ?></th>
-				<th><?php esc_html_e( 'Order', EU_WITHDRAWAL_TEXT_DOMAIN ); ?></th>
-				<th><?php esc_html_e( 'Status', EU_WITHDRAWAL_TEXT_DOMAIN ); ?></th>
-				<th><?php esc_html_e( 'Submitted', EU_WITHDRAWAL_TEXT_DOMAIN ); ?></th>
+				<th><?php esc_html_e( 'ID', 'eu-withdrawal-for-woocommerce' ); ?></th>
+				<th><?php esc_html_e( 'UUID', 'eu-withdrawal-for-woocommerce' ); ?></th>
+				<th><?php esc_html_e( 'Customer', 'eu-withdrawal-for-woocommerce' ); ?></th>
+				<th><?php esc_html_e( 'Order', 'eu-withdrawal-for-woocommerce' ); ?></th>
+				<th><?php esc_html_e( 'Status', 'eu-withdrawal-for-woocommerce' ); ?></th>
+				<th><?php esc_html_e( 'Submitted', 'eu-withdrawal-for-woocommerce' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
 		<?php if ( empty( $items ) ) : ?>
 			<tr>
-				<td colspan="6"><?php esc_html_e( 'No withdrawal requests found.', EU_WITHDRAWAL_TEXT_DOMAIN ); ?></td>
+				<td colspan="6"><?php esc_html_e( 'No withdrawal requests found.', 'eu-withdrawal-for-woocommerce' ); ?></td>
 			</tr>
 		<?php else : ?>
 			<?php foreach ( $items as $item ) : ?>

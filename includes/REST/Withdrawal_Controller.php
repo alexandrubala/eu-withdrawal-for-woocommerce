@@ -77,7 +77,7 @@ final class Withdrawal_Controller {
 		if ( null === $withdrawal ) {
 			return new \WP_Error(
 				'eu_withdrawal_not_found',
-				__( 'Withdrawal request not found.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+				__( 'Withdrawal request not found.', 'eu-withdrawal-for-woocommerce' ),
 				array( 'status' => 404 )
 			);
 		}

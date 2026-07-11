@@ -49,6 +49,7 @@ final class Event_Repository {
 			$formats[]          = '%d';
 		}
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$result = $wpdb->insert( $tables['events'], $row, $formats );
 
 		if ( false === $result ) {
@@ -73,7 +74,8 @@ final class Event_Repository {
 
 		$tables = Schema::get_table_names();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT * FROM {$tables['events']} WHERE request_id = %d ORDER BY created_at ASC, id ASC",

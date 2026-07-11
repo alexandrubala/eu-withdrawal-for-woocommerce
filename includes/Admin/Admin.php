@@ -97,8 +97,8 @@ final class Admin {
 	public function register_menu(): void {
 		add_submenu_page(
 			'woocommerce',
-			__( 'Contract Withdrawals', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			__( 'Retrageri contract', EU_WITHDRAWAL_TEXT_DOMAIN ),
+			__( 'Contract Withdrawals', 'eu-withdrawal-for-woocommerce' ),
+			__( 'Retrageri contract', 'eu-withdrawal-for-woocommerce' ),
 			EU_WITHDRAWAL_CAPABILITY,
 			self::PAGE_SLUG,
 			array( $this, 'render_page' )
@@ -111,15 +111,15 @@ final class Admin {
 	 * @return void
 	 */
 	public function handle_status_change(): void {
-		if ( ! isset( $_POST['eu_withdrawal_change_status'] ) ) {
+		if ( ! isset( $_POST['eu_withdrawal_change_status'], $_POST['eu_withdrawal_status_nonce'], $_POST['request_id'] ) ) {
 			return;
 		}
 
 		if ( ! current_user_can( EU_WITHDRAWAL_CAPABILITY ) ) {
-			wp_die( esc_html__( 'You do not have permission to perform this action.', EU_WITHDRAWAL_TEXT_DOMAIN ) );
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'eu-withdrawal-for-woocommerce' ) );
 		}
 
-		$request_id = isset( $_POST['request_id'] ) ? absint( wp_unslash( $_POST['request_id'] ) ) : 0;
+		$request_id = absint( wp_unslash( $_POST['request_id'] ) );
 		$new_status = isset( $_POST['new_status'] ) ? sanitize_key( wp_unslash( $_POST['new_status'] ) ) : '';
 
 		if ( $request_id <= 0 ) {
@@ -180,11 +180,11 @@ final class Admin {
 			'euWithdrawalAdmin',
 			array(
 				'i18n' => array(
-					'confirmReject'   => __( 'Are you sure you want to reject this withdrawal request?', EU_WITHDRAWAL_TEXT_DOMAIN ),
-					'confirmProcessed'=> __( 'Are you sure you want to mark this request as processed?', EU_WITHDRAWAL_TEXT_DOMAIN ),
-					'confirmRefunded' => __( 'Are you sure you want to mark this request as refunded?', EU_WITHDRAWAL_TEXT_DOMAIN ),
-					'confirmPending'  => __( 'Are you sure you want to set this request back to pending?', EU_WITHDRAWAL_TEXT_DOMAIN ),
-					'confirmGeneric'  => __( 'Are you sure you want to change the status of this request?', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					'confirmReject'   => __( 'Are you sure you want to reject this withdrawal request?', 'eu-withdrawal-for-woocommerce' ),
+					'confirmProcessed'=> __( 'Are you sure you want to mark this request as processed?', 'eu-withdrawal-for-woocommerce' ),
+					'confirmRefunded' => __( 'Are you sure you want to mark this request as refunded?', 'eu-withdrawal-for-woocommerce' ),
+					'confirmPending'  => __( 'Are you sure you want to set this request back to pending?', 'eu-withdrawal-for-woocommerce' ),
+					'confirmGeneric'  => __( 'Are you sure you want to change the status of this request?', 'eu-withdrawal-for-woocommerce' ),
 				),
 			)
 		);
@@ -197,13 +197,18 @@ final class Admin {
 	 */
 	public function render_page(): void {
 		if ( ! current_user_can( EU_WITHDRAWAL_CAPABILITY ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', EU_WITHDRAWAL_TEXT_DOMAIN ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'eu-withdrawal-for-woocommerce' ) );
 		}
 
 		$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : 'list';
 
 		if ( 'view' === $action ) {
-			$request_id = isset( $_GET['request_id'] ) ? absint( wp_unslash( $_GET['request_id'] ) ) : 0;
+			if ( ! isset( $_GET['request_id'] ) ) {
+				$this->render_list_page();
+				return;
+			}
+
+			$request_id = absint( wp_unslash( $_GET['request_id'] ) );
 			$this->detail_page->render( $request_id );
 			return;
 		}
@@ -223,7 +228,7 @@ final class Admin {
 		$list_table->prepare_items();
 
 		echo '<div class="wrap eu-wd-admin">';
-		echo '<h1 class="wp-heading-inline">' . esc_html__( 'Contract Withdrawals', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</h1>';
+		echo '<h1 class="wp-heading-inline">' . esc_html__( 'Contract Withdrawals', 'eu-withdrawal-for-woocommerce' ) . '</h1>';
 		$list_table->render_export_buttons();
 		echo '<hr class="wp-header-end">';
 
@@ -231,7 +236,7 @@ final class Admin {
 
 		echo '<form method="get">';
 		echo '<input type="hidden" name="page" value="' . esc_attr( self::PAGE_SLUG ) . '">';
-		$list_table->search_box( __( 'Search Requests', EU_WITHDRAWAL_TEXT_DOMAIN ), 'eu-withdrawal-search' );
+		$list_table->search_box( __( 'Search Requests', 'eu-withdrawal-for-woocommerce' ), 'eu-withdrawal-search' );
 		$list_table->display();
 		echo '</form>';
 		echo '</div>';

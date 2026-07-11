@@ -102,7 +102,7 @@ final class Ajax {
 		if ( ! $this->check_rate_limit() ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Too many requests. Please wait and try again later.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					'message' => __( 'Too many requests. Please wait and try again later.', 'eu-withdrawal-for-woocommerce' ),
 				),
 				429
 			);
@@ -130,7 +130,7 @@ final class Ajax {
 		if ( ! $this->validate_step1_required( $fields ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Please fill in all required fields.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					'message' => __( 'Please fill in all required fields.', 'eu-withdrawal-for-woocommerce' ),
 				),
 				422
 			);
@@ -139,7 +139,7 @@ final class Ajax {
 		if ( ! is_email( $fields['email'] ) ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Please enter a valid email address.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					'message' => __( 'Please enter a valid email address.', 'eu-withdrawal-for-woocommerce' ),
 				),
 				422
 			);
@@ -150,7 +150,7 @@ final class Ajax {
 		if ( ! $order instanceof \WC_Order ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'We could not find an order matching that number and email address.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					'message' => __( 'We could not find an order matching that number and email address.', 'eu-withdrawal-for-woocommerce' ),
 				),
 				404
 			);
@@ -199,7 +199,7 @@ final class Ajax {
 		if ( ! $input instanceof Step1_Input ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Your session has expired. Please start again.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					'message' => __( 'Your session has expired. Please start again.', 'eu-withdrawal-for-woocommerce' ),
 				),
 				410
 			);
@@ -219,7 +219,7 @@ final class Ajax {
 		if ( 0 === $request_id ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'We could not save your withdrawal request. Please try again.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					'message' => __( 'We could not save your withdrawal request. Please try again.', 'eu-withdrawal-for-woocommerce' ),
 				),
 				500
 			);
@@ -265,7 +265,7 @@ final class Ajax {
 		if ( $apply_rate_limit && ! $this->check_rate_limit() ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'Too many requests. Please wait and try again later.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					'message' => __( 'Too many requests. Please wait and try again later.', 'eu-withdrawal-for-woocommerce' ),
 				),
 				429
 			);

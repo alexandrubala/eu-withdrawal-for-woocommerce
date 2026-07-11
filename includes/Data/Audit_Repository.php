@@ -53,6 +53,7 @@ final class Audit_Repository {
 			'%s',
 		);
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$result = $wpdb->insert( $tables['audit_log'], $row, $formats );
 
 		if ( false === $result ) {
@@ -72,6 +73,7 @@ final class Audit_Repository {
 
 		$tables = Schema::get_table_names();
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$hash = $wpdb->get_var(
 			"SELECT security_hash FROM {$tables['audit_log']} ORDER BY id DESC LIMIT 1"
@@ -99,7 +101,8 @@ final class Audit_Repository {
 
 		$tables = Schema::get_table_names();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$tables['audit_log']} WHERE request_uuid = %s ORDER BY id DESC LIMIT 1",

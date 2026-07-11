@@ -66,10 +66,10 @@ final class Frontend {
 				'nonce'      => wp_create_nonce( self::NONCE_ACTION ),
 				'nonceAction'=> self::NONCE_ACTION,
 				'i18n'       => array(
-					'genericError'  => __( 'Something went wrong. Please try again.', EU_WITHDRAWAL_TEXT_DOMAIN ),
-					'networkError'  => __( 'Network error. Please check your connection and try again.', EU_WITHDRAWAL_TEXT_DOMAIN ),
-					'sessionExpired'=> __( 'Your session has expired. Please start again.', EU_WITHDRAWAL_TEXT_DOMAIN ),
-					'loading'       => __( 'Processing…', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					'genericError'  => __( 'Something went wrong. Please try again.', 'eu-withdrawal-for-woocommerce' ),
+					'networkError'  => __( 'Network error. Please check your connection and try again.', 'eu-withdrawal-for-woocommerce' ),
+					'sessionExpired'=> __( 'Your session has expired. Please start again.', 'eu-withdrawal-for-woocommerce' ),
+					'loading'       => __( 'Processing…', 'eu-withdrawal-for-woocommerce' ),
 				),
 			)
 		);

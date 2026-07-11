@@ -70,8 +70,8 @@ final class Withdrawal_Detail_Page {
 
 		if ( null === $request ) {
 			echo '<div class="wrap eu-wd-admin">';
-			echo '<h1>' . esc_html__( 'Withdrawal Request', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</h1>';
-			echo '<div class="notice notice-error"><p>' . esc_html__( 'Withdrawal request not found.', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</p></div>';
+			echo '<h1>' . esc_html__( 'Withdrawal Request', 'eu-withdrawal-for-woocommerce' ) . '</h1>';
+			echo '<div class="notice notice-error"><p>' . esc_html__( 'Withdrawal request not found.', 'eu-withdrawal-for-woocommerce' ) . '</p></div>';
 			echo '</div>';
 			return;
 		}
@@ -85,22 +85,22 @@ final class Withdrawal_Detail_Page {
 		$status     = (string) ( $request['status'] ?? Withdrawal_Status::PENDING );
 
 		echo '<div class="wrap eu-wd-admin eu-wd-detail">';
-		echo '<h1 class="wp-heading-inline">' . esc_html__( 'Withdrawal Request', EU_WITHDRAWAL_TEXT_DOMAIN ) . ' #' . esc_html( (string) $request_id ) . '</h1>';
+		echo '<h1 class="wp-heading-inline">' . esc_html__( 'Withdrawal Request', 'eu-withdrawal-for-woocommerce' ) . ' #' . esc_html( (string) $request_id ) . '</h1>';
 		echo ' <span class="eu-wd-status eu-wd-status--' . esc_attr( $status ) . '">' . esc_html( Withdrawal_Status::label( $status ) ) . '</span>';
 		echo '<hr class="wp-header-end">';
 
-		if ( isset( $_GET['status_updated'] ) ) {
-			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Status updated successfully.', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</p></div>';
+		if ( isset( $_GET['status_updated'] ) && 1 === absint( wp_unslash( $_GET['status_updated'] ) ) ) {
+			echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Status updated successfully.', 'eu-withdrawal-for-woocommerce' ) . '</p></div>';
 		}
 
-		if ( isset( $_GET['status_error'] ) ) {
-			echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Could not update the request status.', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</p></div>';
+		if ( isset( $_GET['status_error'] ) && 1 === absint( wp_unslash( $_GET['status_error'] ) ) ) {
+			echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'Could not update the request status.', 'eu-withdrawal-for-woocommerce' ) . '</p></div>';
 		}
 
 		printf(
 			'<p><a href="%1$s">&larr; %2$s</a></p>',
 			esc_url( $list_url ),
-			esc_html__( 'Back to all requests', EU_WITHDRAWAL_TEXT_DOMAIN )
+			esc_html__( 'Back to all requests', 'eu-withdrawal-for-woocommerce' )
 		);
 
 		echo '<div class="eu-wd-detail__grid">';
@@ -108,32 +108,32 @@ final class Withdrawal_Detail_Page {
 		echo '<div class="eu-wd-detail__main">';
 
 		$this->render_section(
-			__( 'Customer Details', EU_WITHDRAWAL_TEXT_DOMAIN ),
+			__( 'Customer Details', 'eu-withdrawal-for-woocommerce' ),
 			array(
-				__( 'Name', EU_WITHDRAWAL_TEXT_DOMAIN )  => (string) ( $request['customer_name'] ?? '' ),
-				__( 'Email', EU_WITHDRAWAL_TEXT_DOMAIN ) => (string) ( $request['customer_email'] ?? '' ),
-				__( 'Phone', EU_WITHDRAWAL_TEXT_DOMAIN ) => (string) ( $request['customer_phone'] ?? '—' ),
+				__( 'Name', 'eu-withdrawal-for-woocommerce' )  => (string) ( $request['customer_name'] ?? '' ),
+				__( 'Email', 'eu-withdrawal-for-woocommerce' ) => (string) ( $request['customer_email'] ?? '' ),
+				__( 'Phone', 'eu-withdrawal-for-woocommerce' ) => (string) ( $request['customer_phone'] ?? '—' ),
 			)
 		);
 
 		$this->render_section(
-			__( 'Order', EU_WITHDRAWAL_TEXT_DOMAIN ),
+			__( 'Order', 'eu-withdrawal-for-woocommerce' ),
 			array(
-				__( 'Order Number', EU_WITHDRAWAL_TEXT_DOMAIN ) => $order_id > 0 && '' !== $order_url
+				__( 'Order Number', 'eu-withdrawal-for-woocommerce' ) => $order_id > 0 && '' !== $order_url
 					? sprintf(
 						'<a href="%1$s">%2$s</a>',
 						esc_url( $order_url ),
 						esc_html( (string) ( $request['order_number'] ?? '#' . $order_id ) )
 					)
 					: (string) ( $request['order_number'] ?? '—' ),
-				__( 'Submitted', EU_WITHDRAWAL_TEXT_DOMAIN ) => $this->format_datetime( (string) ( $request['submitted_at'] ?? '' ) ),
+				__( 'Submitted', 'eu-withdrawal-for-woocommerce' ) => $this->format_datetime( (string) ( $request['submitted_at'] ?? '' ) ),
 			),
 			true
 		);
 
 		if ( ! empty( $request['reason'] ) ) {
 			$this->render_section(
-				__( 'Reason', EU_WITHDRAWAL_TEXT_DOMAIN ),
+				__( 'Reason', 'eu-withdrawal-for-woocommerce' ),
 				array(
 					'' => nl2br( esc_html( (string) $request['reason'] ) ),
 				),
@@ -165,13 +165,13 @@ final class Withdrawal_Detail_Page {
 	 */
 	public function change_status( int $request_id, string $new_status ) {
 		if ( ! Withdrawal_Status::is_valid( $new_status ) ) {
-			return new \WP_Error( 'invalid_status', __( 'Invalid status.', EU_WITHDRAWAL_TEXT_DOMAIN ) );
+			return new \WP_Error( 'invalid_status', __( 'Invalid status.', 'eu-withdrawal-for-woocommerce' ) );
 		}
 
 		$request = $this->withdrawal_repository->find_by_id( $request_id );
 
 		if ( null === $request ) {
-			return new \WP_Error( 'not_found', __( 'Withdrawal request not found.', EU_WITHDRAWAL_TEXT_DOMAIN ) );
+			return new \WP_Error( 'not_found', __( 'Withdrawal request not found.', 'eu-withdrawal-for-woocommerce' ) );
 		}
 
 		$old_status = (string) ( $request['status'] ?? '' );
@@ -183,7 +183,7 @@ final class Withdrawal_Detail_Page {
 		$updated = $this->withdrawal_repository->update_status( $request_id, $new_status );
 
 		if ( ! $updated ) {
-			return new \WP_Error( 'update_failed', __( 'Could not update status.', EU_WITHDRAWAL_TEXT_DOMAIN ) );
+			return new \WP_Error( 'update_failed', __( 'Could not update status.', 'eu-withdrawal-for-woocommerce' ) );
 		}
 
 		$user_id = get_current_user_id();
@@ -196,7 +196,7 @@ final class Withdrawal_Detail_Page {
 				'actor_id'   => $user_id > 0 ? $user_id : null,
 				'message'    => sprintf(
 					/* translators: 1: old status label, 2: new status label */
-					__( 'Status changed from %1$s to %2$s.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					__( 'Status changed from %1$s to %2$s.', 'eu-withdrawal-for-woocommerce' ),
 					Withdrawal_Status::label( $old_status ),
 					Withdrawal_Status::label( $new_status )
 				),
@@ -248,19 +248,19 @@ final class Withdrawal_Detail_Page {
 	 */
 	private function render_products_section( array $products ): void {
 		echo '<div class="eu-wd-card">';
-		echo '<h2>' . esc_html__( 'Products', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</h2>';
+		echo '<h2>' . esc_html__( 'Products', 'eu-withdrawal-for-woocommerce' ) . '</h2>';
 
 		if ( empty( $products ) ) {
-			echo '<p>' . esc_html__( 'No products recorded.', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</p>';
+			echo '<p>' . esc_html__( 'No products recorded.', 'eu-withdrawal-for-woocommerce' ) . '</p>';
 			echo '</div>';
 			return;
 		}
 
 		echo '<table class="widefat striped">';
 		echo '<thead><tr>';
-		echo '<th>' . esc_html__( 'Product', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</th>';
-		echo '<th>' . esc_html__( 'SKU', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</th>';
-		echo '<th>' . esc_html__( 'Qty', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</th>';
+		echo '<th>' . esc_html__( 'Product', 'eu-withdrawal-for-woocommerce' ) . '</th>';
+		echo '<th>' . esc_html__( 'SKU', 'eu-withdrawal-for-woocommerce' ) . '</th>';
+		echo '<th>' . esc_html__( 'Qty', 'eu-withdrawal-for-woocommerce' ) . '</th>';
 		echo '</tr></thead><tbody>';
 
 		foreach ( $products as $product ) {
@@ -283,10 +283,10 @@ final class Withdrawal_Detail_Page {
 	 */
 	private function render_timeline( array $events ): void {
 		echo '<div class="eu-wd-card">';
-		echo '<h2>' . esc_html__( 'Timeline', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</h2>';
+		echo '<h2>' . esc_html__( 'Timeline', 'eu-withdrawal-for-woocommerce' ) . '</h2>';
 
 		if ( empty( $events ) ) {
-			echo '<p>' . esc_html__( 'No events recorded yet.', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</p>';
+			echo '<p>' . esc_html__( 'No events recorded yet.', 'eu-withdrawal-for-woocommerce' ) . '</p>';
 			echo '</div>';
 			return;
 		}
@@ -328,13 +328,13 @@ final class Withdrawal_Detail_Page {
 	 */
 	private function render_status_form( int $request_id, string $status ): void {
 		echo '<div class="eu-wd-card">';
-		echo '<h2>' . esc_html__( 'Change Status', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</h2>';
+		echo '<h2>' . esc_html__( 'Change Status', 'eu-withdrawal-for-woocommerce' ) . '</h2>';
 		echo '<form method="post" class="eu-wd-status-form" data-current-status="' . esc_attr( $status ) . '">';
 		wp_nonce_field( Admin::STATUS_NONCE_ACTION . '_' . $request_id, 'eu_withdrawal_status_nonce' );
 		echo '<input type="hidden" name="request_id" value="' . esc_attr( (string) $request_id ) . '">';
 		echo '<input type="hidden" name="eu_withdrawal_change_status" value="1">';
 
-		echo '<label for="eu-wd-new-status" class="screen-reader-text">' . esc_html__( 'New status', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</label>';
+		echo '<label for="eu-wd-new-status" class="screen-reader-text">' . esc_html__( 'New status', 'eu-withdrawal-for-woocommerce' ) . '</label>';
 		echo '<select name="new_status" id="eu-wd-new-status" class="widefat">';
 
 		foreach ( Withdrawal_Status::all() as $status_option ) {
@@ -349,7 +349,7 @@ final class Withdrawal_Detail_Page {
 		echo '</select>';
 		printf(
 			'<button type="submit" class="button button-primary eu-wd-status-submit" style="margin-top: 10px;">%s</button>',
-			esc_html__( 'Update Status', EU_WITHDRAWAL_TEXT_DOMAIN )
+			esc_html__( 'Update Status', 'eu-withdrawal-for-woocommerce' )
 		);
 		echo '</form>';
 		echo '</div>';
@@ -364,30 +364,30 @@ final class Withdrawal_Detail_Page {
 	 */
 	private function render_audit_section( ?array $audit, string $request_uuid ): void {
 		echo '<div class="eu-wd-card eu-wd-audit">';
-		echo '<h2>' . esc_html__( 'Audit Proof', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</h2>';
+		echo '<h2>' . esc_html__( 'Audit Proof', 'eu-withdrawal-for-woocommerce' ) . '</h2>';
 
 		if ( null === $audit ) {
-			echo '<p>' . esc_html__( 'No audit record found for this request.', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</p>';
+			echo '<p>' . esc_html__( 'No audit record found for this request.', 'eu-withdrawal-for-woocommerce' ) . '</p>';
 			echo '</div>';
 			return;
 		}
 
 		echo '<dl class="eu-wd-audit__list">';
-		echo '<dt>' . esc_html__( 'Request UUID', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</dt>';
+		echo '<dt>' . esc_html__( 'Request UUID', 'eu-withdrawal-for-woocommerce' ) . '</dt>';
 		echo '<dd><code>' . esc_html( $request_uuid ) . '</code></dd>';
 
-		echo '<dt>' . esc_html__( 'Payload Hash', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</dt>';
+		echo '<dt>' . esc_html__( 'Payload Hash', 'eu-withdrawal-for-woocommerce' ) . '</dt>';
 		echo '<dd><code class="eu-wd-hash">' . esc_html( (string) ( $audit['payload_hash'] ?? '' ) ) . '</code></dd>';
 
-		echo '<dt>' . esc_html__( 'Security Hash', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</dt>';
+		echo '<dt>' . esc_html__( 'Security Hash', 'eu-withdrawal-for-woocommerce' ) . '</dt>';
 		echo '<dd><code class="eu-wd-hash">' . esc_html( (string) ( $audit['security_hash'] ?? '' ) ) . '</code></dd>';
 
 		if ( ! empty( $audit['previous_hash'] ) ) {
-			echo '<dt>' . esc_html__( 'Previous Hash', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</dt>';
+			echo '<dt>' . esc_html__( 'Previous Hash', 'eu-withdrawal-for-woocommerce' ) . '</dt>';
 			echo '<dd><code class="eu-wd-hash">' . esc_html( (string) $audit['previous_hash'] ) . '</code></dd>';
 		}
 
-		echo '<dt>' . esc_html__( 'Recorded At', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</dt>';
+		echo '<dt>' . esc_html__( 'Recorded At', 'eu-withdrawal-for-woocommerce' ) . '</dt>';
 		echo '<dd>' . esc_html( $this->format_datetime( (string) ( $audit['recorded_at'] ?? '' ) ) ) . '</dd>';
 		echo '</dl>';
 		echo '</div>';
@@ -443,7 +443,7 @@ final class Withdrawal_Detail_Page {
 		$actor_id   = isset( $event['actor_id'] ) ? (int) $event['actor_id'] : 0;
 
 		if ( 'customer' === $actor_type ) {
-			return __( 'Actor: Customer', EU_WITHDRAWAL_TEXT_DOMAIN );
+			return __( 'Actor: Customer', 'eu-withdrawal-for-woocommerce' );
 		}
 
 		if ( 'admin' === $actor_type && $actor_id > 0 ) {
@@ -452,14 +452,14 @@ final class Withdrawal_Detail_Page {
 			if ( $user instanceof \WP_User ) {
 				return sprintf(
 					/* translators: %s: admin display name */
-					__( 'Actor: %s', EU_WITHDRAWAL_TEXT_DOMAIN ),
+					__( 'Actor: %s', 'eu-withdrawal-for-woocommerce' ),
 					$user->display_name
 				);
 			}
 		}
 
 		if ( 'system' === $actor_type ) {
-			return __( 'Actor: System', EU_WITHDRAWAL_TEXT_DOMAIN );
+			return __( 'Actor: System', 'eu-withdrawal-for-woocommerce' );
 		}
 
 		return '';
