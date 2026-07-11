@@ -14,6 +14,8 @@
  * @var array<int, array<string, mixed>> $products Order line items.
  */
 
+use EUWithdrawal\Integrations\Legal_String_Catalog;
+
 defined( 'ABSPATH' ) || exit;
 
 $request_uuid   = $request_uuid ?? '';
@@ -46,10 +48,10 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 					<tr>
 						<td style="padding:32px 32px 16px;">
 							<h1 style="margin:0 0 8px;font-size:22px;line-height:1.3;color:#111827;">
-								<?php esc_html_e( 'Withdrawal request confirmation', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+								<?php echo esc_html( Legal_String_Catalog::translate( 'email_confirmation_heading' ) ); ?>
 							</h1>
 							<p style="margin:0;font-size:15px;line-height:1.6;color:#4b5563;">
-								<?php esc_html_e( 'We have received your withdrawal declaration. Please keep this email as proof of submission.', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+								<?php echo esc_html( Legal_String_Catalog::translate( 'email_confirmation_intro' ) ); ?>
 							</p>
 						</td>
 					</tr>
@@ -58,7 +60,7 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 							<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-top:1px solid #e5e7eb;">
 								<tr>
 									<td style="padding:16px 0 8px;font-size:13px;color:#6b7280;width:40%;">
-										<?php esc_html_e( 'Request number', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+										<?php echo esc_html( Legal_String_Catalog::translate( 'request_number' ) ); ?>
 									</td>
 									<td style="padding:16px 0 8px;font-size:14px;color:#111827;font-family:monospace;">
 										<?php echo esc_html( $request_uuid ); ?>
@@ -66,7 +68,7 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 								</tr>
 								<tr>
 									<td style="padding:8px 0;font-size:13px;color:#6b7280;">
-										<?php esc_html_e( 'Order number', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+										<?php echo esc_html( Legal_String_Catalog::translate( 'order_number' ) ); ?>
 									</td>
 									<td style="padding:8px 0;font-size:14px;color:#111827;">
 										<?php echo esc_html( $order_number ); ?>
@@ -74,7 +76,7 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 								</tr>
 								<tr>
 									<td style="padding:8px 0;font-size:13px;color:#6b7280;">
-										<?php esc_html_e( 'Date', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+										<?php echo esc_html( Legal_String_Catalog::translate( 'date' ) ); ?>
 									</td>
 									<td style="padding:8px 0;font-size:14px;color:#111827;">
 										<?php echo esc_html( $date ); ?>
@@ -82,7 +84,7 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 								</tr>
 								<tr>
 									<td style="padding:8px 0;font-size:13px;color:#6b7280;">
-										<?php esc_html_e( 'Time', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+										<?php echo esc_html( Legal_String_Catalog::translate( 'time' ) ); ?>
 									</td>
 									<td style="padding:8px 0;font-size:14px;color:#111827;">
 										<?php echo esc_html( $time ); ?>
@@ -94,12 +96,12 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 					<tr>
 						<td style="padding:0 32px 24px;">
 							<h2 style="margin:0 0 12px;font-size:16px;color:#111827;">
-								<?php esc_html_e( 'Your details', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+								<?php echo esc_html( Legal_String_Catalog::translate( 'your_details' ) ); ?>
 							</h2>
 							<table role="presentation" width="100%" cellspacing="0" cellpadding="0">
 								<tr>
 									<td style="padding:6px 0;font-size:13px;color:#6b7280;width:40%;">
-										<?php esc_html_e( 'Full name', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+										<?php echo esc_html( Legal_String_Catalog::translate( 'full_name' ) ); ?>
 									</td>
 									<td style="padding:6px 0;font-size:14px;color:#111827;">
 										<?php echo esc_html( $customer_name ); ?>
@@ -107,7 +109,7 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 								</tr>
 								<tr>
 									<td style="padding:6px 0;font-size:13px;color:#6b7280;">
-										<?php esc_html_e( 'Email', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+										<?php echo esc_html( Legal_String_Catalog::translate( 'email' ) ); ?>
 									</td>
 									<td style="padding:6px 0;font-size:14px;color:#111827;">
 										<?php echo esc_html( $customer_email ); ?>
@@ -116,7 +118,7 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 								<?php if ( '' !== $customer_phone ) : ?>
 								<tr>
 									<td style="padding:6px 0;font-size:13px;color:#6b7280;">
-										<?php esc_html_e( 'Phone', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+										<?php echo esc_html( Legal_String_Catalog::translate( 'phone' ) ); ?>
 									</td>
 									<td style="padding:6px 0;font-size:14px;color:#111827;">
 										<?php echo esc_html( $customer_phone ); ?>
@@ -126,7 +128,7 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 								<?php if ( '' !== $reason ) : ?>
 								<tr>
 									<td style="padding:6px 0;font-size:13px;color:#6b7280;vertical-align:top;">
-										<?php esc_html_e( 'Reason for withdrawal', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+										<?php echo esc_html( Legal_String_Catalog::translate( 'reason_for_withdrawal' ) ); ?>
 									</td>
 									<td style="padding:6px 0;font-size:14px;color:#111827;">
 										<?php echo esc_html( $reason ); ?>
@@ -140,7 +142,7 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 					<tr>
 						<td style="padding:0 32px 24px;">
 							<h2 style="margin:0 0 12px;font-size:16px;color:#111827;">
-								<?php esc_html_e( 'Products', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+								<?php echo esc_html( Legal_String_Catalog::translate( 'products' ) ); ?>
 							</h2>
 							<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
 								<?php foreach ( $products as $product ) : ?>
@@ -166,7 +168,7 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 					<tr>
 						<td style="padding:16px 32px 32px;border-top:1px solid #e5e7eb;">
 							<p style="margin:0;font-size:14px;line-height:1.6;color:#374151;">
-								<?php esc_html_e( 'Această confirmare atestă doar primirea declarației de retragere. Veți primi instrucțiunile privind returnarea în scurt timp.', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+								<?php echo esc_html( Legal_String_Catalog::translate( 'email_legal_disclaimer' ) ); ?>
 							</p>
 						</td>
 					</tr>

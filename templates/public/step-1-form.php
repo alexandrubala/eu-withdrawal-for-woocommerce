@@ -11,6 +11,8 @@
  * @var string $reason       Reason field value.
  */
 
+use EUWithdrawal\Integrations\Legal_String_Catalog;
+
 defined( 'ABSPATH' ) || exit;
 
 $name         = $name ?? '';
@@ -20,14 +22,14 @@ $phone        = $phone ?? '';
 $reason       = $reason ?? '';
 ?>
 <form class="eu-withdrawal__form eu-withdrawal__form--step1" method="post" novalidate>
-	<h2 class="eu-withdrawal__heading"><?php esc_html_e( 'Withdrawal request', EU_WITHDRAWAL_TEXT_DOMAIN ); ?></h2>
+	<h2 class="eu-withdrawal__heading"><?php echo esc_html( Legal_String_Catalog::translate( 'withdrawal_request_heading' ) ); ?></h2>
 	<p class="eu-withdrawal__intro">
-		<?php esc_html_e( 'Enter your order details to begin the EU withdrawal process.', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+		<?php echo esc_html( Legal_String_Catalog::translate( 'withdrawal_intro' ) ); ?>
 	</p>
 
 	<p class="eu-withdrawal__field">
 		<label for="eu-withdrawal-name">
-			<?php esc_html_e( 'Full name', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+			<?php echo esc_html( Legal_String_Catalog::translate( 'full_name' ) ); ?>
 			<span class="required" aria-hidden="true">*</span>
 		</label>
 		<input
@@ -42,7 +44,7 @@ $reason       = $reason ?? '';
 
 	<p class="eu-withdrawal__field">
 		<label for="eu-withdrawal-email">
-			<?php esc_html_e( 'Email', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+			<?php echo esc_html( Legal_String_Catalog::translate( 'email' ) ); ?>
 			<span class="required" aria-hidden="true">*</span>
 		</label>
 		<input
@@ -57,7 +59,7 @@ $reason       = $reason ?? '';
 
 	<p class="eu-withdrawal__field">
 		<label for="eu-withdrawal-order-number">
-			<?php esc_html_e( 'Order number', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+			<?php echo esc_html( Legal_String_Catalog::translate( 'order_number' ) ); ?>
 			<span class="required" aria-hidden="true">*</span>
 		</label>
 		<input
@@ -72,8 +74,8 @@ $reason       = $reason ?? '';
 
 	<p class="eu-withdrawal__field">
 		<label for="eu-withdrawal-phone">
-			<?php esc_html_e( 'Phone', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
-			<span class="eu-withdrawal__optional"><?php esc_html_e( '(optional)', EU_WITHDRAWAL_TEXT_DOMAIN ); ?></span>
+			<?php echo esc_html( Legal_String_Catalog::translate( 'phone' ) ); ?>
+			<span class="eu-withdrawal__optional"><?php echo esc_html( Legal_String_Catalog::translate( 'optional' ) ); ?></span>
 		</label>
 		<input
 			type="tel"
@@ -86,8 +88,8 @@ $reason       = $reason ?? '';
 
 	<p class="eu-withdrawal__field">
 		<label for="eu-withdrawal-reason">
-			<?php esc_html_e( 'Reason for withdrawal', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
-			<span class="eu-withdrawal__optional"><?php esc_html_e( '(optional)', EU_WITHDRAWAL_TEXT_DOMAIN ); ?></span>
+			<?php echo esc_html( Legal_String_Catalog::translate( 'reason_for_withdrawal' ) ); ?>
+			<span class="eu-withdrawal__optional"><?php echo esc_html( Legal_String_Catalog::translate( 'optional' ) ); ?></span>
 		</label>
 		<textarea
 			id="eu-withdrawal-reason"
@@ -98,7 +100,7 @@ $reason       = $reason ?? '';
 
 	<p class="eu-withdrawal__actions">
 		<button type="submit" class="eu-withdrawal__submit button">
-			<?php esc_html_e( 'Continue', EU_WITHDRAWAL_TEXT_DOMAIN ); ?>
+			<?php echo esc_html( Legal_String_Catalog::translate( 'continue' ) ); ?>
 		</button>
 	</p>
 </form>
