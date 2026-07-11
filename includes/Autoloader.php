@@ -38,7 +38,10 @@ final class Autoloader {
 
 		$relative_class = substr( $class, strlen( $prefix ) );
 		$relative_path  = str_replace( '\\', '/', $relative_class ) . '.php';
-		$file           = EU_WITHDRAWAL_PATH . 'includes/' . $relative_path;
+
+		// PublicArea maps to Public/ — "Public" alone is a reserved PHP keyword.
+		$relative_path = str_replace( 'PublicArea/', 'Public/', $relative_path );
+		$file          = EU_WITHDRAWAL_PATH . 'includes/' . $relative_path;
 
 		if ( is_readable( $file ) ) {
 			require_once $file;
