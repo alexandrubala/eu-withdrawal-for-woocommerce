@@ -28,7 +28,6 @@ define( 'EU_WITHDRAWAL_PATH', plugin_dir_path( __FILE__ ) );
 define( 'EU_WITHDRAWAL_URL', plugin_dir_url( __FILE__ ) );
 define( 'EU_WITHDRAWAL_FILE', __FILE__ );
 define( 'EU_WITHDRAWAL_BASENAME', plugin_basename( __FILE__ ) );
-define( 'EU_WITHDRAWAL_TEXT_DOMAIN', 'eu-withdrawal-for-woocommerce' );
 define( 'EU_WITHDRAWAL_CAPABILITY', 'manage_eu_withdrawals' );
 define( 'EU_WITHDRAWAL_DB_VERSION', '1.0.0' );
 
@@ -44,8 +43,8 @@ register_deactivation_hook( EU_WITHDRAWAL_FILE, array( 'EUWithdrawal\Deactivator
  *
  * @return EUWithdrawal\Plugin
  */
-function eu_withdrawal(): EUWithdrawal\Plugin {
+function eu_withdrawal_for_woocommerce_init(): EUWithdrawal\Plugin {
 	return EUWithdrawal\Plugin::instance();
 }
 
-eu_withdrawal();
+eu_withdrawal_for_woocommerce_init();

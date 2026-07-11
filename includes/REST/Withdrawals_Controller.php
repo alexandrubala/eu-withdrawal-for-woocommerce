@@ -94,7 +94,7 @@ final class Withdrawals_Controller {
 		if ( '' !== $status && ! Withdrawal_Status::is_valid( $status ) ) {
 			return new \WP_Error(
 				'eu_withdrawal_invalid_status',
-				__( 'Invalid status filter.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+				__( 'Invalid status filter.', 'eu-withdrawal-for-woocommerce' ),
 				array( 'status' => 400 )
 			);
 		}

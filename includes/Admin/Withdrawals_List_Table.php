@@ -53,12 +53,12 @@ final class Withdrawals_List_Table extends \WP_List_Table {
 	 */
 	public function get_columns(): array {
 		return array(
-			'id'            => __( 'ID', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			'uuid'          => __( 'UUID', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			'customer_name' => __( 'Customer Name', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			'order'         => __( 'Order', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			'status'        => __( 'Status', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			'submitted_at'  => __( 'Date', EU_WITHDRAWAL_TEXT_DOMAIN ),
+			'id'            => __( 'ID', 'eu-withdrawal-for-woocommerce' ),
+			'uuid'          => __( 'UUID', 'eu-withdrawal-for-woocommerce' ),
+			'customer_name' => __( 'Customer Name', 'eu-withdrawal-for-woocommerce' ),
+			'order'         => __( 'Order', 'eu-withdrawal-for-woocommerce' ),
+			'status'        => __( 'Status', 'eu-withdrawal-for-woocommerce' ),
+			'submitted_at'  => __( 'Date', 'eu-withdrawal-for-woocommerce' ),
 		);
 	}
 
@@ -86,7 +86,7 @@ final class Withdrawals_List_Table extends \WP_List_Table {
 		$base_url       = admin_url( 'admin.php?page=' . Admin::PAGE_SLUG );
 		$views          = array();
 
-		$all_label = __( 'All', EU_WITHDRAWAL_TEXT_DOMAIN );
+		$all_label = __( 'All', 'eu-withdrawal-for-woocommerce' );
 		$views['all'] = sprintf(
 			'<a href="%1$s"%2$s>%3$s</a>',
 			esc_url( $base_url ),
@@ -286,13 +286,13 @@ final class Withdrawals_List_Table extends \WP_List_Table {
 		printf(
 			'<a href="%1$s" class="page-title-action">%2$s</a>',
 			esc_url( $csv_url ),
-			esc_html__( 'Export CSV', EU_WITHDRAWAL_TEXT_DOMAIN )
+			esc_html__( 'Export CSV', 'eu-withdrawal-for-woocommerce' )
 		);
 
 		printf(
 			'<a href="%1$s" class="page-title-action" target="_blank" rel="noopener noreferrer">%2$s</a>',
 			esc_url( $print_url ),
-			esc_html__( 'Print / PDF', EU_WITHDRAWAL_TEXT_DOMAIN )
+			esc_html__( 'Print / PDF', 'eu-withdrawal-for-woocommerce' )
 		);
 
 		echo '</span>';
@@ -344,7 +344,7 @@ final class Withdrawals_List_Table extends \WP_List_Table {
 	 * @return void
 	 */
 	public function no_items(): void {
-		esc_html_e( 'No withdrawal requests found.', EU_WITHDRAWAL_TEXT_DOMAIN );
+		esc_html_e( 'No withdrawal requests found.', 'eu-withdrawal-for-woocommerce' );
 	}
 
 	/**
@@ -366,7 +366,7 @@ final class Withdrawals_List_Table extends \WP_List_Table {
 			$links[] = '<li class="' . esc_attr( $class ) . '">' . $html . '</li>';
 		}
 
-		echo implode( ' | ', $links );
+		echo wp_kses_post( implode( ' | ', $links ) );
 		echo '</ul>';
 	}
 }

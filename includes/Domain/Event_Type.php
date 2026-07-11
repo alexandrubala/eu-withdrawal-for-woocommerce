@@ -27,10 +27,10 @@ final class Event_Type {
 	 */
 	public static function label( string $event_type ): string {
 		$labels = array(
-			self::REQUEST_SUBMITTED => __( 'Request submitted', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			self::EMAIL_FAILED      => __( 'Email failed', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			self::STATUS_CHANGED    => __( 'Status changed', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			self::REFUND_COMPLETED  => __( 'Refund completed', EU_WITHDRAWAL_TEXT_DOMAIN ),
+			self::REQUEST_SUBMITTED => __( 'Request submitted', 'eu-withdrawal-for-woocommerce' ),
+			self::EMAIL_FAILED      => __( 'Email failed', 'eu-withdrawal-for-woocommerce' ),
+			self::STATUS_CHANGED    => __( 'Status changed', 'eu-withdrawal-for-woocommerce' ),
+			self::REFUND_COMPLETED  => __( 'Refund completed', 'eu-withdrawal-for-woocommerce' ),
 		);
 
 		return $labels[ $event_type ] ?? ucfirst( str_replace( '_', ' ', $event_type ) );

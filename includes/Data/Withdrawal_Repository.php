@@ -58,6 +58,7 @@ final class Withdrawal_Repository {
 			'%s',
 		);
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$result = $wpdb->insert( $tables['requests'], $row, $formats );
 
 		if ( false === $result ) {
@@ -82,7 +83,8 @@ final class Withdrawal_Repository {
 
 		$tables = Schema::get_table_names();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$tables['requests']} WHERE id = %d LIMIT 1",
@@ -111,7 +113,8 @@ final class Withdrawal_Repository {
 
 		$tables = Schema::get_table_names();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$tables['requests']} WHERE uuid = %s LIMIT 1",
@@ -138,7 +141,8 @@ final class Withdrawal_Repository {
 
 		$tables = Schema::get_table_names();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$tables['requests']} WHERE order_id = %d ORDER BY id DESC LIMIT 1",
@@ -201,7 +205,9 @@ final class Withdrawal_Repository {
 
 		$where_sql = implode( ' AND ', $where );
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$count_sql = "SELECT COUNT(*) FROM {$table} WHERE {$where_sql}";
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$list_sql  = "SELECT * FROM {$table} WHERE {$where_sql} ORDER BY {$allowed_orderby[ $orderby ]} {$order} LIMIT %d OFFSET %d";
 
 		if ( ! empty( $values ) ) {

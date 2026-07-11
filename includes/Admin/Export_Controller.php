@@ -74,10 +74,12 @@ final class Export_Controller {
 		}
 
 		if ( ! current_user_can( EU_WITHDRAWAL_CAPABILITY ) ) {
-			wp_die( esc_html__( 'You do not have permission to perform this action.', EU_WITHDRAWAL_TEXT_DOMAIN ) );
+			wp_die( esc_html__( 'You do not have permission to perform this action.', 'eu-withdrawal-for-woocommerce' ) );
 		}
 
-		check_admin_referer( self::EXPORT_NONCE_ACTION, 'eu_withdrawal_export_nonce' );
+		if ( ! isset( $_GET['eu_withdrawal_export_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['eu_withdrawal_export_nonce'] ) ), self::EXPORT_NONCE_ACTION ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'eu-withdrawal-for-woocommerce' ) );
+		}
 
 		$action = sanitize_key( wp_unslash( $_GET['eu_withdrawal_action'] ) );
 

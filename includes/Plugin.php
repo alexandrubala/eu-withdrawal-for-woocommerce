@@ -85,7 +85,6 @@ final class Plugin {
 	private function register_hooks(): void {
 		add_action( 'before_woocommerce_init', array( Hpos_Compatibility::class, 'declare_compatibility' ) );
 		add_action( 'plugins_loaded', array( $this, 'on_plugins_loaded' ), 20 );
-		add_action( 'init', array( $this, 'on_init' ) );
 	}
 
 	/**
@@ -205,19 +204,6 @@ final class Plugin {
 	}
 
 	/**
-	 * General initialization (textdomain, etc.).
-	 *
-	 * @return void
-	 */
-	public function on_init(): void {
-		load_plugin_textdomain(
-			EU_WITHDRAWAL_TEXT_DOMAIN,
-			false,
-			dirname( EU_WITHDRAWAL_BASENAME ) . '/languages'
-		);
-	}
-
-	/**
 	 * Display an admin notice when WooCommerce is missing.
 	 *
 	 * @return void
@@ -231,7 +217,7 @@ final class Plugin {
 			'<div class="notice notice-error"><p>%s</p></div>',
 			esc_html__(
 				'EU Withdrawal for WooCommerce requires WooCommerce. Please activate WooCommerce to use this plugin.',
-				EU_WITHDRAWAL_TEXT_DOMAIN
+				'eu-withdrawal-for-woocommerce'
 			)
 		);
 	}

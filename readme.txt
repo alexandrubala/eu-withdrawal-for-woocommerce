@@ -1,8 +1,8 @@
 === EU Withdrawal for WooCommerce ===
 Contributors: alexandrubala
-Tags: woocommerce, eu directive, withdrawal, refund, return, compliance
+Tags: woocommerce, eu directive, withdrawal, refund, compliance
 Requires at least: 6.4
-Tested up to: 6.5
+Tested up to: 6.6
 Requires PHP: 8.0
 Stable tag: 1.0.0
 License: GPLv2 or later

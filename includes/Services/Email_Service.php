@@ -30,7 +30,7 @@ final class Email_Service {
 
 		$subject = sprintf(
 			/* translators: %s: withdrawal request UUID */
-			__( 'Withdrawal request confirmation – %s', EU_WITHDRAWAL_TEXT_DOMAIN ),
+			__( 'Withdrawal request confirmation – %s', 'eu-withdrawal-for-woocommerce' ),
 			(string) ( $template_args['request_uuid'] ?? '' )
 		);
 

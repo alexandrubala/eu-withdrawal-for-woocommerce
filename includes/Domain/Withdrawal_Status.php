@@ -41,10 +41,10 @@ final class Withdrawal_Status {
 	 */
 	public static function label( string $status ): string {
 		$labels = array(
-			self::PENDING   => __( 'Pending', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			self::PROCESSED => __( 'Processed', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			self::REJECTED  => __( 'Rejected', EU_WITHDRAWAL_TEXT_DOMAIN ),
-			self::REFUNDED  => __( 'Refunded', EU_WITHDRAWAL_TEXT_DOMAIN ),
+			self::PENDING   => __( 'Pending', 'eu-withdrawal-for-woocommerce' ),
+			self::PROCESSED => __( 'Processed', 'eu-withdrawal-for-woocommerce' ),
+			self::REJECTED  => __( 'Rejected', 'eu-withdrawal-for-woocommerce' ),
+			self::REFUNDED  => __( 'Refunded', 'eu-withdrawal-for-woocommerce' ),
 		);
 
 		return $labels[ $status ] ?? ucfirst( $status );

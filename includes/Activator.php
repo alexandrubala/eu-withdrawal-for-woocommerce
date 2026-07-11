@@ -27,9 +27,9 @@ final class Activator {
 			wp_die(
 				esc_html__(
 					'EU Withdrawal for WooCommerce requires WooCommerce. Please activate WooCommerce and try again.',
-					EU_WITHDRAWAL_TEXT_DOMAIN
+					'eu-withdrawal-for-woocommerce'
 				),
-				esc_html__( 'Missing dependency', EU_WITHDRAWAL_TEXT_DOMAIN ),
+				esc_html__( 'Missing dependency', 'eu-withdrawal-for-woocommerce' ),
 				array( 'back_link' => true )
 			);
 		}

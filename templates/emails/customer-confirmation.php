@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 /**
  * Customer withdrawal confirmation email (durable medium).
  *
@@ -152,7 +153,7 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 										echo esc_html(
 											sprintf(
 												/* translators: 1: product name, 2: quantity */
-												__( '%1$s × %2$d', EU_WITHDRAWAL_TEXT_DOMAIN ),
+												__( '%1$s × %2$d', 'eu-withdrawal-for-woocommerce' ),
 												(string) ( $product['name'] ?? '' ),
 												(int) ( $product['quantity'] ?? 0 )
 											)
