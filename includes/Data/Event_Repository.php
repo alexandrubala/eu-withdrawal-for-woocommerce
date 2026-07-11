@@ -59,6 +59,33 @@ final class Event_Repository {
 	}
 
 	/**
+	 * Fetch all events for a withdrawal request, oldest first.
+	 *
+	 * @param int $request_id Withdrawal request ID.
+	 * @return array<int, array<string, mixed>>
+	 */
+	public function find_by_request_id( int $request_id ): array {
+		if ( $request_id <= 0 ) {
+			return array();
+		}
+
+		global $wpdb;
+
+		$tables = Schema::get_table_names();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT * FROM {$tables['events']} WHERE request_id = %d ORDER BY created_at ASC, id ASC",
+				$request_id
+			),
+			ARRAY_A
+		);
+
+		return is_array( $rows ) ? $rows : array();
+	}
+
+	/**
 	 * Normalize optional string columns for database storage.
 	 *
 	 * @param mixed $value Raw value.

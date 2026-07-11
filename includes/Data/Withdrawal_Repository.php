@@ -1,6 +1,6 @@
 <?php
 /**
- * Insert-only data access for withdrawal requests.
+ * Data access for withdrawal requests.
  *
  * @package EUWithdrawal\Data
  */
@@ -65,6 +65,170 @@ final class Withdrawal_Repository {
 		}
 
 		return (int) $wpdb->insert_id;
+	}
+
+	/**
+	 * Find a withdrawal request by primary key.
+	 *
+	 * @param int $id Request ID.
+	 * @return array<string, mixed>|null
+	 */
+	public function find_by_id( int $id ): ?array {
+		if ( $id <= 0 ) {
+			return null;
+		}
+
+		global $wpdb;
+
+		$tables = Schema::get_table_names();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$tables['requests']} WHERE id = %d LIMIT 1",
+				$id
+			),
+			ARRAY_A
+		);
+
+		return is_array( $row ) ? $row : null;
+	}
+
+	/**
+	 * Find the most recent withdrawal request for an order.
+	 *
+	 * @param int $order_id WooCommerce order ID.
+	 * @return array<string, mixed>|null
+	 */
+	public function find_by_order_id( int $order_id ): ?array {
+		if ( $order_id <= 0 ) {
+			return null;
+		}
+
+		global $wpdb;
+
+		$tables = Schema::get_table_names();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$tables['requests']} WHERE order_id = %d ORDER BY id DESC LIMIT 1",
+				$order_id
+			),
+			ARRAY_A
+		);
+
+		return is_array( $row ) ? $row : null;
+	}
+
+	/**
+	 * Query withdrawal requests with pagination, filtering, and sorting.
+	 *
+	 * @param array<string, mixed> $args Query arguments.
+	 * @return array{items: array<int, array<string, mixed>>, total: int}
+	 */
+	public function query( array $args = array() ): array {
+		global $wpdb;
+
+		$tables = Schema::get_table_names();
+		$table  = $tables['requests'];
+
+		$status   = isset( $args['status'] ) ? sanitize_key( (string) $args['status'] ) : '';
+		$search   = isset( $args['search'] ) ? sanitize_text_field( (string) $args['search'] ) : '';
+		$orderby  = isset( $args['orderby'] ) ? sanitize_key( (string) $args['orderby'] ) : 'submitted_at';
+		$order    = isset( $args['order'] ) ? strtoupper( (string) $args['order'] ) : 'DESC';
+		$per_page = max( 1, (int) ( $args['per_page'] ?? 20 ) );
+		$offset   = max( 0, (int) ( $args['offset'] ?? 0 ) );
+
+		$allowed_orderby = array(
+			'id'            => 'id',
+			'customer_name' => 'customer_name',
+			'status'        => 'status',
+			'submitted_at'  => 'submitted_at',
+		);
+
+		if ( ! isset( $allowed_orderby[ $orderby ] ) ) {
+			$orderby = 'submitted_at';
+		}
+
+		$order = 'ASC' === $order ? 'ASC' : 'DESC';
+
+		$where  = array( '1=1' );
+		$values = array();
+
+		if ( '' !== $status ) {
+			$where[]  = 'status = %s';
+			$values[] = $status;
+		}
+
+		if ( '' !== $search ) {
+			$like     = '%' . $wpdb->esc_like( $search ) . '%';
+			$where[]  = '( customer_name LIKE %s OR customer_email LIKE %s OR uuid LIKE %s OR order_number LIKE %s )';
+			$values[] = $like;
+			$values[] = $like;
+			$values[] = $like;
+			$values[] = $like;
+		}
+
+		$where_sql = implode( ' AND ', $where );
+
+		$count_sql = "SELECT COUNT(*) FROM {$table} WHERE {$where_sql}";
+		$list_sql  = "SELECT * FROM {$table} WHERE {$where_sql} ORDER BY {$allowed_orderby[ $orderby ]} {$order} LIMIT %d OFFSET %d";
+
+		if ( ! empty( $values ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			$total = (int) $wpdb->get_var( $wpdb->prepare( $count_sql, ...$values ) );
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			$items = $wpdb->get_results(
+				$wpdb->prepare( $list_sql, ...array_merge( $values, array( $per_page, $offset ) ) ),
+				ARRAY_A
+			);
+		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			$total = (int) $wpdb->get_var( $count_sql );
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+			$items = $wpdb->get_results(
+				$wpdb->prepare( $list_sql, $per_page, $offset ),
+				ARRAY_A
+			);
+		}
+
+		return array(
+			'items' => is_array( $items ) ? $items : array(),
+			'total' => $total,
+		);
+	}
+
+	/**
+	 * Update the status of a withdrawal request.
+	 *
+	 * @param int    $id     Request ID.
+	 * @param string $status New status slug.
+	 * @return bool
+	 */
+	public function update_status( int $id, string $status ): bool {
+		if ( $id <= 0 || '' === $status ) {
+			return false;
+		}
+
+		global $wpdb;
+
+		$tables = Schema::get_table_names();
+		$now    = current_time( 'mysql' );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$result = $wpdb->update(
+			$tables['requests'],
+			array(
+				'status'     => $status,
+				'updated_at' => $now,
+			),
+			array( 'id' => $id ),
+			array( '%s', '%s' ),
+			array( '%d' )
+		);
+
+		return false !== $result;
 	}
 
 	/**
