@@ -10,6 +10,8 @@ namespace EUWithdrawal;
 use EUWithdrawal\PublicArea\Ajax;
 use EUWithdrawal\PublicArea\Frontend;
 use EUWithdrawal\PublicArea\Shortcode;
+use EUWithdrawal\Admin\Admin;
+use EUWithdrawal\Admin\Order_Meta_Box;
 use EUWithdrawal\Data\Audit_Repository;
 use EUWithdrawal\Data\Event_Repository;
 use EUWithdrawal\Data\Withdrawal_Repository;
@@ -19,6 +21,7 @@ use EUWithdrawal\Services\Order_Validator;
 use EUWithdrawal\Services\Session_Token_Service;
 use EUWithdrawal\Services\Withdrawal_Service;
 use EUWithdrawal\WooCommerce\Hpos_Compatibility;
+use EUWithdrawal\WooCommerce\Refund_Integration;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -40,6 +43,13 @@ final class Plugin {
 	 * @var array<string, object>
 	 */
 	private array $public_modules = array();
+
+	/**
+	 * Admin module instances.
+	 *
+	 * @var array<string, object>
+	 */
+	private array $admin_modules = array();
 
 	/**
 	 * Get the singleton instance.
@@ -84,6 +94,8 @@ final class Plugin {
 		}
 
 		$this->bootstrap_public_area();
+		$this->bootstrap_admin_area();
+		$this->bootstrap_woocommerce_integrations();
 	}
 
 	/**
@@ -111,6 +123,43 @@ final class Plugin {
 		$this->public_modules['frontend']->register_hooks();
 		$this->public_modules['shortcode']->register_hooks();
 		$this->public_modules['ajax']->register_hooks();
+	}
+
+	/**
+	 * Instantiate and register admin dashboard components.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_admin_area(): void {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$withdrawal_repository = new Withdrawal_Repository();
+		$event_repository      = new Event_Repository();
+		$audit_repository      = new Audit_Repository();
+
+		$this->admin_modules = array(
+			'admin'          => new Admin( $withdrawal_repository, $event_repository, $audit_repository ),
+			'order_meta_box' => new Order_Meta_Box( $withdrawal_repository ),
+		);
+
+		$this->admin_modules['admin']->register_hooks();
+		$this->admin_modules['order_meta_box']->register_hooks();
+	}
+
+	/**
+	 * Instantiate and register WooCommerce integration hooks.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_woocommerce_integrations(): void {
+		$refund_integration = new Refund_Integration(
+			new Withdrawal_Repository(),
+			new Event_Repository()
+		);
+
+		$refund_integration->register_hooks();
 	}
 
 	/**

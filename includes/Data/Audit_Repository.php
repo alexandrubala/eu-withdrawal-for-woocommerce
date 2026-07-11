@@ -85,6 +85,33 @@ final class Audit_Repository {
 	}
 
 	/**
+	 * Fetch the audit log entry for a request UUID.
+	 *
+	 * @param string $request_uuid Request UUID.
+	 * @return array<string, mixed>|null
+	 */
+	public function get_by_request_uuid( string $request_uuid ): ?array {
+		if ( '' === $request_uuid ) {
+			return null;
+		}
+
+		global $wpdb;
+
+		$tables = Schema::get_table_names();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$tables['audit_log']} WHERE request_uuid = %s ORDER BY id DESC LIMIT 1",
+				$request_uuid
+			),
+			ARRAY_A
+		);
+
+		return is_array( $row ) ? $row : null;
+	}
+
+	/**
 	 * Normalize optional string columns for database storage.
 	 *
 	 * @param mixed $value Raw value.
