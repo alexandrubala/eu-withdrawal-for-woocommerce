@@ -273,6 +273,72 @@ final class Withdrawals_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Render export action buttons above the list table.
+	 *
+	 * @return void
+	 */
+	public function render_export_buttons(): void {
+		$csv_url   = $this->get_export_url( Export_Controller::ACTION_EXPORT_CSV );
+		$print_url = $this->get_export_url( Export_Controller::ACTION_PRINT_VIEW );
+
+		echo '<span class="eu-wd-export-actions">';
+
+		printf(
+			'<a href="%1$s" class="page-title-action">%2$s</a>',
+			esc_url( $csv_url ),
+			esc_html__( 'Export CSV', EU_WITHDRAWAL_TEXT_DOMAIN )
+		);
+
+		printf(
+			'<a href="%1$s" class="page-title-action" target="_blank" rel="noopener noreferrer">%2$s</a>',
+			esc_url( $print_url ),
+			esc_html__( 'Print / PDF', EU_WITHDRAWAL_TEXT_DOMAIN )
+		);
+
+		echo '</span>';
+	}
+
+	/**
+	 * Build an export URL preserving current list filters.
+	 *
+	 * @param string $action Export action slug.
+	 * @return string
+	 */
+	private function get_export_url( string $action ): string {
+		$args = array(
+			'page'                         => Admin::PAGE_SLUG,
+			'eu_withdrawal_action'         => $action,
+			'eu_withdrawal_export_nonce'   => wp_create_nonce( Export_Controller::EXPORT_NONCE_ACTION ),
+		);
+
+		if ( isset( $_GET['status'] ) ) {
+			$status = sanitize_key( wp_unslash( $_GET['status'] ) );
+
+			if ( '' !== $status && Withdrawal_Status::is_valid( $status ) ) {
+				$args['status'] = $status;
+			}
+		}
+
+		if ( isset( $_REQUEST['s'] ) ) {
+			$search = sanitize_text_field( wp_unslash( $_REQUEST['s'] ) );
+
+			if ( '' !== $search ) {
+				$args['s'] = $search;
+			}
+		}
+
+		if ( isset( $_GET['orderby'] ) ) {
+			$args['orderby'] = sanitize_key( wp_unslash( $_GET['orderby'] ) );
+		}
+
+		if ( isset( $_GET['order'] ) ) {
+			$args['order'] = sanitize_key( wp_unslash( $_GET['order'] ) );
+		}
+
+		return add_query_arg( $args, admin_url( 'admin.php' ) );
+	}
+
+	/**
 	 * Message when no items exist.
 	 *
 	 * @return void

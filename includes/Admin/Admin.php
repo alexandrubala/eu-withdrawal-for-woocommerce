@@ -224,6 +224,7 @@ final class Admin {
 
 		echo '<div class="wrap eu-wd-admin">';
 		echo '<h1 class="wp-heading-inline">' . esc_html__( 'Contract Withdrawals', EU_WITHDRAWAL_TEXT_DOMAIN ) . '</h1>';
+		$list_table->render_export_buttons();
 		echo '<hr class="wp-header-end">';
 
 		$list_table->render_status_views();
