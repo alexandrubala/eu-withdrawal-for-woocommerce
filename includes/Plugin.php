@@ -7,6 +7,11 @@
 
 namespace EUWithdrawal;
 
+use EUWithdrawal\PublicArea\Ajax;
+use EUWithdrawal\PublicArea\Frontend;
+use EUWithdrawal\PublicArea\Shortcode;
+use EUWithdrawal\Services\Order_Validator;
+use EUWithdrawal\Services\Session_Token_Service;
 use EUWithdrawal\WooCommerce\Hpos_Compatibility;
 
 defined( 'ABSPATH' ) || exit;
@@ -22,6 +27,13 @@ final class Plugin {
 	 * @var Plugin|null
 	 */
 	private static ?Plugin $instance = null;
+
+	/**
+	 * Public-facing module instances.
+	 *
+	 * @var array<string, object>
+	 */
+	private array $public_modules = array();
 
 	/**
 	 * Get the singleton instance.
@@ -64,6 +76,28 @@ final class Plugin {
 			add_action( 'admin_notices', array( $this, 'woocommerce_missing_notice' ) );
 			return;
 		}
+
+		$this->bootstrap_public_area();
+	}
+
+	/**
+	 * Instantiate and register public-facing components.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_public_area(): void {
+		$session_service = new Session_Token_Service();
+		$order_validator = new Order_Validator();
+
+		$this->public_modules = array(
+			'frontend'  => new Frontend(),
+			'shortcode' => new Shortcode(),
+			'ajax'      => new Ajax( $order_validator, $session_service ),
+		);
+
+		$this->public_modules['frontend']->register_hooks();
+		$this->public_modules['shortcode']->register_hooks();
+		$this->public_modules['ajax']->register_hooks();
 	}
 
 	/**

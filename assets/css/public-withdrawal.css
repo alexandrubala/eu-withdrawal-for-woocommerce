@@ -1,0 +1,145 @@
+/**
+ * Public withdrawal flow styles.
+ */
+
+.eu-withdrawal {
+	max-width: 36rem;
+	margin: 1.5rem auto;
+	font-family: inherit;
+	line-height: 1.5;
+	color: inherit;
+}
+
+.eu-withdrawal__trigger {
+	display: inline-block;
+	cursor: pointer;
+}
+
+.eu-withdrawal__flow {
+	margin-top: 1.25rem;
+	padding: 1.5rem;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.eu-withdrawal__heading {
+	margin: 0 0 0.5rem;
+	font-size: 1.35rem;
+	font-weight: 600;
+}
+
+.eu-withdrawal__intro {
+	margin: 0 0 1.25rem;
+	color: #50575e;
+}
+
+.eu-withdrawal__field {
+	margin: 0 0 1rem;
+}
+
+.eu-withdrawal__field label {
+	display: block;
+	margin-bottom: 0.35rem;
+	font-weight: 600;
+}
+
+.eu-withdrawal__field .required {
+	color: #b32d2e;
+}
+
+.eu-withdrawal__optional {
+	font-weight: 400;
+	color: #646970;
+	font-size: 0.9em;
+}
+
+.eu-withdrawal__field input[type="text"],
+.eu-withdrawal__field input[type="email"],
+.eu-withdrawal__field input[type="tel"],
+.eu-withdrawal__field textarea {
+	width: 100%;
+	max-width: 100%;
+	padding: 0.55rem 0.65rem;
+	border: 1px solid #8c8f94;
+	border-radius: 3px;
+	box-sizing: border-box;
+}
+
+.eu-withdrawal__field textarea {
+	resize: vertical;
+	min-height: 5rem;
+}
+
+.eu-withdrawal__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	margin: 1.25rem 0 0;
+}
+
+.eu-withdrawal__summary,
+.eu-withdrawal__receipt {
+	margin: 0 0 1.25rem;
+	padding: 0;
+}
+
+.eu-withdrawal__summary-row,
+.eu-withdrawal__receipt-row {
+	display: grid;
+	grid-template-columns: minmax(8rem, 35%) 1fr;
+	gap: 0.5rem 1rem;
+	padding: 0.65rem 0;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.eu-withdrawal__summary-row:last-child,
+.eu-withdrawal__receipt-row:last-child {
+	border-bottom: 0;
+}
+
+.eu-withdrawal__summary dt,
+.eu-withdrawal__receipt dt {
+	margin: 0;
+	font-weight: 600;
+	color: #50575e;
+}
+
+.eu-withdrawal__summary dd,
+.eu-withdrawal__receipt dd {
+	margin: 0;
+}
+
+.eu-withdrawal__uuid {
+	display: inline-block;
+	padding: 0.15rem 0.35rem;
+	background: #f6f7f7;
+	border-radius: 3px;
+	font-size: 0.95em;
+	word-break: break-all;
+}
+
+.eu-withdrawal__messages {
+	margin-top: 1rem;
+	padding: 0.75rem 1rem;
+	border-left: 4px solid #b32d2e;
+	background: #fcf0f1;
+	color: #1d2327;
+}
+
+.eu-withdrawal__messages[hidden] {
+	display: none !important;
+}
+
+.eu-withdrawal.is-loading .eu-withdrawal__submit,
+.eu-withdrawal.is-loading .eu-withdrawal__confirm {
+	opacity: 0.65;
+	pointer-events: none;
+}
+
+@media (max-width: 480px) {
+	.eu-withdrawal__summary-row,
+	.eu-withdrawal__receipt-row {
+		grid-template-columns: 1fr;
+	}
+}
