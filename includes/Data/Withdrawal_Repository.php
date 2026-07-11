@@ -95,6 +95,35 @@ final class Withdrawal_Repository {
 	}
 
 	/**
+	 * Find a withdrawal request by its public UUID.
+	 *
+	 * @param string $uuid Request UUID.
+	 * @return array<string, mixed>|null
+	 */
+	public function find_by_uuid( string $uuid ): ?array {
+		$uuid = sanitize_text_field( $uuid );
+
+		if ( '' === $uuid || ! wp_is_uuid( $uuid ) ) {
+			return null;
+		}
+
+		global $wpdb;
+
+		$tables = Schema::get_table_names();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT * FROM {$tables['requests']} WHERE uuid = %s LIMIT 1",
+				$uuid
+			),
+			ARRAY_A
+		);
+
+		return is_array( $row ) ? $row : null;
+	}
+
+	/**
 	 * Find the most recent withdrawal request for an order.
 	 *
 	 * @param int $order_id WooCommerce order ID.

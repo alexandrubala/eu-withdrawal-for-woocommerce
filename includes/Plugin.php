@@ -14,12 +14,15 @@ use EUWithdrawal\PublicArea\Ajax;
 use EUWithdrawal\PublicArea\Frontend;
 use EUWithdrawal\PublicArea\Shortcode;
 use EUWithdrawal\Admin\Admin;
+use EUWithdrawal\Admin\Export_Controller;
 use EUWithdrawal\Admin\Order_Meta_Box;
 use EUWithdrawal\Data\Audit_Repository;
 use EUWithdrawal\Data\Event_Repository;
 use EUWithdrawal\Data\Withdrawal_Repository;
+use EUWithdrawal\REST\Rest_Bootstrap;
 use EUWithdrawal\Security\Audit_Hash;
 use EUWithdrawal\Services\Email_Service;
+use EUWithdrawal\Services\Export_Service;
 use EUWithdrawal\Services\Order_Validator;
 use EUWithdrawal\Services\Session_Token_Service;
 use EUWithdrawal\Services\Withdrawal_Service;
@@ -97,6 +100,7 @@ final class Plugin {
 		}
 
 		$this->bootstrap_public_area();
+		$this->bootstrap_rest_api();
 		$this->bootstrap_admin_area();
 		$this->bootstrap_woocommerce_integrations();
 		$this->bootstrap_blocks();
@@ -131,6 +135,16 @@ final class Plugin {
 	}
 
 	/**
+	 * Instantiate and register REST API endpoints.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_rest_api(): void {
+		$rest_bootstrap = new Rest_Bootstrap( new Withdrawal_Repository() );
+		$rest_bootstrap->register_hooks();
+	}
+
+	/**
 	 * Instantiate and register admin dashboard components.
 	 *
 	 * @return void
@@ -143,13 +157,16 @@ final class Plugin {
 		$withdrawal_repository = new Withdrawal_Repository();
 		$event_repository      = new Event_Repository();
 		$audit_repository      = new Audit_Repository();
+		$export_service        = new Export_Service( $withdrawal_repository );
 
 		$this->admin_modules = array(
-			'admin'          => new Admin( $withdrawal_repository, $event_repository, $audit_repository ),
-			'order_meta_box' => new Order_Meta_Box( $withdrawal_repository ),
+			'admin'             => new Admin( $withdrawal_repository, $event_repository, $audit_repository ),
+			'export_controller' => new Export_Controller( $export_service ),
+			'order_meta_box'    => new Order_Meta_Box( $withdrawal_repository ),
 		);
 
 		$this->admin_modules['admin']->register_hooks();
+		$this->admin_modules['export_controller']->register_hooks();
 		$this->admin_modules['order_meta_box']->register_hooks();
 	}
 
