@@ -11,6 +11,7 @@ use EUWithdrawal\Domain\Step1_Input;
 use EUWithdrawal\Services\Order_Validator;
 use EUWithdrawal\Services\Session_Token_Service;
 use EUWithdrawal\Services\Uuid_Generator;
+use EUWithdrawal\Services\Withdrawal_Service;
 use EUWithdrawal\Utils\Sanitizer;
 use EUWithdrawal\Utils\Template_Loader;
 
@@ -51,17 +52,27 @@ final class Ajax {
 	private Session_Token_Service $session_service;
 
 	/**
+	 * Withdrawal submission service.
+	 *
+	 * @var Withdrawal_Service
+	 */
+	private Withdrawal_Service $withdrawal_service;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param Order_Validator       $order_validator  Order validator.
-	 * @param Session_Token_Service $session_service  Session storage.
+	 * @param Order_Validator       $order_validator       Order validator.
+	 * @param Session_Token_Service $session_service       Session storage.
+	 * @param Withdrawal_Service    $withdrawal_service    Submission orchestrator.
 	 */
 	public function __construct(
 		Order_Validator $order_validator,
-		Session_Token_Service $session_service
+		Session_Token_Service $session_service,
+		Withdrawal_Service $withdrawal_service
 	) {
-		$this->order_validator = $order_validator;
-		$this->session_service = $session_service;
+		$this->order_validator    = $order_validator;
+		$this->session_service    = $session_service;
+		$this->withdrawal_service = $withdrawal_service;
 	}
 
 	/**
@@ -173,7 +184,7 @@ final class Ajax {
 	}
 
 	/**
-	 * Process Step 2 final confirmation (simulated persistence for Phase 2).
+	 * Process Step 2 final confirmation and persist the withdrawal request.
 	 *
 	 * @return void
 	 */
@@ -197,8 +208,32 @@ final class Ajax {
 		$request_uuid = Uuid_Generator::generate();
 		$submitted_at = current_time( 'mysql' );
 
-		// Phase 3 will persist to custom tables and write the audit log.
-		do_action( 'eu_withdrawal_request_submitted', $input, $request_uuid, $submitted_at );
+		$request_id = $this->withdrawal_service->submit(
+			$input,
+			$request_uuid,
+			$submitted_at,
+			$this->get_client_ip(),
+			$this->get_user_agent()
+		);
+
+		if ( 0 === $request_id ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'We could not save your withdrawal request. Please try again.', EU_WITHDRAWAL_TEXT_DOMAIN ),
+				),
+				500
+			);
+		}
+
+		/**
+		 * Fires after a withdrawal request has been persisted successfully.
+		 *
+		 * @param Step1_Input $input        Step 1 form data.
+		 * @param string      $request_uuid Generated request UUID.
+		 * @param string      $submitted_at MySQL datetime of submission.
+		 * @param int         $request_id   Inserted request row ID.
+		 */
+		do_action( 'eu_withdrawal_request_submitted', $input, $request_uuid, $submitted_at, $request_id );
 
 		$this->session_service->delete( $token );
 
@@ -275,6 +310,19 @@ final class Ajax {
 		}
 
 		return $ip;
+	}
+
+	/**
+	 * Resolve the client user agent string.
+	 *
+	 * @return string
+	 */
+	private function get_user_agent(): string {
+		if ( empty( $_SERVER['HTTP_USER_AGENT'] ) ) {
+			return '';
+		}
+
+		return sanitize_text_field( wp_unslash( (string) $_SERVER['HTTP_USER_AGENT'] ) );
 	}
 
 	/**

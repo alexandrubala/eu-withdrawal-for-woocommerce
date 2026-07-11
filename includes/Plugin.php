@@ -10,8 +10,14 @@ namespace EUWithdrawal;
 use EUWithdrawal\PublicArea\Ajax;
 use EUWithdrawal\PublicArea\Frontend;
 use EUWithdrawal\PublicArea\Shortcode;
+use EUWithdrawal\Data\Audit_Repository;
+use EUWithdrawal\Data\Event_Repository;
+use EUWithdrawal\Data\Withdrawal_Repository;
+use EUWithdrawal\Security\Audit_Hash;
+use EUWithdrawal\Services\Email_Service;
 use EUWithdrawal\Services\Order_Validator;
 use EUWithdrawal\Services\Session_Token_Service;
+use EUWithdrawal\Services\Withdrawal_Service;
 use EUWithdrawal\WooCommerce\Hpos_Compatibility;
 
 defined( 'ABSPATH' ) || exit;
@@ -86,13 +92,20 @@ final class Plugin {
 	 * @return void
 	 */
 	private function bootstrap_public_area(): void {
-		$session_service = new Session_Token_Service();
-		$order_validator = new Order_Validator();
+		$session_service    = new Session_Token_Service();
+		$order_validator    = new Order_Validator();
+		$withdrawal_service = new Withdrawal_Service(
+			new Withdrawal_Repository(),
+			new Audit_Repository(),
+			new Event_Repository(),
+			new Audit_Hash(),
+			new Email_Service()
+		);
 
 		$this->public_modules = array(
 			'frontend'  => new Frontend(),
 			'shortcode' => new Shortcode(),
-			'ajax'      => new Ajax( $order_validator, $session_service ),
+			'ajax'      => new Ajax( $order_validator, $session_service, $withdrawal_service ),
 		);
 
 		$this->public_modules['frontend']->register_hooks();
