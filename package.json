@@ -1,0 +1,13 @@
+{
+	"name": "eu-withdrawal-for-woocommerce",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Build toolchain for EU Withdrawal Gutenberg blocks.",
+	"scripts": {
+		"build": "wp-scripts build --webpack-copy-php",
+		"start": "wp-scripts start --webpack-copy-php"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^30.14.0"
+	}
+}

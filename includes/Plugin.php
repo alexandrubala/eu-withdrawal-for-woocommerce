@@ -7,6 +7,9 @@
 
 namespace EUWithdrawal;
 
+use EUWithdrawal\Blocks\Block_Registry;
+use EUWithdrawal\Integrations\Polylang;
+use EUWithdrawal\Integrations\Wpml;
 use EUWithdrawal\PublicArea\Ajax;
 use EUWithdrawal\PublicArea\Frontend;
 use EUWithdrawal\PublicArea\Shortcode;
@@ -96,6 +99,8 @@ final class Plugin {
 		$this->bootstrap_public_area();
 		$this->bootstrap_admin_area();
 		$this->bootstrap_woocommerce_integrations();
+		$this->bootstrap_blocks();
+		$this->bootstrap_integrations();
 	}
 
 	/**
@@ -160,6 +165,26 @@ final class Plugin {
 		);
 
 		$refund_integration->register_hooks();
+	}
+
+	/**
+	 * Instantiate and register Gutenberg blocks.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_blocks(): void {
+		$block_registry = new Block_Registry();
+		$block_registry->register_hooks();
+	}
+
+	/**
+	 * Instantiate multilingual integration hooks.
+	 *
+	 * @return void
+	 */
+	private function bootstrap_integrations(): void {
+		( new Wpml() )->register_hooks();
+		( new Polylang() )->register_hooks();
 	}
 
 	/**

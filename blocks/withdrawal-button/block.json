@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "eu-withdrawal/withdrawal-button",
+	"version": "1.0.0",
+	"title": "Retragere Contract",
+	"category": "woocommerce",
+	"icon": "shield",
+	"description": "Afișează butonul și formularul de retragere din contract conform directivei UE.",
+	"keywords": [ "withdrawal", "retragere", "woocommerce", "EU", "contract" ],
+	"textdomain": "eu-withdrawal-for-woocommerce",
+	"attributes": {
+		"label": {
+			"type": "string",
+			"default": "Request withdrawal"
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ]
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

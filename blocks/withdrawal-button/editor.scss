@@ -1,0 +1,25 @@
+/**
+ * Editor-only styles for the withdrawal button block placeholder.
+ *
+ * @package EUWithdrawal
+ */
+
+.eu-withdrawal-block-editor {
+	border: 1px dashed #c3c4c7;
+	border-radius: 4px;
+	padding: 1.5rem;
+	text-align: center;
+	background: #f6f7f7;
+}
+
+.eu-withdrawal-block-editor__preview {
+	pointer-events: none;
+	margin-bottom: 0.75rem;
+}
+
+.eu-withdrawal-block-editor__notice {
+	margin: 0;
+	color: #646970;
+	font-size: 0.875rem;
+	font-style: italic;
+}

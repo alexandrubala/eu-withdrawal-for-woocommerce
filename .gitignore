@@ -2,4 +2,5 @@
 *.log
 /vendor/
 /node_modules/
+blocks/**/build/
 *.zip
