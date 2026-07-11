@@ -108,6 +108,33 @@ Each request detail page also shows the full **audit log** with payload and secu
 
 **Yes.** After a customer confirms their withdrawal, the plugin sends an HTML **confirmation email** to the billing email address on the order. The email includes the unique request UUID, submission timestamp, and withdrawal details—supporting the **durable medium** requirement for confirmation of receipt.
 
+== Privacy ==
+
+This plugin processes and stores personal data solely to support your compliance obligations under **Article 11a of Directive (EU) 2023/2673**. The following describes how that data is handled.
+
+= What data is stored =
+
+When a customer submits a withdrawal request, the plugin may store:
+
+* **Name** — from the order billing details
+* **Email address** — from the order billing details, used to identify the customer and send confirmation
+* **IP address** — captured at submission for abuse prevention and audit integrity
+* **Order number** — to link the withdrawal request to the originating WooCommerce order
+
+All such data is stored **exclusively in your WordPress site's local database**, in a dedicated custom audit table designed to be immutable and tamper-evident (HMAC audit log).
+
+= Purpose of processing =
+
+Data is collected and retained **strictly for legal compliance** with Article 11a of Directive (EU) 2023/2673, which requires traders to provide an electronic means for consumers to exercise the right of withdrawal. The stored records serve as **legal evidence** of the withdrawal request and its receipt, including timestamps and cryptographic audit entries suitable for demonstrating compliance to supervisory authorities or in dispute resolution.
+
+= Third-party services and telemetry =
+
+This plugin **does not transmit any personal data to external servers**. It does not connect to third-party APIs, analytics platforms, or remote services for data processing.
+
+There is **no tracking or telemetry**—the plugin does not collect usage statistics, send diagnostic data, or phone home in any form.
+
+All personal data remains **100% under the control of the online store owner** on the server where WordPress is installed. Data is not shared with the plugin author or any other party unless you explicitly choose to export it (e.g. CSV export from the admin dashboard).
+
 == Screenshots ==
 
 1. Frontend withdrawal form — Step 1 order lookup and legal withdrawal statement displayed to the customer.
