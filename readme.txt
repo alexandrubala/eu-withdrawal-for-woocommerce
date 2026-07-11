@@ -1,5 +1,5 @@
 === EU Withdrawal for WooCommerce ===
-Contributors: your-wp-org-username
+Contributors: alexandrubala
 Tags: woocommerce, eu directive, withdrawal, refund, return, compliance
 Requires at least: 6.4
 Tested up to: 6.5
