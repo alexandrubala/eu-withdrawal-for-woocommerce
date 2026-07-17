@@ -84,7 +84,24 @@ final class Plugin {
 	 */
 	private function register_hooks(): void {
 		add_action( 'before_woocommerce_init', array( Hpos_Compatibility::class, 'declare_compatibility' ) );
+		add_action( 'init', array( $this, 'load_textdomain' ) );
 		add_action( 'plugins_loaded', array( $this, 'on_plugins_loaded' ), 20 );
+	}
+
+	/**
+	 * Load the plugin translation files.
+	 *
+	 * Translations are resolved from wp-content/languages/plugins/ first, then
+	 * from the bundled /languages directory declared via the Domain Path header.
+	 *
+	 * @return void
+	 */
+	public function load_textdomain(): void {
+		load_plugin_textdomain(
+			'eu-withdrawal-for-woocommerce',
+			false,
+			dirname( EU_WITHDRAWAL_BASENAME ) . '/languages'
+		);
 	}
 
 	/**
