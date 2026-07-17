@@ -1,0 +1,493 @@
+# Copyright (C) 2026 EU Withdrawal for WooCommerce
+# This file is distributed under the same license as the EU Withdrawal for WooCommerce package.
+msgid ""
+msgstr ""
+"Project-Id-Version: EU Withdrawal for WooCommerce 1.0.0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Language-Team: Alexandru Bala\n"
+"Last-Translator: Alexandru Bala\n"
+"POT-Creation-Date: 2026-07-17 19:10+0000\n"
+"Report-Msgid-Bugs-To: https://github.com/alexandrubala/eu-withdrawal-for-woocommerce\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:1,2,3c;_x:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../includes/Activator.php:28
+msgid "EU Withdrawal for WooCommerce requires WooCommerce. Please activate WooCommerce and try again."
+msgstr ""
+
+#: ../includes/Activator.php:32
+msgid "Missing dependency"
+msgstr ""
+
+#: ../includes/Plugin.php:218
+msgid "EU Withdrawal for WooCommerce requires WooCommerce. Please activate WooCommerce to use this plugin."
+msgstr ""
+
+#: ../includes/Admin/Admin.php:100, ../includes/Admin/Admin.php:231, ../includes/Services/Export_Service.php:131
+msgid "Contract Withdrawals"
+msgstr ""
+
+#: ../includes/Admin/Admin.php:101
+msgid "Retrageri contract"
+msgstr ""
+
+#: ../includes/Admin/Admin.php:119, ../includes/Admin/Export_Controller.php:77
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: ../includes/Admin/Admin.php:183
+msgid "Are you sure you want to reject this withdrawal request?"
+msgstr ""
+
+#: ../includes/Admin/Admin.php:184
+msgid "Are you sure you want to mark this request as processed?"
+msgstr ""
+
+#: ../includes/Admin/Admin.php:185
+msgid "Are you sure you want to mark this request as refunded?"
+msgstr ""
+
+#: ../includes/Admin/Admin.php:186
+msgid "Are you sure you want to set this request back to pending?"
+msgstr ""
+
+#: ../includes/Admin/Admin.php:187
+msgid "Are you sure you want to change the status of this request?"
+msgstr ""
+
+#: ../includes/Admin/Admin.php:200
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: ../includes/Admin/Admin.php:239
+msgid "Search Requests"
+msgstr ""
+
+#: ../includes/Admin/Export_Controller.php:81
+msgid "Security check failed."
+msgstr ""
+
+#: ../includes/Admin/Order_Meta_Box.php:67
+msgid "Contract Withdrawal"
+msgstr ""
+
+#: ../includes/Admin/Order_Meta_Box.php:85
+msgid "Unable to determine order ID."
+msgstr ""
+
+#: ../includes/Admin/Order_Meta_Box.php:92
+msgid "No withdrawal request is linked to this order."
+msgstr ""
+
+#: ../includes/Admin/Order_Meta_Box.php:108
+msgid "Request"
+msgstr ""
+
+#: ../includes/Admin/Order_Meta_Box.php:109, ../includes/Admin/Withdrawals_List_Table.php:60, ../includes/Services/Export_Service.php:75, ../includes/Services/Export_Service.php:181
+msgid "Status"
+msgstr ""
+
+#: ../includes/Admin/Order_Meta_Box.php:111, ../includes/Services/Export_Service.php:179
+msgid "Customer"
+msgstr ""
+
+#: ../includes/Admin/Order_Meta_Box.php:112, ../includes/Admin/Withdrawal_Detail_Page.php:129, ../includes/Services/Export_Service.php:182
+msgid "Submitted"
+msgstr ""
+
+#: ../includes/Admin/Order_Meta_Box.php:116
+msgid "View Withdrawal Details"
+msgstr ""
+
+#: ../includes/Admin/Withdrawals_List_Table.php:56, ../includes/Services/Export_Service.php:69, ../includes/Services/Export_Service.php:177
+msgid "ID"
+msgstr ""
+
+#: ../includes/Admin/Withdrawals_List_Table.php:57, ../includes/Services/Export_Service.php:70, ../includes/Services/Export_Service.php:178
+msgid "UUID"
+msgstr ""
+
+#: ../includes/Admin/Withdrawals_List_Table.php:58, ../includes/Services/Export_Service.php:71
+msgid "Customer Name"
+msgstr ""
+
+#: ../includes/Admin/Withdrawals_List_Table.php:59, ../includes/Admin/Withdrawal_Detail_Page.php:120, ../includes/Services/Export_Service.php:180
+msgid "Order"
+msgstr ""
+
+#: ../includes/Admin/Withdrawals_List_Table.php:61, ../includes/Integrations/Legal_String_Catalog.php:45
+msgid "Date"
+msgstr ""
+
+#: ../includes/Admin/Withdrawals_List_Table.php:89
+msgid "All"
+msgstr ""
+
+#: ../includes/Admin/Withdrawals_List_Table.php:289
+msgid "Export CSV"
+msgstr ""
+
+#: ../includes/Admin/Withdrawals_List_Table.php:295
+msgid "Print / PDF"
+msgstr ""
+
+#: ../includes/Admin/Withdrawals_List_Table.php:347, ../includes/Services/Export_Service.php:188
+msgid "No withdrawal requests found."
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:73, ../includes/Admin/Withdrawal_Detail_Page.php:88
+msgid "Withdrawal Request"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:74, ../includes/Admin/Withdrawal_Detail_Page.php:174, ../includes/REST/Withdrawal_Controller.php:80
+msgid "Withdrawal request not found."
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:93
+msgid "Status updated successfully."
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:97
+msgid "Could not update the request status."
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:103
+msgid "Back to all requests"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:111
+msgid "Customer Details"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:113
+msgid "Name"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:114, ../includes/Integrations/Legal_String_Catalog.php:33
+msgid "Email"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:115, ../includes/Integrations/Legal_String_Catalog.php:35
+msgid "Phone"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:122, ../includes/Services/Export_Service.php:74
+msgid "Order Number"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:136, ../includes/Services/Export_Service.php:76
+msgid "Reason"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:168
+msgid "Invalid status."
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:186
+msgid "Could not update status."
+msgstr ""
+
+#. translators: 1: old status label, 2: new status label
+#: ../includes/Admin/Withdrawal_Detail_Page.php:199
+msgid "Status changed from %1$s to %2$s."
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:251, ../includes/Integrations/Legal_String_Catalog.php:51, ../includes/Services/Export_Service.php:77
+msgid "Products"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:254
+msgid "No products recorded."
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:261
+msgid "Product"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:262
+msgid "SKU"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:263
+msgid "Qty"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:286
+msgid "Timeline"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:289
+msgid "No events recorded yet."
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:331
+msgid "Change Status"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:337
+msgid "New status"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:352
+msgid "Update Status"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:367
+msgid "Audit Proof"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:370
+msgid "No audit record found for this request."
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:376
+msgid "Request UUID"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:379
+msgid "Payload Hash"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:382
+msgid "Security Hash"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:386
+msgid "Previous Hash"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:390
+msgid "Recorded At"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:446
+msgid "Actor: Customer"
+msgstr ""
+
+#. translators: %s: admin display name
+#: ../includes/Admin/Withdrawal_Detail_Page.php:455
+msgid "Actor: %s"
+msgstr ""
+
+#: ../includes/Admin/Withdrawal_Detail_Page.php:462
+msgid "Actor: System"
+msgstr ""
+
+#: ../includes/Domain/Event_Type.php:30
+msgid "Request submitted"
+msgstr ""
+
+#: ../includes/Domain/Event_Type.php:31
+msgid "Email failed"
+msgstr ""
+
+#: ../includes/Domain/Event_Type.php:32
+msgid "Status changed"
+msgstr ""
+
+#: ../includes/Domain/Event_Type.php:33
+msgid "Refund completed"
+msgstr ""
+
+#: ../includes/Domain/Withdrawal_Status.php:44
+msgid "Pending"
+msgstr ""
+
+#: ../includes/Domain/Withdrawal_Status.php:45
+msgid "Processed"
+msgstr ""
+
+#: ../includes/Domain/Withdrawal_Status.php:46
+msgid "Rejected"
+msgstr ""
+
+#: ../includes/Domain/Withdrawal_Status.php:47
+msgid "Refunded"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:29, ../blocks/withdrawal-button/edit.js:19
+msgid "Request withdrawal"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:30
+msgid "Withdrawal request"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:31
+msgid "Enter your order details to begin the EU withdrawal process."
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:32
+msgid "Full name"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:34
+msgid "Order number"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:36
+msgid "(optional)"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:37
+msgid "Reason for withdrawal"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:38
+msgid "Continue"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:39
+msgid "Confirm your withdrawal"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:40
+msgid "Please review your details before submitting the withdrawal request."
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:41
+msgid "Back"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:42
+msgid "Confirm withdrawal"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:43
+msgid "Withdrawal request received"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:44
+msgid "Your withdrawal request has been submitted successfully."
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:46
+msgid "Time"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:47
+msgid "Request number"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:48
+msgid "Withdrawal request confirmation"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:49
+msgid "We have received your withdrawal declaration. Please keep this email as proof of submission."
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:50
+msgid "Your details"
+msgstr ""
+
+#: ../includes/Integrations/Legal_String_Catalog.php:52
+msgid "This confirmation attests only to the receipt of the withdrawal declaration. You will receive return instructions shortly."
+msgstr ""
+
+#: ../includes/Public/Ajax.php:106, ../includes/Public/Ajax.php:269
+msgid "Too many requests. Please wait and try again later."
+msgstr ""
+
+#: ../includes/Public/Ajax.php:134
+msgid "Please fill in all required fields."
+msgstr ""
+
+#: ../includes/Public/Ajax.php:143
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: ../includes/Public/Ajax.php:154
+msgid "We could not find an order matching that number and email address."
+msgstr ""
+
+#: ../includes/Public/Ajax.php:203, ../includes/Public/Frontend.php:71
+msgid "Your session has expired. Please start again."
+msgstr ""
+
+#: ../includes/Public/Ajax.php:223
+msgid "We could not save your withdrawal request. Please try again."
+msgstr ""
+
+#: ../includes/Public/Frontend.php:69
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: ../includes/Public/Frontend.php:70
+msgid "Network error. Please check your connection and try again."
+msgstr ""
+
+#: ../includes/Public/Frontend.php:72
+msgid "Processing…"
+msgstr ""
+
+#: ../includes/REST/Withdrawals_Controller.php:97
+msgid "Invalid status filter."
+msgstr ""
+
+#. translators: %s: withdrawal request UUID
+#: ../includes/Services/Email_Service.php:33
+msgid "Withdrawal request confirmation – %s"
+msgstr ""
+
+#: ../includes/Services/Export_Service.php:72
+msgid "Customer Email"
+msgstr ""
+
+#: ../includes/Services/Export_Service.php:73
+msgid "Customer Phone"
+msgstr ""
+
+#: ../includes/Services/Export_Service.php:78
+msgid "Submitted At"
+msgstr ""
+
+#: ../includes/Services/Export_Service.php:158
+msgid "Print"
+msgstr ""
+
+#. translators: 1: site name, 2: generation datetime, 3: item count
+#: ../includes/Services/Export_Service.php:166
+msgid "%1$s — Generated on %2$s (%3$d requests)"
+msgstr ""
+
+#: ../includes/Services/Withdrawal_Service.php:164
+msgid "Withdrawal request submitted by customer."
+msgstr ""
+
+#: ../includes/Services/Withdrawal_Service.php:194
+msgid "Customer confirmation email could not be sent."
+msgstr ""
+
+#. translators: %d: WooCommerce refund ID
+#: ../includes/WooCommerce/Refund_Integration.php:97
+msgid "WooCommerce refund #%d completed. Withdrawal marked as refunded."
+msgstr ""
+
+#. translators: 1: product name, 2: quantity
+#: ../templates/emails/customer-confirmation.php:156
+msgid "%1$s × %2$d"
+msgstr ""
+
+#: ../blocks/withdrawal-button/edit.js:26
+msgid "Settings"
+msgstr ""
+
+#: ../blocks/withdrawal-button/edit.js:32
+msgid "Button label"
+msgstr ""
+
+#: ../blocks/withdrawal-button/edit.js:40
+msgid "Text displayed on the withdrawal trigger button."
+msgstr ""
+
+#: ../blocks/withdrawal-button/edit.js:56
+msgid "Formularul de retragere va fi afișat aici pe frontend."
+msgstr ""
