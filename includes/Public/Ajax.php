@@ -102,9 +102,9 @@ final class Ajax {
 		if ( ! $this->check_rate_limit() ) {
 			wp_send_json_error(
 				array(
+					'code'    => 'rate_limited',
 					'message' => __( 'Too many requests. Please wait and try again later.', 'eu-withdrawal-for-woocommerce' ),
-				),
-				429
+				)
 			);
 		}
 
@@ -130,18 +130,18 @@ final class Ajax {
 		if ( ! $this->validate_step1_required( $fields ) ) {
 			wp_send_json_error(
 				array(
+					'code'    => 'missing_fields',
 					'message' => __( 'Please fill in all required fields.', 'eu-withdrawal-for-woocommerce' ),
-				),
-				422
+				)
 			);
 		}
 
 		if ( ! is_email( $fields['email'] ) ) {
 			wp_send_json_error(
 				array(
+					'code'    => 'invalid_email',
 					'message' => __( 'Please enter a valid email address.', 'eu-withdrawal-for-woocommerce' ),
-				),
-				422
+				)
 			);
 		}
 
@@ -150,9 +150,9 @@ final class Ajax {
 		if ( ! $order instanceof \WC_Order ) {
 			wp_send_json_error(
 				array(
+					'code'    => 'order_not_found',
 					'message' => __( 'We could not find an order matching that number and email address.', 'eu-withdrawal-for-woocommerce' ),
-				),
-				404
+				)
 			);
 		}
 
@@ -199,9 +199,9 @@ final class Ajax {
 		if ( ! $input instanceof Step1_Input ) {
 			wp_send_json_error(
 				array(
+					'code'    => 'session_expired',
 					'message' => __( 'Your session has expired. Please start again.', 'eu-withdrawal-for-woocommerce' ),
-				),
-				410
+				)
 			);
 		}
 
@@ -219,9 +219,9 @@ final class Ajax {
 		if ( 0 === $request_id ) {
 			wp_send_json_error(
 				array(
+					'code'    => 'save_failed',
 					'message' => __( 'We could not save your withdrawal request. Please try again.', 'eu-withdrawal-for-woocommerce' ),
-				),
-				500
+				)
 			);
 		}
 
@@ -265,9 +265,9 @@ final class Ajax {
 		if ( $apply_rate_limit && ! $this->check_rate_limit() ) {
 			wp_send_json_error(
 				array(
+					'code'    => 'rate_limited',
 					'message' => __( 'Too many requests. Please wait and try again later.', 'eu-withdrawal-for-woocommerce' ),
-				),
-				429
+				)
 			);
 
 			return false;
