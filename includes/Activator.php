@@ -39,6 +39,7 @@ final class Activator {
 		self::ensure_audit_secret();
 
 		update_option( 'eu_withdrawal_db_version', EU_WITHDRAWAL_DB_VERSION );
+		update_option( 'eu_withdrawal_flush_rewrites', '1' );
 
 		flush_rewrite_rules();
 	}

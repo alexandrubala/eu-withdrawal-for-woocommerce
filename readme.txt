@@ -4,7 +4,7 @@ Tags: woocommerce, eu directive, withdrawal, refund, compliance
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,10 +144,19 @@ All personal data remains **100% under the control of the online store owner** o
 
 == Changelog ==
 
+= 1.1.0 =
+* Multi-step return / refund flow with product selection, images, and attributes.
+* Configurable return window, courier instructions, and IBAN collection in WooCommerce settings.
+* My Account endpoint for logged-in customers; shortcode remains fully available for guests.
+* Hardened AJAX JSON handling to avoid cryptic parse errors on server HTML responses.
+
 = 1.0.0 =
 * Initial release. Fully compliant with EU Directive 2023/2673 Article 11a.
 
 == Upgrade Notice ==
+
+= 1.1.0 =
+Adds return/refund UX, settings, and My Account integration. Re-save permalinks if the My Account menu item 404s.
 
 = 1.0.0 =
 Initial public release. Install to add EU Art. 11a withdrawal compliance to your WooCommerce store.

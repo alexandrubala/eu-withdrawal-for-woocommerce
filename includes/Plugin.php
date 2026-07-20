@@ -16,8 +16,10 @@ use EUWithdrawal\PublicArea\Shortcode;
 use EUWithdrawal\Admin\Admin;
 use EUWithdrawal\Admin\Export_Controller;
 use EUWithdrawal\Admin\Order_Meta_Box;
+use EUWithdrawal\Admin\Settings_Page;
 use EUWithdrawal\Data\Audit_Repository;
 use EUWithdrawal\Data\Event_Repository;
+use EUWithdrawal\Data\Schema;
 use EUWithdrawal\Data\Withdrawal_Repository;
 use EUWithdrawal\REST\Rest_Bootstrap;
 use EUWithdrawal\Security\Audit_Hash;
@@ -27,6 +29,7 @@ use EUWithdrawal\Services\Order_Validator;
 use EUWithdrawal\Services\Session_Token_Service;
 use EUWithdrawal\Services\Withdrawal_Service;
 use EUWithdrawal\WooCommerce\Hpos_Compatibility;
+use EUWithdrawal\WooCommerce\My_Account;
 use EUWithdrawal\WooCommerce\Refund_Integration;
 
 defined( 'ABSPATH' ) || exit;
@@ -115,6 +118,9 @@ final class Plugin {
 			return;
 		}
 
+		Schema::maybe_upgrade();
+		My_Account::maybe_flush_rewrites();
+
 		$this->bootstrap_public_area();
 		$this->bootstrap_rest_api();
 		$this->bootstrap_admin_area();
@@ -179,11 +185,13 @@ final class Plugin {
 			'admin'             => new Admin( $withdrawal_repository, $event_repository, $audit_repository ),
 			'export_controller' => new Export_Controller( $export_service ),
 			'order_meta_box'    => new Order_Meta_Box( $withdrawal_repository ),
+			'settings_page'     => new Settings_Page(),
 		);
 
 		$this->admin_modules['admin']->register_hooks();
 		$this->admin_modules['export_controller']->register_hooks();
 		$this->admin_modules['order_meta_box']->register_hooks();
+		$this->admin_modules['settings_page']->register_hooks();
 	}
 
 	/**
@@ -198,6 +206,9 @@ final class Plugin {
 		);
 
 		$refund_integration->register_hooks();
+
+		$my_account = new My_Account();
+		$my_account->register_hooks();
 	}
 
 	/**

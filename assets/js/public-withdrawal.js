@@ -1,5 +1,5 @@
 /**
- * Public withdrawal flow – AJAX step handler.
+ * Public withdrawal / return flow – AJAX step handler.
  */
 (function () {
 	'use strict';
@@ -22,6 +22,33 @@
 	var step3Container = app.querySelector('.eu-withdrawal__step--3');
 	var messages = app.querySelector('.eu-withdrawal__messages');
 	var nonce = config.nonce || '';
+	var detailsHtmlCache = '';
+
+	/**
+	 * Parse a fetch response as JSON with a clear error when HTML is returned.
+	 *
+	 * @param {Response} response Fetch response.
+	 * @return {Promise<Object>}
+	 */
+	function parseJsonResponse(response) {
+		return response.text().then(function (text) {
+			var trimmed = (text || '').trim();
+
+			if (!trimmed) {
+				throw new Error(config.i18n.genericError);
+			}
+
+			if (trimmed.charAt(0) === '<') {
+				throw new Error(config.i18n.serverError || config.i18n.genericError);
+			}
+
+			try {
+				return JSON.parse(trimmed);
+			} catch (error) {
+				throw new Error(config.i18n.serverError || config.i18n.genericError);
+			}
+		});
+	}
 
 	/**
 	 * POST to admin-ajax.php and parse JSON.
@@ -49,9 +76,7 @@
 			method: 'POST',
 			credentials: 'same-origin',
 			body: body
-		}).then(function (response) {
-			return response.json();
-		});
+		}).then(parseJsonResponse);
 	}
 
 	/**
@@ -99,9 +124,7 @@
 			credentials: 'same-origin',
 			body: body
 		})
-			.then(function (response) {
-				return response.json();
-			})
+			.then(parseJsonResponse)
 			.then(function (data) {
 				if (data && data.success && data.data && data.data.nonce) {
 					nonce = data.data.nonce;
@@ -127,12 +150,38 @@
 		});
 	}
 
+	/**
+	 * Toggle IBAN / courier panels based on request type selection.
+	 *
+	 * @param {HTMLElement} root Details form root.
+	 */
+	function syncRequestTypePanels(root) {
+		var selected = root.querySelector('input[name="request_type"]:checked');
+		var type = selected ? selected.value : '';
+		var ibanPanel = root.querySelector('.eu-withdrawal__iban-panel');
+		var courierPanel = root.querySelector('.eu-withdrawal__courier-panel');
+
+		if (ibanPanel) {
+			ibanPanel.hidden = type !== 'refund';
+		}
+
+		if (courierPanel) {
+			courierPanel.hidden = type !== 'return';
+		}
+	}
+
 	if (trigger && flow) {
 		trigger.addEventListener('click', function () {
 			trigger.hidden = true;
 			flow.hidden = false;
 			showStep(1);
 		});
+	}
+
+	// Auto-open flow when triggered from My Account (no button).
+	if (!trigger && flow) {
+		flow.hidden = false;
+		showStep(1);
 	}
 
 	var step1Form = app.querySelector('.eu-withdrawal__form--step1');
@@ -153,6 +202,7 @@
 						);
 					}
 
+					detailsHtmlCache = data.data.html;
 					step2Container.innerHTML = data.data.html;
 					showStep(2);
 					bindStep2Events();
@@ -167,15 +217,69 @@
 	}
 
 	/**
-	 * Bind confirm/back handlers for dynamically injected Step 2 markup.
+	 * Bind handlers for details + confirm markup injected into step 2.
 	 */
 	function bindStep2Events() {
+		var detailsForm = step2Container.querySelector('.eu-withdrawal__form--details');
 		var confirmForm = step2Container.querySelector('.eu-withdrawal__form--confirm');
 		var backButton = step2Container.querySelector('.eu-withdrawal__back');
+
+		if (detailsForm) {
+			syncRequestTypePanels(detailsForm);
+
+			detailsForm.querySelectorAll('input[name="request_type"]').forEach(function (radio) {
+				radio.addEventListener('change', function () {
+					syncRequestTypePanels(detailsForm);
+				});
+			});
+
+			detailsForm.addEventListener('submit', function (event) {
+				event.preventDefault();
+				hideError();
+
+				var checkedProducts = detailsForm.querySelectorAll(
+					'input[name="product_items[]"]:checked'
+				);
+
+				if (!checkedProducts.length) {
+					showError(config.i18n.selectProduct || config.i18n.genericError);
+					return;
+				}
+
+				setLoading(true);
+
+				var formData = new FormData(detailsForm);
+
+				request('eu_withdrawal_details', formData)
+					.then(function (data) {
+						if (!data || !data.success) {
+							throw new Error(
+								(data && data.data && data.data.message) || config.i18n.genericError
+							);
+						}
+
+						step2Container.innerHTML = data.data.html;
+						bindStep2Events();
+					})
+					.catch(function (error) {
+						showError(error.message || config.i18n.networkError);
+					})
+					.finally(function () {
+						setLoading(false);
+					});
+			});
+		}
 
 		if (backButton) {
 			backButton.addEventListener('click', function () {
 				hideError();
+
+				if (confirmForm && detailsHtmlCache) {
+					step2Container.innerHTML = detailsHtmlCache;
+					bindStep2Events();
+					return;
+				}
+
 				showStep(1);
 			});
 		}

@@ -11,6 +11,7 @@ use EUWithdrawal\Data\Audit_Repository;
 use EUWithdrawal\Data\Event_Repository;
 use EUWithdrawal\Data\Withdrawal_Repository;
 use EUWithdrawal\Domain\Event_Type;
+use EUWithdrawal\Domain\Request_Type;
 use EUWithdrawal\Domain\Withdrawal_Status;
 use EUWithdrawal\WooCommerce\Hpos_Compatibility;
 
@@ -115,6 +116,32 @@ final class Withdrawal_Detail_Page {
 				__( 'Phone', 'eu-withdrawal-for-woocommerce' ) => (string) ( $request['customer_phone'] ?? '—' ),
 			)
 		);
+
+		$request_type = (string) ( $request['request_type'] ?? Request_Type::REFUND );
+		$iban         = (string) ( $request['refund_iban'] ?? '' );
+		$request_fields = array(
+			__( 'Type', 'eu-withdrawal-for-woocommerce' ) => Request_Type::label( $request_type ),
+		);
+
+		if ( Request_Type::REFUND === $request_type ) {
+			$request_fields[ __( 'IBAN', 'eu-withdrawal-for-woocommerce' ) ] = '' !== $iban ? $this->mask_iban( $iban ) : '—';
+			$request_fields[ __( 'Account holder', 'eu-withdrawal-for-woocommerce' ) ] = (string) ( $request['refund_account_name'] ?? '—' );
+		}
+
+		$this->render_section(
+			__( 'Request', 'eu-withdrawal-for-woocommerce' ),
+			$request_fields
+		);
+
+		if ( ! empty( $request['courier_notes'] ) ) {
+			$this->render_section(
+				__( 'Courier / return instructions', 'eu-withdrawal-for-woocommerce' ),
+				array(
+					'' => nl2br( esc_html( (string) $request['courier_notes'] ) ),
+				),
+				true
+			);
+		}
 
 		$this->render_section(
 			__( 'Order', 'eu-withdrawal-for-woocommerce' ),
@@ -260,19 +287,59 @@ final class Withdrawal_Detail_Page {
 		echo '<thead><tr>';
 		echo '<th>' . esc_html__( 'Product', 'eu-withdrawal-for-woocommerce' ) . '</th>';
 		echo '<th>' . esc_html__( 'SKU', 'eu-withdrawal-for-woocommerce' ) . '</th>';
+		echo '<th>' . esc_html__( 'Price', 'eu-withdrawal-for-woocommerce' ) . '</th>';
 		echo '<th>' . esc_html__( 'Qty', 'eu-withdrawal-for-woocommerce' ) . '</th>';
 		echo '</tr></thead><tbody>';
 
 		foreach ( $products as $product ) {
+			$attrs = '';
+			if ( ! empty( $product['attributes'] ) && is_array( $product['attributes'] ) ) {
+				$parts = array();
+				foreach ( $product['attributes'] as $label => $value ) {
+					$parts[] = esc_html( (string) $label ) . ': ' . esc_html( (string) $value );
+				}
+				$attrs = '<br><small>' . implode( ' · ', $parts ) . '</small>';
+			}
+
+			$image = '';
+			if ( ! empty( $product['image'] ) ) {
+				$image = sprintf(
+					'<img src="%1$s" alt="" width="40" height="40" style="vertical-align:middle;margin-right:8px;border-radius:4px;" />',
+					esc_url( (string) $product['image'] )
+				);
+			}
+
+			$price = isset( $product['price_html'] )
+				? wp_kses_post( (string) $product['price_html'] )
+				: ( isset( $product['price'] ) ? wc_price( (float) $product['price'] ) : '—' );
+
 			echo '<tr>';
-			echo '<td>' . esc_html( (string) ( $product['name'] ?? '' ) ) . '</td>';
+			echo '<td>' . $image . esc_html( (string) ( $product['name'] ?? '' ) ) . $attrs . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo '<td>' . esc_html( (string) ( $product['sku'] ?? '—' ) ) . '</td>';
+			echo '<td>' . $price . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo '<td>' . esc_html( (string) ( $product['quantity'] ?? '' ) ) . '</td>';
 			echo '</tr>';
 		}
 
 		echo '</tbody></table>';
 		echo '</div>';
+	}
+
+	/**
+	 * Mask an IBAN for list/detail display (keep country + last 4).
+	 *
+	 * @param string $iban Full IBAN.
+	 * @return string
+	 */
+	private function mask_iban( string $iban ): string {
+		$iban = strtoupper( preg_replace( '/\s+/', '', $iban ) ?? '' );
+		$len  = strlen( $iban );
+
+		if ( $len <= 8 ) {
+			return $iban;
+		}
+
+		return substr( $iban, 0, 4 ) . str_repeat( '•', max( 0, $len - 8 ) ) . substr( $iban, -4 );
 	}
 
 	/**
