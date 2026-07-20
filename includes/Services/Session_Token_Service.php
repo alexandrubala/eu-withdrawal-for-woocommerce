@@ -67,6 +67,31 @@ final class Session_Token_Service {
 	}
 
 	/**
+	 * Update an existing session payload (extends TTL).
+	 *
+	 * @param string      $token Session token.
+	 * @param Step1_Input $input Updated payload.
+	 * @return bool
+	 */
+	public function update( string $token, Step1_Input $input ): bool {
+		$token = sanitize_text_field( $token );
+
+		if ( '' === $token ) {
+			return false;
+		}
+
+		$key = self::TRANSIENT_PREFIX . $token;
+
+		if ( false === get_transient( $key ) ) {
+			return false;
+		}
+
+		set_transient( $key, $input->to_array(), self::TTL );
+
+		return true;
+	}
+
+	/**
 	 * Remove a session transient after successful completion.
 	 *
 	 * @param string $token Session token.

@@ -8,7 +8,7 @@
  * Plugin Name:       EU Withdrawal for WooCommerce
  * Plugin URI:        https://github.com/alexandrubala/eu-withdrawal-for-woocommerce
  * Description:       EU Directive 2023/2673 Art. 11a compliant withdrawal flow for WooCommerce stores.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Requires at least: 6.4
  * Requires PHP:      8.0
  * Author:            Alexandru Bala
@@ -23,13 +23,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'EU_WITHDRAWAL_VERSION', '1.0.0' );
+define( 'EU_WITHDRAWAL_VERSION', '1.1.0' );
 define( 'EU_WITHDRAWAL_PATH', plugin_dir_path( __FILE__ ) );
 define( 'EU_WITHDRAWAL_URL', plugin_dir_url( __FILE__ ) );
 define( 'EU_WITHDRAWAL_FILE', __FILE__ );
 define( 'EU_WITHDRAWAL_BASENAME', plugin_basename( __FILE__ ) );
 define( 'EU_WITHDRAWAL_CAPABILITY', 'manage_eu_withdrawals' );
-define( 'EU_WITHDRAWAL_DB_VERSION', '1.0.0' );
+define( 'EU_WITHDRAWAL_DB_VERSION', '1.1.0' );
 
 require_once EU_WITHDRAWAL_PATH . 'includes/Autoloader.php';
 

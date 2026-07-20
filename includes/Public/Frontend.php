@@ -30,7 +30,7 @@ final class Frontend {
 	}
 
 	/**
-	 * Enqueue assets when the shortcode is present on the current page.
+	 * Enqueue assets when the shortcode / My Account flow is present.
 	 *
 	 * @return void
 	 */
@@ -62,13 +62,15 @@ final class Frontend {
 			'eu-withdrawal-public',
 			'euWithdrawalPublic',
 			array(
-				'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
-				'nonce'      => wp_create_nonce( self::NONCE_ACTION ),
-				'nonceAction'=> self::NONCE_ACTION,
-				'i18n'       => array(
+				'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
+				'nonce'       => wp_create_nonce( self::NONCE_ACTION ),
+				'nonceAction' => self::NONCE_ACTION,
+				'i18n'        => array(
 					'genericError'  => __( 'Something went wrong. Please try again.', 'eu-withdrawal-for-woocommerce' ),
 					'networkError'  => __( 'Network error. Please check your connection and try again.', 'eu-withdrawal-for-woocommerce' ),
+					'serverError'   => __( 'The server returned an unexpected response. Please try again or contact the store.', 'eu-withdrawal-for-woocommerce' ),
 					'sessionExpired'=> __( 'Your session has expired. Please start again.', 'eu-withdrawal-for-woocommerce' ),
+					'selectProduct' => __( 'Please select at least one product.', 'eu-withdrawal-for-woocommerce' ),
 					'loading'       => __( 'Processing…', 'eu-withdrawal-for-woocommerce' ),
 				),
 			)

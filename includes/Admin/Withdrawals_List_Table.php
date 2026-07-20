@@ -8,6 +8,7 @@
 namespace EUWithdrawal\Admin;
 
 use EUWithdrawal\Data\Withdrawal_Repository;
+use EUWithdrawal\Domain\Request_Type;
 use EUWithdrawal\Domain\Withdrawal_Status;
 use EUWithdrawal\WooCommerce\Hpos_Compatibility;
 
@@ -57,6 +58,7 @@ final class Withdrawals_List_Table extends \WP_List_Table {
 			'uuid'          => __( 'UUID', 'eu-withdrawal-for-woocommerce' ),
 			'customer_name' => __( 'Customer Name', 'eu-withdrawal-for-woocommerce' ),
 			'order'         => __( 'Order', 'eu-withdrawal-for-woocommerce' ),
+			'request_type'  => __( 'Type', 'eu-withdrawal-for-woocommerce' ),
 			'status'        => __( 'Status', 'eu-withdrawal-for-woocommerce' ),
 			'submitted_at'  => __( 'Date', 'eu-withdrawal-for-woocommerce' ),
 		);
@@ -227,6 +229,18 @@ final class Withdrawals_List_Table extends \WP_List_Table {
 			esc_url( $edit_url ),
 			esc_html( $label )
 		);
+	}
+
+	/**
+	 * Render the request type column.
+	 *
+	 * @param array<string, mixed> $item Row data.
+	 * @return string
+	 */
+	protected function column_request_type( array $item ): string {
+		$type = (string) ( $item['request_type'] ?? Request_Type::REFUND );
+
+		return esc_html( Request_Type::label( $type ) );
 	}
 
 	/**

@@ -52,6 +52,10 @@ final class Schema {
 			customer_phone varchar(50) NULL,
 			products_json longtext NULL,
 			reason text NULL,
+			request_type varchar(20) NOT NULL DEFAULT 'refund',
+			refund_iban varchar(50) NULL,
+			refund_account_name varchar(200) NULL,
+			courier_notes text NULL,
 			status varchar(20) NOT NULL DEFAULT 'pending',
 			locale varchar(10) NOT NULL DEFAULT '',
 			submitted_at datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -61,6 +65,7 @@ final class Schema {
 			UNIQUE KEY uuid (uuid),
 			KEY order_id (order_id),
 			KEY status (status),
+			KEY request_type (request_type),
 			KEY customer_email (customer_email),
 			KEY submitted_at (submitted_at)
 		) $charset;";
@@ -100,5 +105,22 @@ final class Schema {
 		dbDelta( $sql_requests );
 		dbDelta( $sql_audit_log );
 		dbDelta( $sql_events );
+	}
+
+	/**
+	 * Upgrade schema when the stored DB version is older than the plugin constant.
+	 *
+	 * @return void
+	 */
+	public static function maybe_upgrade(): void {
+		$installed = (string) get_option( 'eu_withdrawal_db_version', '' );
+
+		if ( $installed === EU_WITHDRAWAL_DB_VERSION ) {
+			return;
+		}
+
+		self::create_tables();
+		update_option( 'eu_withdrawal_db_version', EU_WITHDRAWAL_DB_VERSION );
+		update_option( 'eu_withdrawal_flush_rewrites', '1' );
 	}
 }

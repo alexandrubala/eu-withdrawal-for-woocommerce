@@ -8,6 +8,7 @@
 namespace EUWithdrawal\PublicArea;
 
 use EUWithdrawal\Integrations\Legal_String_Catalog;
+use EUWithdrawal\Services\Order_Validator;
 use EUWithdrawal\Utils\Template_Loader;
 
 defined( 'ABSPATH' ) || exit;
@@ -88,7 +89,8 @@ final class Shortcode {
 	public function render( $atts = array() ): string {
 		$atts = shortcode_atts(
 			array(
-				'label' => Legal_String_Catalog::translate( 'withdrawal_button_label' ),
+				'label'     => Legal_String_Catalog::translate( 'withdrawal_button_label' ),
+				'show_button' => 'yes',
 			),
 			is_array( $atts ) ? $atts : array(),
 			self::TAG
@@ -98,7 +100,7 @@ final class Shortcode {
 	}
 
 	/**
-	 * Shared HTML renderer for the shortcode and Gutenberg block.
+	 * Shared HTML renderer for the shortcode, Gutenberg block, and My Account.
 	 *
 	 * @param array<string, string> $atts Render attributes.
 	 * @return string
@@ -110,15 +112,45 @@ final class Shortcode {
 			$atts['label'] = Legal_String_Catalog::translate( 'withdrawal_button_label' );
 		}
 
-		$step1_html = Template_Loader::load( 'step-1-form.php' );
+		$show_button = ! isset( $atts['show_button'] ) || 'yes' === $atts['show_button'];
+
+		$is_logged_in    = is_user_logged_in();
+		$eligible_orders = array();
+		$name            = '';
+		$email           = '';
+		$phone           = '';
+
+		if ( $is_logged_in ) {
+			$user = wp_get_current_user();
+			$name = trim( $user->first_name . ' ' . $user->last_name );
+			if ( '' === $name ) {
+				$name = $user->display_name;
+			}
+			$email           = (string) $user->user_email;
+			$eligible_orders = ( new Order_Validator() )->get_eligible_orders_for_customer( get_current_user_id() );
+		}
+
+		$step1_html = Template_Loader::load(
+			'step-1-form.php',
+			array(
+				'name'            => $name,
+				'email'           => $email,
+				'phone'           => $phone,
+				'order_number'    => '',
+				'eligible_orders' => $eligible_orders,
+				'is_logged_in'    => $is_logged_in,
+			)
+		);
 
 		ob_start();
 		?>
 		<div class="eu-withdrawal" id="eu-withdrawal-app">
+			<?php if ( $show_button ) : ?>
 			<button type="button" class="eu-withdrawal__trigger button">
 				<?php echo esc_html( $atts['label'] ); ?>
 			</button>
-			<div class="eu-withdrawal__flow" hidden>
+			<?php endif; ?>
+			<div class="eu-withdrawal__flow"<?php echo $show_button ? ' hidden' : ''; ?>>
 				<div class="eu-withdrawal__step eu-withdrawal__step--1">
 					<?php echo $step1_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Template output is escaped internally. ?>
 				</div>

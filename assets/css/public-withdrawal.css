@@ -1,9 +1,15 @@
 /**
- * Public withdrawal flow styles.
+ * Public withdrawal / return flow styles.
  */
 
 .eu-withdrawal {
-	max-width: 36rem;
+	--eu-wd-border: #d8dde3;
+	--eu-wd-muted: #5c6670;
+	--eu-wd-surface: #f7f8fa;
+	--eu-wd-accent: #1f4b73;
+	--eu-wd-accent-soft: #e8f0f7;
+	--eu-wd-danger: #b32d2e;
+	max-width: 42rem;
 	margin: 1.5rem auto;
 	font-family: inherit;
 	line-height: 1.5;
@@ -18,9 +24,10 @@
 .eu-withdrawal__flow {
 	margin-top: 1.25rem;
 	padding: 1.5rem;
-	border: 1px solid #dcdcde;
-	border-radius: 4px;
+	border: 1px solid var(--eu-wd-border);
+	border-radius: 8px;
 	background: #fff;
+	box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
 }
 
 .eu-withdrawal__heading {
@@ -29,9 +36,17 @@
 	font-weight: 600;
 }
 
-.eu-withdrawal__intro {
+.eu-withdrawal__subheading {
+	margin: 1.25rem 0 0.75rem;
+	font-size: 1.05rem;
+	font-weight: 600;
+}
+
+.eu-withdrawal__intro,
+.eu-withdrawal__note,
+.eu-withdrawal__empty {
 	margin: 0 0 1.25rem;
-	color: #50575e;
+	color: var(--eu-wd-muted);
 }
 
 .eu-withdrawal__field {
@@ -45,7 +60,7 @@
 }
 
 .eu-withdrawal__field .required {
-	color: #b32d2e;
+	color: var(--eu-wd-danger);
 }
 
 .eu-withdrawal__optional {
@@ -57,18 +72,167 @@
 .eu-withdrawal__field input[type="text"],
 .eu-withdrawal__field input[type="email"],
 .eu-withdrawal__field input[type="tel"],
+.eu-withdrawal__field input[type="number"],
+.eu-withdrawal__field select,
 .eu-withdrawal__field textarea {
 	width: 100%;
 	max-width: 100%;
-	padding: 0.55rem 0.65rem;
+	padding: 0.6rem 0.7rem;
 	border: 1px solid #8c8f94;
-	border-radius: 3px;
+	border-radius: 4px;
 	box-sizing: border-box;
+	background: #fff;
 }
 
 .eu-withdrawal__field textarea {
 	resize: vertical;
 	min-height: 5rem;
+}
+
+.eu-withdrawal__fieldset {
+	margin: 0 0 1.25rem;
+	padding: 0;
+	border: 0;
+}
+
+.eu-withdrawal__fieldset legend {
+	margin: 0 0 0.75rem;
+	font-weight: 600;
+	padding: 0;
+}
+
+.eu-withdrawal__choice {
+	display: block;
+	margin: 0 0 0.75rem;
+	padding: 0.9rem 1rem;
+	border: 1px solid var(--eu-wd-border);
+	border-radius: 8px;
+	background: var(--eu-wd-surface);
+	cursor: pointer;
+}
+
+.eu-withdrawal__choice:has(input:checked) {
+	border-color: var(--eu-wd-accent);
+	background: var(--eu-wd-accent-soft);
+}
+
+.eu-withdrawal__choice input {
+	margin-right: 0.55rem;
+	vertical-align: top;
+	margin-top: 0.2rem;
+}
+
+.eu-withdrawal__choice-title {
+	display: inline-block;
+	font-weight: 600;
+}
+
+.eu-withdrawal__choice-desc {
+	display: block;
+	margin: 0.25rem 0 0 1.4rem;
+	color: var(--eu-wd-muted);
+	font-size: 0.92em;
+}
+
+.eu-withdrawal__product-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: 0.75rem;
+}
+
+.eu-withdrawal__product-card {
+	display: grid;
+	gap: 0.65rem;
+	padding: 0.85rem;
+	border: 1px solid var(--eu-wd-border);
+	border-radius: 8px;
+	background: #fff;
+}
+
+.eu-withdrawal__product-select {
+	display: block;
+	cursor: pointer;
+}
+
+.eu-withdrawal__product-select > input[type="checkbox"] {
+	float: left;
+	margin: 1.1rem 0.75rem 0 0;
+}
+
+.eu-withdrawal__product-body {
+	display: flex;
+	gap: 0.85rem;
+	align-items: flex-start;
+	overflow: hidden;
+}
+
+.eu-withdrawal__product-image {
+	flex: 0 0 64px;
+	width: 64px;
+	height: 64px;
+	object-fit: cover;
+	border-radius: 6px;
+	background: var(--eu-wd-surface);
+	border: 1px solid var(--eu-wd-border);
+}
+
+.eu-withdrawal__product-image--placeholder {
+	display: inline-block;
+}
+
+.eu-withdrawal__product-meta {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	min-width: 0;
+}
+
+.eu-withdrawal__product-name {
+	font-weight: 600;
+}
+
+.eu-withdrawal__product-attrs,
+.eu-withdrawal__product-sku {
+	color: var(--eu-wd-muted);
+	font-size: 0.9em;
+}
+
+.eu-withdrawal__product-price {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	align-items: baseline;
+}
+
+.eu-withdrawal__product-qty {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin-left: 1.7rem;
+	font-size: 0.92em;
+}
+
+.eu-withdrawal__product-qty input {
+	width: 4.5rem;
+	padding: 0.35rem 0.45rem;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+}
+
+.eu-withdrawal__courier-box {
+	margin: 0 0 1rem;
+	padding: 0.9rem 1rem;
+	border-radius: 8px;
+	background: var(--eu-wd-accent-soft);
+	border: 1px solid #c5d6e6;
+	white-space: pre-wrap;
+}
+
+.eu-withdrawal__iban-panel,
+.eu-withdrawal__courier-panel {
+	margin-top: 0.5rem;
 }
 
 .eu-withdrawal__actions {
@@ -102,7 +266,7 @@
 .eu-withdrawal__receipt dt {
 	margin: 0;
 	font-weight: 600;
-	color: #50575e;
+	color: var(--eu-wd-muted);
 }
 
 .eu-withdrawal__summary dd,
@@ -122,7 +286,7 @@
 .eu-withdrawal__messages {
 	margin-top: 1rem;
 	padding: 0.75rem 1rem;
-	border-left: 4px solid #b32d2e;
+	border-left: 4px solid var(--eu-wd-danger);
 	background: #fcf0f1;
 	color: #1d2327;
 }
@@ -137,9 +301,29 @@
 	pointer-events: none;
 }
 
+.eu-withdrawal-my-account__intro {
+	margin: 0 0 1.25rem;
+	color: var(--eu-wd-muted);
+}
+
 @media (max-width: 480px) {
 	.eu-withdrawal__summary-row,
 	.eu-withdrawal__receipt-row {
 		grid-template-columns: 1fr;
+	}
+
+	.eu-withdrawal__product-select > input[type="checkbox"] {
+		margin-top: 0.35rem;
+	}
+
+	.eu-withdrawal__product-qty {
+		margin-left: 0;
+	}
+}
+
+/* Fallback when :has() is unsupported — checked state still usable. */
+@supports not selector(:has(*)) {
+	.eu-withdrawal__choice {
+		background: #fff;
 	}
 }
