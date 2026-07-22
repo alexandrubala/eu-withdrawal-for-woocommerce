@@ -52,6 +52,7 @@ final class Schema {
 			customer_phone varchar(50) NULL,
 			products_json longtext NULL,
 			reason text NULL,
+			attachments_json longtext NULL,
 			request_type varchar(20) NOT NULL DEFAULT 'refund',
 			refund_iban varchar(50) NULL,
 			refund_account_name varchar(200) NULL,

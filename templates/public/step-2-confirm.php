@@ -7,6 +7,7 @@
  *
  * @var \EUWithdrawal\Domain\Step1_Input $input
  * @var string                           $session_token
+ * @var array<int, array<string, string>> $photos
  */
 
 use EUWithdrawal\Domain\Request_Type;
@@ -66,6 +67,28 @@ $session_token = $session_token ?? '';
 		</div>
 		<?php endif; ?>
 	</dl>
+
+	<?php
+	$photos = $photos ?? array();
+	if ( ! empty( $photos ) ) :
+		?>
+		<h3 class="eu-withdrawal__subheading"><?php echo esc_html( Legal_String_Catalog::translate( 'reason_photos' ) ); ?></h3>
+		<ul class="eu-withdrawal__photo-preview eu-withdrawal__photo-preview--readonly">
+			<?php foreach ( $photos as $photo ) : ?>
+				<li>
+					<a href="<?php echo esc_url( (string) ( $photo['url'] ?? '' ) ); ?>" target="_blank" rel="noopener noreferrer">
+						<img
+							src="<?php echo esc_url( (string) ( $photo['thumb'] ?? $photo['url'] ?? '' ) ); ?>"
+							alt="<?php echo esc_attr( (string) ( $photo['name'] ?? '' ) ); ?>"
+							width="72"
+							height="72"
+							loading="lazy"
+						/>
+					</a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+	<?php endif; ?>
 
 	<?php if ( ! empty( $input->selected_products ) ) : ?>
 		<h3 class="eu-withdrawal__subheading"><?php echo esc_html( Legal_String_Catalog::translate( 'products' ) ); ?></h3>

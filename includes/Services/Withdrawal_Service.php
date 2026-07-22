@@ -57,6 +57,13 @@ final class Withdrawal_Service {
 	private Email_Service $email_service;
 
 	/**
+	 * Attachment uploader.
+	 *
+	 * @var Attachment_Uploader
+	 */
+	private Attachment_Uploader $attachment_uploader;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Withdrawal_Repository $withdrawal_repository Withdrawal persistence.
@@ -64,19 +71,22 @@ final class Withdrawal_Service {
 	 * @param Event_Repository      $event_repository      Event persistence.
 	 * @param Audit_Hash            $audit_hash            Hash generator.
 	 * @param Email_Service         $email_service         Customer email sender.
+	 * @param Attachment_Uploader   $attachment_uploader   Reason photo uploader.
 	 */
 	public function __construct(
 		Withdrawal_Repository $withdrawal_repository,
 		Audit_Repository $audit_repository,
 		Event_Repository $event_repository,
 		Audit_Hash $audit_hash,
-		Email_Service $email_service
+		Email_Service $email_service,
+		Attachment_Uploader $attachment_uploader
 	) {
 		$this->withdrawal_repository = $withdrawal_repository;
 		$this->audit_repository      = $audit_repository;
 		$this->event_repository      = $event_repository;
 		$this->audit_hash            = $audit_hash;
 		$this->email_service         = $email_service;
+		$this->attachment_uploader   = $attachment_uploader;
 	}
 
 	/**
@@ -121,6 +131,7 @@ final class Withdrawal_Service {
 				'customer_phone'      => $input->phone,
 				'products_json'       => $products_json,
 				'reason'              => $input->reason,
+				'attachments_json'    => ! empty( $input->attachments ) ? wp_json_encode( $input->attachments ) : null,
 				'request_type'        => $request_type,
 				'refund_iban'         => $input->refund_iban,
 				'refund_account_name' => $input->refund_account_name,
@@ -135,6 +146,10 @@ final class Withdrawal_Service {
 			return 0;
 		}
 
+		if ( ! empty( $input->attachments ) ) {
+			$this->attachment_uploader->attach_to_request( $input->attachments, $request_uuid );
+		}
+
 		$audit_payload = array(
 			'uuid'                => $request_uuid,
 			'order_id'            => $input->order_id,
@@ -144,6 +159,7 @@ final class Withdrawal_Service {
 			'customer_phone'      => $input->phone,
 			'products'            => $products,
 			'reason'              => $input->reason,
+			'attachments'         => $input->attachments,
 			'request_type'        => $request_type,
 			'refund_iban'         => $input->refund_iban,
 			'refund_account_name' => $input->refund_account_name,

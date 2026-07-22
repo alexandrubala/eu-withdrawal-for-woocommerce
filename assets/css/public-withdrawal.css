@@ -306,6 +306,53 @@
 	color: var(--eu-wd-muted);
 }
 
+.eu-withdrawal__hint {
+	margin: 0 0 0.5rem;
+	font-size: 0.9em;
+	color: var(--eu-wd-muted);
+}
+
+.eu-withdrawal__photos input[type="file"] {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	padding: 0.45rem 0;
+	font-size: 0.95rem;
+}
+
+.eu-withdrawal__photo-preview {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	list-style: none;
+	margin: 0.75rem 0 0;
+	padding: 0;
+}
+
+.eu-withdrawal__photo-preview li {
+	margin: 0;
+	padding: 0;
+}
+
+.eu-withdrawal__photo-preview img {
+	display: block;
+	width: 72px;
+	height: 72px;
+	object-fit: cover;
+	border-radius: 6px;
+	border: 1px solid var(--eu-wd-border);
+	background: var(--eu-wd-surface);
+}
+
+.eu-withdrawal__photo-preview--readonly a {
+	display: block;
+	line-height: 0;
+}
+
+.eu-withdrawal__photos-kept {
+	margin-top: 0.75rem;
+}
+
 @media (max-width: 480px) {
 	.eu-withdrawal__summary-row,
 	.eu-withdrawal__receipt-row {

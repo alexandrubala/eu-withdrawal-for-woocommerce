@@ -50,6 +50,13 @@ final class Step1_Input {
 	public string $reason;
 
 	/**
+	 * Optional reason photo attachment IDs.
+	 *
+	 * @var array<int, int>
+	 */
+	public array $attachments;
+
+	/**
 	 * Resolved WooCommerce order ID (set after validation).
 	 *
 	 * @var int
@@ -105,6 +112,7 @@ final class Step1_Input {
 	 * @param string                           $refund_iban         IBAN.
 	 * @param string                           $refund_account_name Account holder.
 	 * @param string                           $courier_notes       Courier notes.
+	 * @param array<int, int>                  $attachments         Reason photo attachment IDs.
 	 */
 	public function __construct(
 		string $name,
@@ -117,7 +125,8 @@ final class Step1_Input {
 		array $selected_products = array(),
 		string $refund_iban = '',
 		string $refund_account_name = '',
-		string $courier_notes = ''
+		string $courier_notes = '',
+		array $attachments = array()
 	) {
 		$this->name                = $name;
 		$this->email               = $email;
@@ -130,6 +139,7 @@ final class Step1_Input {
 		$this->refund_iban         = $refund_iban;
 		$this->refund_account_name = $refund_account_name;
 		$this->courier_notes       = $courier_notes;
+		$this->attachments         = $this->normalize_attachments( $attachments );
 	}
 
 	/**
@@ -150,6 +160,7 @@ final class Step1_Input {
 			'refund_iban'         => $this->refund_iban,
 			'refund_account_name' => $this->refund_account_name,
 			'courier_notes'       => $this->courier_notes,
+			'attachments'         => $this->attachments,
 		);
 	}
 
@@ -166,6 +177,12 @@ final class Step1_Input {
 			$products = array();
 		}
 
+		$attachments = $data['attachments'] ?? array();
+
+		if ( ! is_array( $attachments ) ) {
+			$attachments = array();
+		}
+
 		return new self(
 			(string) ( $data['name'] ?? '' ),
 			(string) ( $data['email'] ?? '' ),
@@ -177,7 +194,8 @@ final class Step1_Input {
 			$products,
 			(string) ( $data['refund_iban'] ?? '' ),
 			(string) ( $data['refund_account_name'] ?? '' ),
-			(string) ( $data['courier_notes'] ?? '' )
+			(string) ( $data['courier_notes'] ?? '' ),
+			$attachments
 		);
 	}
 
@@ -191,5 +209,25 @@ final class Step1_Input {
 		$data = array_merge( $this->to_array(), $overrides );
 
 		return self::from_array( $data );
+	}
+
+	/**
+	 * Normalize attachment ID list.
+	 *
+	 * @param array<int, mixed> $attachments Raw IDs.
+	 * @return array<int, int>
+	 */
+	private function normalize_attachments( array $attachments ): array {
+		$ids = array();
+
+		foreach ( $attachments as $id ) {
+			$id = absint( $id );
+
+			if ( $id > 0 ) {
+				$ids[] = $id;
+			}
+		}
+
+		return array_values( array_unique( $ids ) );
 	}
 }
