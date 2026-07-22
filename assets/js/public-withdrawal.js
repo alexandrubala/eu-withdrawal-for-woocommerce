@@ -170,6 +170,66 @@
 		}
 	}
 
+	/**
+	 * Clamp a qty input between its min and max (order quantity).
+	 *
+	 * @param {HTMLInputElement} input Qty number input.
+	 * @param {boolean} forceEmpty Whether empty values should be forced to min.
+	 */
+	function clampQtyInput(input, forceEmpty) {
+		var min = parseInt(input.min, 10);
+		var max = parseInt(input.max, 10);
+
+		if (isNaN(min) || min < 1) {
+			min = 1;
+		}
+
+		if (isNaN(max) || max < min) {
+			max = min;
+		}
+
+		var raw = String(input.value || '').trim();
+
+		if (raw === '') {
+			if (forceEmpty) {
+				input.value = String(min);
+			}
+			return;
+		}
+
+		var value = parseInt(raw, 10);
+
+		if (isNaN(value) || value < min) {
+			input.value = String(min);
+			return;
+		}
+
+		if (value > max) {
+			input.value = String(max);
+		}
+	}
+
+	/**
+	 * Bind qty clamp handlers so users cannot exceed ordered quantity.
+	 *
+	 * @param {HTMLElement} root Details form root.
+	 */
+	function bindQtyLimits(root) {
+		root.querySelectorAll('.eu-withdrawal__product-qty input[type="number"]').forEach(function (input) {
+			input.addEventListener('input', function () {
+				clampQtyInput(input, false);
+			});
+
+			input.addEventListener('change', function () {
+				clampQtyInput(input, true);
+			});
+
+			input.addEventListener('blur', function () {
+				clampQtyInput(input, true);
+			});
+		});
+	}
+
 	if (trigger && flow) {
 		trigger.addEventListener('click', function () {
 			trigger.hidden = true;
@@ -226,6 +286,7 @@
 
 		if (detailsForm) {
 			syncRequestTypePanels(detailsForm);
+			bindQtyLimits(detailsForm);
 
 			detailsForm.querySelectorAll('input[name="request_type"]').forEach(function (radio) {
 				radio.addEventListener('change', function () {
@@ -245,6 +306,12 @@
 					showError(config.i18n.selectProduct || config.i18n.genericError);
 					return;
 				}
+
+				detailsForm
+					.querySelectorAll('.eu-withdrawal__product-qty input[type="number"]')
+					.forEach(function (input) {
+						clampQtyInput(input, true);
+					});
 
 				setLoading(true);
 
