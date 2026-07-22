@@ -13,6 +13,7 @@ use EUWithdrawal\Data\Withdrawal_Repository;
 use EUWithdrawal\Domain\Event_Type;
 use EUWithdrawal\Domain\Request_Type;
 use EUWithdrawal\Domain\Withdrawal_Status;
+use EUWithdrawal\Services\Attachment_Uploader;
 use EUWithdrawal\WooCommerce\Hpos_Compatibility;
 
 defined( 'ABSPATH' ) || exit;
@@ -168,6 +169,10 @@ final class Withdrawal_Detail_Page {
 			);
 		}
 
+		$this->render_photos_section(
+			Attachment_Uploader::decode_ids( (string) ( $request['attachments_json'] ?? '' ) )
+		);
+
 		$this->render_products_section( $products );
 		$this->render_timeline( $events );
 
@@ -264,6 +269,41 @@ final class Withdrawal_Detail_Page {
 		}
 
 		echo '</table>';
+		echo '</div>';
+	}
+
+	/**
+	 * Render customer-uploaded reason photos.
+	 *
+	 * @param array<int, int> $attachment_ids Attachment IDs.
+	 * @return void
+	 */
+	private function render_photos_section( array $attachment_ids ): void {
+		if ( empty( $attachment_ids ) ) {
+			return;
+		}
+
+		$uploader = new Attachment_Uploader();
+		$photos   = $uploader->describe( $attachment_ids );
+
+		if ( empty( $photos ) ) {
+			return;
+		}
+
+		echo '<div class="eu-wd-card">';
+		echo '<h2>' . esc_html__( 'Photos', 'eu-withdrawal-for-woocommerce' ) . '</h2>';
+		echo '<ul class="eu-wd-photos">';
+
+		foreach ( $photos as $photo ) {
+			printf(
+				'<li><a href="%1$s" target="_blank" rel="noopener noreferrer"><img src="%2$s" alt="%3$s" width="96" height="96" loading="lazy" /></a></li>',
+				esc_url( (string) ( $photo['url'] ?? '' ) ),
+				esc_url( (string) ( $photo['thumb'] ?? $photo['url'] ?? '' ) ),
+				esc_attr( (string) ( $photo['name'] ?? '' ) )
+			);
+		}
+
+		echo '</ul>';
 		echo '</div>';
 	}
 

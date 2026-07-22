@@ -29,7 +29,7 @@ define( 'EU_WITHDRAWAL_URL', plugin_dir_url( __FILE__ ) );
 define( 'EU_WITHDRAWAL_FILE', __FILE__ );
 define( 'EU_WITHDRAWAL_BASENAME', plugin_basename( __FILE__ ) );
 define( 'EU_WITHDRAWAL_CAPABILITY', 'manage_eu_withdrawals' );
-define( 'EU_WITHDRAWAL_DB_VERSION', '1.1.0' );
+define( 'EU_WITHDRAWAL_DB_VERSION', '1.2.0' );
 
 require_once EU_WITHDRAWAL_PATH . 'includes/Autoloader.php';
 

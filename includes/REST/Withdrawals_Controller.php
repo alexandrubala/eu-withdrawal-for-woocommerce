@@ -9,6 +9,7 @@ namespace EUWithdrawal\REST;
 
 use EUWithdrawal\Data\Withdrawal_Repository;
 use EUWithdrawal\Domain\Withdrawal_Status;
+use EUWithdrawal\Services\Attachment_Uploader;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -193,6 +194,7 @@ final class Withdrawals_Controller {
 			'status'         => $status,
 			'status_label'   => Withdrawal_Status::label( $status ),
 			'reason'         => (string) ( $item['reason'] ?? '' ),
+			'attachments'    => Attachment_Uploader::decode_ids( (string) ( $item['attachments_json'] ?? '' ) ),
 			'products'       => $this->decode_products( (string) ( $item['products_json'] ?? '' ) ),
 			'locale'         => (string) ( $item['locale'] ?? '' ),
 			'submitted_at'   => (string) ( $item['submitted_at'] ?? '' ),

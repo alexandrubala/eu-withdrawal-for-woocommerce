@@ -174,6 +174,37 @@ $days_remaining = $days_remaining ?? 0;
 		<textarea id="eu-withdrawal-reason" name="reason" rows="3"><?php echo esc_textarea( $input->reason ); ?></textarea>
 	</p>
 
+	<div class="eu-withdrawal__field eu-withdrawal__photos">
+		<label for="eu-withdrawal-photos">
+			<?php echo esc_html( Legal_String_Catalog::translate( 'reason_photos' ) ); ?>
+			<span class="eu-withdrawal__optional"><?php echo esc_html( Legal_String_Catalog::translate( 'optional' ) ); ?></span>
+		</label>
+		<p class="eu-withdrawal__hint">
+			<?php echo esc_html( Legal_String_Catalog::translate( 'reason_photos_hint' ) ); ?>
+		</p>
+		<input
+			type="file"
+			id="eu-withdrawal-photos"
+			name="reason_photos[]"
+			accept="image/jpeg,image/png,image/gif,image/webp"
+			multiple
+		/>
+		<ul class="eu-withdrawal__photo-preview" hidden></ul>
+		<?php if ( ! empty( $input->attachments ) ) : ?>
+			<p class="eu-withdrawal__note eu-withdrawal__photos-kept">
+				<?php
+				echo esc_html(
+					sprintf(
+						/* translators: %d: number of photos already uploaded */
+						Legal_String_Catalog::translate( 'reason_photos_kept' ),
+						count( $input->attachments )
+					)
+				);
+				?>
+			</p>
+		<?php endif; ?>
+	</div>
+
 	<p class="eu-withdrawal__actions">
 		<button type="button" class="eu-withdrawal__back button button-secondary">
 			<?php echo esc_html( Legal_String_Catalog::translate( 'back' ) ); ?>

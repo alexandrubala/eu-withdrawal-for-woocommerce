@@ -230,6 +230,102 @@
 		});
 	}
 
+	/**
+	 * Whether a File looks like an allowed image type.
+	 *
+	 * @param {File} file Selected file.
+	 * @return {boolean}
+	 */
+	function isAllowedImage(file) {
+		var type = (file && file.type) || '';
+		return (
+			type === 'image/jpeg' ||
+			type === 'image/png' ||
+			type === 'image/gif' ||
+			type === 'image/webp'
+		);
+	}
+
+	/**
+	 * Validate selected reason photos and render local previews.
+	 *
+	 * @param {HTMLInputElement} input File input.
+	 * @return {boolean}
+	 */
+	function syncPhotoPreview(input) {
+		var list = input.closest('.eu-withdrawal__photos');
+		var preview = list ? list.querySelector('.eu-withdrawal__photo-preview') : null;
+		var files = input.files ? Array.prototype.slice.call(input.files) : [];
+		var maxPhotos = parseInt(config.maxPhotos, 10) || 5;
+		var maxBytes = parseInt(config.maxPhotoBytes, 10) || 5242880;
+
+		if (!preview) {
+			return true;
+		}
+
+		preview.innerHTML = '';
+
+		if (!files.length) {
+			preview.hidden = true;
+			return true;
+		}
+
+		if (files.length > maxPhotos) {
+			showError(config.i18n.tooManyPhotos || config.i18n.genericError);
+			input.value = '';
+			preview.hidden = true;
+			return false;
+		}
+
+		for (var i = 0; i < files.length; i++) {
+			if (!isAllowedImage(files[i])) {
+				showError(config.i18n.photoType || config.i18n.genericError);
+				input.value = '';
+				preview.hidden = true;
+				return false;
+			}
+
+			if (files[i].size > maxBytes) {
+				showError(config.i18n.photoTooLarge || config.i18n.genericError);
+				input.value = '';
+				preview.hidden = true;
+				return false;
+			}
+		}
+
+		files.forEach(function (file) {
+			var item = document.createElement('li');
+			var img = document.createElement('img');
+			img.alt = file.name || '';
+			img.width = 72;
+			img.height = 72;
+			img.src = URL.createObjectURL(file);
+			item.appendChild(img);
+			preview.appendChild(item);
+		});
+
+		preview.hidden = false;
+		return true;
+	}
+
+	/**
+	 * Bind photo input preview + validation.
+	 *
+	 * @param {HTMLElement} root Details form root.
+	 */
+	function bindPhotoInput(root) {
+		var input = root.querySelector('#eu-withdrawal-photos');
+
+		if (!input) {
+			return;
+		}
+
+		input.addEventListener('change', function () {
+			hideError();
+			syncPhotoPreview(input);
+		});
+	}
+
 	if (trigger && flow) {
 		trigger.addEventListener('click', function () {
 			trigger.hidden = true;
@@ -287,6 +383,7 @@
 		if (detailsForm) {
 			syncRequestTypePanels(detailsForm);
 			bindQtyLimits(detailsForm);
+			bindPhotoInput(detailsForm);
 
 			detailsForm.querySelectorAll('input[name="request_type"]').forEach(function (radio) {
 				radio.addEventListener('change', function () {
@@ -304,6 +401,12 @@
 
 				if (!checkedProducts.length) {
 					showError(config.i18n.selectProduct || config.i18n.genericError);
+					return;
+				}
+
+				var photoInput = detailsForm.querySelector('#eu-withdrawal-photos');
+
+				if (photoInput && !syncPhotoPreview(photoInput)) {
 					return;
 				}
 

@@ -23,6 +23,7 @@ use EUWithdrawal\Data\Schema;
 use EUWithdrawal\Data\Withdrawal_Repository;
 use EUWithdrawal\REST\Rest_Bootstrap;
 use EUWithdrawal\Security\Audit_Hash;
+use EUWithdrawal\Services\Attachment_Uploader;
 use EUWithdrawal\Services\Email_Service;
 use EUWithdrawal\Services\Export_Service;
 use EUWithdrawal\Services\Order_Validator;
@@ -136,19 +137,21 @@ final class Plugin {
 	 */
 	private function bootstrap_public_area(): void {
 		$session_service    = new Session_Token_Service();
+		$attachment_uploader = new Attachment_Uploader();
 		$withdrawal_service = new Withdrawal_Service(
 			new Withdrawal_Repository(),
 			new Audit_Repository(),
 			new Event_Repository(),
 			new Audit_Hash(),
-			new Email_Service()
+			new Email_Service(),
+			$attachment_uploader
 		);
 		$order_validator = new Order_Validator( $withdrawal_service );
 
 		$this->public_modules = array(
 			'frontend'  => new Frontend(),
 			'shortcode' => new Shortcode( $order_validator ),
-			'ajax'      => new Ajax( $order_validator, $session_service, $withdrawal_service ),
+			'ajax'      => new Ajax( $order_validator, $session_service, $withdrawal_service, $attachment_uploader ),
 		);
 
 		$this->public_modules['frontend']->register_hooks();

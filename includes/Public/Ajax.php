@@ -9,6 +9,7 @@ namespace EUWithdrawal\PublicArea;
 
 use EUWithdrawal\Domain\Request_Type;
 use EUWithdrawal\Domain\Step1_Input;
+use EUWithdrawal\Services\Attachment_Uploader;
 use EUWithdrawal\Services\Order_Validator;
 use EUWithdrawal\Services\Session_Token_Service;
 use EUWithdrawal\Services\Settings;
@@ -62,20 +63,30 @@ final class Ajax {
 	private Withdrawal_Service $withdrawal_service;
 
 	/**
+	 * Reason photo uploader.
+	 *
+	 * @var Attachment_Uploader
+	 */
+	private Attachment_Uploader $attachment_uploader;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param Order_Validator       $order_validator    Order validator.
-	 * @param Session_Token_Service $session_service    Session storage.
-	 * @param Withdrawal_Service    $withdrawal_service Submission orchestrator.
+	 * @param Order_Validator       $order_validator      Order validator.
+	 * @param Session_Token_Service $session_service      Session storage.
+	 * @param Withdrawal_Service    $withdrawal_service   Submission orchestrator.
+	 * @param Attachment_Uploader   $attachment_uploader  Reason photo uploader.
 	 */
 	public function __construct(
 		Order_Validator $order_validator,
 		Session_Token_Service $session_service,
-		Withdrawal_Service $withdrawal_service
+		Withdrawal_Service $withdrawal_service,
+		Attachment_Uploader $attachment_uploader
 	) {
-		$this->order_validator    = $order_validator;
-		$this->session_service    = $session_service;
-		$this->withdrawal_service = $withdrawal_service;
+		$this->order_validator      = $order_validator;
+		$this->session_service      = $session_service;
+		$this->withdrawal_service   = $withdrawal_service;
+		$this->attachment_uploader  = $attachment_uploader;
 	}
 
 	/**
@@ -305,6 +316,19 @@ final class Ajax {
 				$courier_notes = Settings::courier_instructions_html();
 			}
 
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- validated inside Attachment_Uploader.
+			$files   = isset( $_FILES['reason_photos'] ) && is_array( $_FILES['reason_photos'] ) ? $_FILES['reason_photos'] : array();
+			$upload  = $this->attachment_uploader->process( $files, $input->attachments );
+
+			if ( '' !== $upload['error'] ) {
+				wp_send_json_error(
+					array(
+						'code'    => 'upload_failed',
+						'message' => $upload['error'],
+					)
+				);
+			}
+
 			$input = $input->with(
 				array(
 					'request_type'        => $fields['request_type'],
@@ -313,6 +337,7 @@ final class Ajax {
 					'refund_account_name' => $account_name,
 					'courier_notes'       => $courier_notes,
 					'reason'              => (string) $fields['reason'],
+					'attachments'         => $upload['ids'],
 				)
 			);
 
@@ -330,6 +355,7 @@ final class Ajax {
 				array(
 					'input'         => $input,
 					'session_token' => $token,
+					'photos'        => $this->attachment_uploader->describe( $input->attachments ),
 				)
 			);
 
