@@ -221,7 +221,58 @@ final class Withdrawal_Service {
 	}
 
 	/**
+	 * Whether the order still has line-item quantities available for a new request.
+	 *
+	 * @param int $order_id WooCommerce order ID.
+	 * @return bool
+	 */
+	public function has_returnable_items( int $order_id ): bool {
+		return ! empty( $this->resolve_order_products( $order_id ) );
+	}
+
+	/**
+	 * Quantities already claimed by non-rejected withdrawal requests, keyed by order item ID.
+	 *
+	 * @param int $order_id WooCommerce order ID.
+	 * @return array<int, int>
+	 */
+	public function get_requested_quantities( int $order_id ): array {
+		if ( $order_id <= 0 ) {
+			return array();
+		}
+
+		$claimed = array();
+
+		foreach ( $this->withdrawal_repository->find_all_by_order_id( $order_id, true ) as $request ) {
+			$products = json_decode( (string) ( $request['products_json'] ?? '' ), true );
+
+			if ( ! is_array( $products ) ) {
+				continue;
+			}
+
+			foreach ( $products as $product ) {
+				if ( ! is_array( $product ) ) {
+					continue;
+				}
+
+				$item_id = absint( $product['item_id'] ?? 0 );
+				$qty     = absint( $product['quantity'] ?? 0 );
+
+				if ( $item_id <= 0 || $qty <= 0 ) {
+					continue;
+				}
+
+				$claimed[ $item_id ] = ( $claimed[ $item_id ] ?? 0 ) + $qty;
+			}
+		}
+
+		return $claimed;
+	}
+
+	/**
 	 * Build rich product snapshots from a WooCommerce order.
+	 *
+	 * Only items with remaining returnable quantity are included.
 	 *
 	 * @param int $order_id WooCommerce order ID.
 	 * @return array<int, array<string, mixed>>
@@ -237,6 +288,7 @@ final class Withdrawal_Service {
 			return array();
 		}
 
+		$claimed  = $this->get_requested_quantities( $order_id );
 		$products = array();
 
 		foreach ( $order->get_items() as $item_id => $item ) {
@@ -244,7 +296,16 @@ final class Withdrawal_Service {
 				continue;
 			}
 
-			$products[] = $this->snapshot_item( (int) $item_id, $item );
+			$item_id   = (int) $item_id;
+			$remaining = max( 0, (int) $item->get_quantity() - ( $claimed[ $item_id ] ?? 0 ) );
+
+			if ( $remaining <= 0 ) {
+				continue;
+			}
+
+			$snapshot             = $this->snapshot_item( $item_id, $item );
+			$snapshot['quantity'] = $remaining;
+			$products[]           = $snapshot;
 		}
 
 		return $products;
@@ -252,6 +313,8 @@ final class Withdrawal_Service {
 
 	/**
 	 * Build product snapshots for selected line items.
+	 *
+	 * Quantities are clamped to what is still available after prior requests.
 	 *
 	 * @param int                  $order_id   Order ID.
 	 * @param array<int, string>   $item_keys  Selected item IDs as strings.
@@ -265,6 +328,7 @@ final class Withdrawal_Service {
 			return array();
 		}
 
+		$claimed  = $this->get_requested_quantities( $order_id );
 		$selected = array();
 
 		foreach ( $item_keys as $item_key ) {
@@ -275,8 +339,13 @@ final class Withdrawal_Service {
 				continue;
 			}
 
+			$max_qty = max( 0, (int) $item->get_quantity() - ( $claimed[ $item_id ] ?? 0 ) );
+
+			if ( $max_qty <= 0 ) {
+				continue;
+			}
+
 			$snapshot = $this->snapshot_item( $item_id, $item );
-			$max_qty  = max( 1, (int) $item->get_quantity() );
 			$qty      = isset( $quantities[ (string) $item_id ] ) ? (int) $quantities[ (string) $item_id ] : $max_qty;
 			$snapshot['quantity'] = max( 1, min( $qty, $max_qty ) );
 

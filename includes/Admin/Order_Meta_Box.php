@@ -86,35 +86,41 @@ final class Order_Meta_Box {
 			return;
 		}
 
-		$request = $this->withdrawal_repository->find_by_order_id( $order_id );
+		$requests = $this->withdrawal_repository->find_all_by_order_id( $order_id, false );
 
-		if ( null === $request ) {
+		if ( empty( $requests ) ) {
 			echo '<p>' . esc_html__( 'No withdrawal request is linked to this order.', 'eu-withdrawal-for-woocommerce' ) . '</p>';
 			return;
 		}
 
-		$request_id = (int) ( $request['id'] ?? 0 );
-		$status     = (string) ( $request['status'] ?? Withdrawal_Status::PENDING );
-		$detail_url = add_query_arg(
-			array(
-				'page'       => Admin::PAGE_SLUG,
-				'action'     => 'view',
-				'request_id' => $request_id,
-			),
-			admin_url( 'admin.php' )
-		);
-
 		echo '<div class="eu-wd-order-metabox">';
-		echo '<p><strong>' . esc_html__( 'Request', 'eu-withdrawal-for-woocommerce' ) . ':</strong> #' . esc_html( (string) $request_id ) . '</p>';
-		echo '<p><strong>' . esc_html__( 'Status', 'eu-withdrawal-for-woocommerce' ) . ':</strong> ';
-		echo '<span class="eu-wd-status eu-wd-status--' . esc_attr( $status ) . '">' . esc_html( Withdrawal_Status::label( $status ) ) . '</span></p>';
-		echo '<p><strong>' . esc_html__( 'Customer', 'eu-withdrawal-for-woocommerce' ) . ':</strong> ' . esc_html( (string) ( $request['customer_name'] ?? '' ) ) . '</p>';
-		echo '<p><strong>' . esc_html__( 'Submitted', 'eu-withdrawal-for-woocommerce' ) . ':</strong> ' . esc_html( $this->format_datetime( (string) ( $request['submitted_at'] ?? '' ) ) ) . '</p>';
-		printf(
-			'<p><a class="button button-secondary" href="%1$s">%2$s</a></p>',
-			esc_url( $detail_url ),
-			esc_html__( 'View Withdrawal Details', 'eu-withdrawal-for-woocommerce' )
-		);
+
+		foreach ( $requests as $request ) {
+			$request_id = (int) ( $request['id'] ?? 0 );
+			$status     = (string) ( $request['status'] ?? Withdrawal_Status::PENDING );
+			$detail_url = add_query_arg(
+				array(
+					'page'       => Admin::PAGE_SLUG,
+					'action'     => 'view',
+					'request_id' => $request_id,
+				),
+				admin_url( 'admin.php' )
+			);
+
+			echo '<div class="eu-wd-order-metabox__request">';
+			echo '<p><strong>' . esc_html__( 'Request', 'eu-withdrawal-for-woocommerce' ) . ':</strong> #' . esc_html( (string) $request_id ) . '</p>';
+			echo '<p><strong>' . esc_html__( 'Status', 'eu-withdrawal-for-woocommerce' ) . ':</strong> ';
+			echo '<span class="eu-wd-status eu-wd-status--' . esc_attr( $status ) . '">' . esc_html( Withdrawal_Status::label( $status ) ) . '</span></p>';
+			echo '<p><strong>' . esc_html__( 'Customer', 'eu-withdrawal-for-woocommerce' ) . ':</strong> ' . esc_html( (string) ( $request['customer_name'] ?? '' ) ) . '</p>';
+			echo '<p><strong>' . esc_html__( 'Submitted', 'eu-withdrawal-for-woocommerce' ) . ':</strong> ' . esc_html( $this->format_datetime( (string) ( $request['submitted_at'] ?? '' ) ) ) . '</p>';
+			printf(
+				'<p><a class="button button-secondary" href="%1$s">%2$s</a></p>',
+				esc_url( $detail_url ),
+				esc_html__( 'View Withdrawal Details', 'eu-withdrawal-for-woocommerce' )
+			);
+			echo '</div>';
+		}
+
 		echo '</div>';
 	}
 

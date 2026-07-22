@@ -36,6 +36,22 @@ final class Shortcode {
 	private static bool $used = false;
 
 	/**
+	 * Shared order validator for static render helpers (My Account, etc.).
+	 *
+	 * @var Order_Validator|null
+	 */
+	private static ?Order_Validator $order_validator = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param Order_Validator $order_validator Order eligibility validator.
+	 */
+	public function __construct( Order_Validator $order_validator ) {
+		self::$order_validator = $order_validator;
+	}
+
+	/**
 	 * Register shortcode hooks.
 	 *
 	 * @return void
@@ -127,7 +143,9 @@ final class Shortcode {
 				$name = $user->display_name;
 			}
 			$email           = (string) $user->user_email;
-			$eligible_orders = ( new Order_Validator() )->get_eligible_orders_for_customer( get_current_user_id() );
+			$eligible_orders = self::$order_validator instanceof Order_Validator
+				? self::$order_validator->get_eligible_orders_for_customer( get_current_user_id() )
+				: array();
 		}
 
 		$step1_html = Template_Loader::load(
