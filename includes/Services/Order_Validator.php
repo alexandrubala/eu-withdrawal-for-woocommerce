@@ -80,6 +80,8 @@ final class Order_Validator {
 	/**
 	 * Eligible orders for a logged-in customer (within return window).
 	 *
+	 * Queries are bounded by Settings::return_days() so older orders are never loaded.
+	 *
 	 * @param int $user_id WordPress user ID.
 	 * @return array<int, \WC_Order>
 	 */
@@ -88,21 +90,26 @@ final class Order_Validator {
 			return array();
 		}
 
-		$order_ids = wc_get_orders(
-			array(
-				'customer_id' => $user_id,
-				'limit'       => 50,
-				'orderby'     => 'date',
-				'order'       => 'DESC',
-				'return'      => 'ids',
-				'status'      => array( 'wc-completed', 'wc-processing', 'wc-on-hold' ),
-			)
+		$base_args = array(
+			'customer_id' => $user_id,
+			'limit'       => 50,
+			'orderby'     => 'date',
+			'order'       => 'DESC',
+			'return'      => 'ids',
+			'status'      => array( 'wc-completed', 'wc-processing', 'wc-on-hold' ),
 		);
+
+		// Window is measured from date_completed when set, else date_created.
+		// Two bounded queries cover both cases without scanning older orders.
+		$date_after    = $this->return_window_date_after_arg();
+		$created_ids   = wc_get_orders( array_merge( $base_args, array( 'date_created' => $date_after ) ) );
+		$completed_ids = wc_get_orders( array_merge( $base_args, array( 'date_completed' => $date_after ) ) );
+		$order_ids     = array_values( array_unique( array_map( 'absint', array_merge( $created_ids, $completed_ids ) ) ) );
 
 		$eligible = array();
 
 		foreach ( $order_ids as $order_id ) {
-			$order = wc_get_order( (int) $order_id );
+			$order = wc_get_order( $order_id );
 
 			if ( $order instanceof \WC_Order && $this->is_within_return_window( $order ) ) {
 				$eligible[] = $order;
@@ -162,10 +169,14 @@ final class Order_Validator {
 	/**
 	 * Locate an order by its display number (HPOS-compatible).
 	 *
+	 * Search is limited to the configured return window so older orders are never queried.
+	 *
 	 * @param string $order_number Order number to search for.
 	 * @return \WC_Order|null
 	 */
 	private function find_order_by_number( string $order_number ): ?\WC_Order {
+		$date_after = $this->return_window_date_after_arg();
+
 		if ( is_numeric( $order_number ) ) {
 			$candidate = wc_get_order( absint( $order_number ) );
 
@@ -174,14 +185,16 @@ final class Order_Validator {
 			}
 		}
 
-		$order_ids = wc_get_orders(
-			array(
-				'limit'  => 5,
-				'return' => 'ids',
-				'status' => array_keys( wc_get_order_statuses() ),
-				's'      => $order_number,
-			)
+		$base_args = array(
+			'limit'  => 5,
+			'return' => 'ids',
+			'status' => array_keys( wc_get_order_statuses() ),
+			's'      => $order_number,
 		);
+
+		$created_ids   = wc_get_orders( array_merge( $base_args, array( 'date_created' => $date_after ) ) );
+		$completed_ids = wc_get_orders( array_merge( $base_args, array( 'date_completed' => $date_after ) ) );
+		$order_ids     = array_values( array_unique( array_map( 'absint', array_merge( $created_ids, $completed_ids ) ) ) );
 
 		foreach ( $order_ids as $order_id ) {
 			$candidate = wc_get_order( $order_id );
@@ -192,6 +205,17 @@ final class Order_Validator {
 		}
 
 		return null;
+	}
+
+	/**
+	 * WC order query date argument: only orders on/after the return-window cutoff.
+	 *
+	 * @return string
+	 */
+	private function return_window_date_after_arg(): string {
+		$cutoff = time() - ( Settings::return_days() * DAY_IN_SECONDS );
+
+		return '>=' . gmdate( 'Y-m-d H:i:s', $cutoff );
 	}
 
 	/**

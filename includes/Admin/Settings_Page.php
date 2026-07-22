@@ -114,7 +114,7 @@ final class Settings_Page {
 
 		echo '<tr><th scope="row"><label for="eu-wd-return-days">' . esc_html__( 'Return / withdrawal window (days)', 'eu-withdrawal-for-woocommerce' ) . '</label></th>';
 		echo '<td><input name="return_days" type="number" min="1" max="365" id="eu-wd-return-days" value="' . esc_attr( (string) (int) $settings['return_days'] ) . '" class="small-text">';
-		echo '<p class="description">' . esc_html__( 'Number of days after order completion (or creation) during which customers can submit a return or withdrawal.', 'eu-withdrawal-for-woocommerce' ) . '</p></td></tr>';
+		echo '<p class="description">' . esc_html__( 'Number of days after order completion (or creation) during which customers can submit a return or withdrawal. Orders older than this window are not queried.', 'eu-withdrawal-for-woocommerce' ) . '</p></td></tr>';
 
 		echo '<tr><th scope="row"><label for="eu-wd-require-iban">' . esc_html__( 'Collect bank account (IBAN)', 'eu-withdrawal-for-woocommerce' ) . '</label></th>';
 		echo '<td><select name="require_iban" id="eu-wd-require-iban">';
