@@ -25,9 +25,10 @@ defined( 'ABSPATH' ) || exit;
 final class Ajax {
 
 	/**
-	 * Maximum requests per IP per hour.
+	 * Maximum form-step requests per IP per hour (step1 / details / confirm).
+	 * Nonce refresh is excluded — it runs on every page load for cache bypass.
 	 */
-	private const RATE_LIMIT_MAX = 10;
+	private const RATE_LIMIT_MAX = 30;
 
 	/**
 	 * Rate-limit window in seconds (1 hour).
@@ -100,19 +101,13 @@ final class Ajax {
 	/**
 	 * Return a fresh nonce to bypass full-page cache (WP Rocket, etc.).
 	 *
+	 * Not rate-limited: this endpoint is called on every page load and must not
+	 * consume the same budget as form submission steps.
+	 *
 	 * @return void
 	 */
 	public function handle_refresh_nonce(): void {
 		try {
-			if ( ! $this->check_rate_limit() ) {
-				wp_send_json_error(
-					array(
-						'code'    => 'rate_limited',
-						'message' => __( 'Too many requests. Please wait and try again later.', 'eu-withdrawal-for-woocommerce' ),
-					)
-				);
-			}
-
 			wp_send_json_success(
 				array(
 					'nonce' => wp_create_nonce( Frontend::NONCE_ACTION ),
