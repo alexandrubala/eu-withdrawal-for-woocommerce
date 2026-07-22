@@ -136,7 +136,7 @@ final class Ajax {
 				wp_send_json_error(
 					array(
 						'code'    => 'order_not_found',
-						'message' => __( 'We could not find an eligible order matching those details. Check the order number, email, and that the return window has not expired.', 'eu-withdrawal-for-woocommerce' ),
+						'message' => __( 'We could not find an eligible order matching those details. Check the order number, email, that the return window has not expired, and that products remain available for return.', 'eu-withdrawal-for-woocommerce' ),
 					)
 				);
 			}
@@ -186,6 +186,16 @@ final class Ajax {
 
 			$token    = $this->session_service->create( $input );
 			$products = $this->withdrawal_service->resolve_order_products( $order->get_id() );
+
+			if ( empty( $products ) ) {
+				wp_send_json_error(
+					array(
+						'code'    => 'no_remaining_products',
+						'message' => __( 'All products from this order have already been included in a return or withdrawal request.', 'eu-withdrawal-for-woocommerce' ),
+					)
+				);
+			}
+
 			$require_iban = Settings::should_require_iban( $order ) ? '1' : '0';
 
 			$html = Template_Loader::load(
@@ -365,6 +375,60 @@ final class Ajax {
 					)
 				);
 			}
+
+			// Re-check remaining quantities in case another request was submitted meanwhile.
+			$item_keys  = array();
+			$quantities = array();
+
+			foreach ( $input->selected_products as $product ) {
+				if ( ! is_array( $product ) ) {
+					continue;
+				}
+
+				$item_id = absint( $product['item_id'] ?? 0 );
+
+				if ( $item_id <= 0 ) {
+					continue;
+				}
+
+				$item_keys[]                     = (string) $item_id;
+				$quantities[ (string) $item_id ] = absint( $product['quantity'] ?? 0 );
+			}
+
+			$available = $this->withdrawal_service->resolve_selected_products(
+				$input->order_id,
+				$item_keys,
+				$quantities
+			);
+
+			if ( empty( $available ) || count( $available ) !== count( $item_keys ) ) {
+				wp_send_json_error(
+					array(
+						'code'    => 'no_remaining_products',
+						'message' => __( 'One or more selected products are no longer available for return. Please start again.', 'eu-withdrawal-for-woocommerce' ),
+					)
+				);
+			}
+
+			foreach ( $available as $product ) {
+				$requested_qty = absint( $quantities[ (string) $product['item_id'] ] ?? 0 );
+				$available_qty = absint( $product['quantity'] ?? 0 );
+
+				if ( $requested_qty > $available_qty ) {
+					wp_send_json_error(
+						array(
+							'code'    => 'no_remaining_products',
+							'message' => __( 'One or more selected products are no longer available for return. Please start again.', 'eu-withdrawal-for-woocommerce' ),
+						)
+					);
+				}
+			}
+
+			$input = $input->with(
+				array(
+					'selected_products' => $available,
+				)
+			);
 
 			$request_uuid = Uuid_Generator::generate();
 			$submitted_at = current_time( 'mysql' );

@@ -136,7 +136,6 @@ final class Plugin {
 	 */
 	private function bootstrap_public_area(): void {
 		$session_service    = new Session_Token_Service();
-		$order_validator    = new Order_Validator();
 		$withdrawal_service = new Withdrawal_Service(
 			new Withdrawal_Repository(),
 			new Audit_Repository(),
@@ -144,10 +143,11 @@ final class Plugin {
 			new Audit_Hash(),
 			new Email_Service()
 		);
+		$order_validator = new Order_Validator( $withdrawal_service );
 
 		$this->public_modules = array(
 			'frontend'  => new Frontend(),
-			'shortcode' => new Shortcode(),
+			'shortcode' => new Shortcode( $order_validator ),
 			'ajax'      => new Ajax( $order_validator, $session_service, $withdrawal_service ),
 		);
 

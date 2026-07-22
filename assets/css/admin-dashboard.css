@@ -169,6 +169,12 @@
 	margin-left: 4px;
 }
 
+.eu-wd-order-metabox__request + .eu-wd-order-metabox__request {
+	margin-top: 12px;
+	padding-top: 12px;
+	border-top: 1px solid #dcdcde;
+}
+
 .eu-wd-admin .subsubsub {
 	margin-bottom: 12px;
 }

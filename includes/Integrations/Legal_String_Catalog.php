@@ -47,7 +47,7 @@ final class Legal_String_Catalog {
 			'return_choice_desc'           => __( 'Send the product back and follow the courier instructions.', 'eu-withdrawal-for-woocommerce' ),
 			'refund_choice_desc'           => __( 'Get your money back (withdrawal / refund).', 'eu-withdrawal-for-woocommerce' ),
 			'select_products'              => __( 'Select products', 'eu-withdrawal-for-woocommerce' ),
-			'no_products'                  => __( 'No products found on this order.', 'eu-withdrawal-for-woocommerce' ),
+			'no_products'                  => __( 'No products remain available for return on this order.', 'eu-withdrawal-for-woocommerce' ),
 			'quantity'                     => __( 'Qty', 'eu-withdrawal-for-woocommerce' ),
 			'refund_account_heading'       => __( 'Where should we send the refund?', 'eu-withdrawal-for-woocommerce' ),
 			'iban'                         => __( 'IBAN', 'eu-withdrawal-for-woocommerce' ),

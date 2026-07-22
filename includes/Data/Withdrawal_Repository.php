@@ -141,25 +141,55 @@ final class Withdrawal_Repository {
 	 * @return array<string, mixed>|null
 	 */
 	public function find_by_order_id( int $order_id ): ?array {
-		if ( $order_id <= 0 ) {
+		$requests = $this->find_all_by_order_id( $order_id, false );
+
+		if ( empty( $requests ) ) {
 			return null;
+		}
+
+		return $requests[ count( $requests ) - 1 ];
+	}
+
+	/**
+	 * Find all withdrawal requests for an order, oldest first.
+	 *
+	 * @param int  $order_id         WooCommerce order ID.
+	 * @param bool $exclude_rejected When true, omit rejected requests (they free stock for a new request).
+	 * @return array<int, array<string, mixed>>
+	 */
+	public function find_all_by_order_id( int $order_id, bool $exclude_rejected = true ): array {
+		if ( $order_id <= 0 ) {
+			return array();
 		}
 
 		global $wpdb;
 
 		$tables = Schema::get_table_names();
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$row = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT * FROM {$tables['requests']} WHERE order_id = %d ORDER BY id DESC LIMIT 1",
-				$order_id
-			),
-			ARRAY_A
-		);
+		if ( $exclude_rejected ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$rows = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM {$tables['requests']} WHERE order_id = %d AND status != %s ORDER BY id ASC",
+					$order_id,
+					'rejected'
+				),
+				ARRAY_A
+			);
+		} else {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$rows = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM {$tables['requests']} WHERE order_id = %d ORDER BY id ASC",
+					$order_id
+				),
+				ARRAY_A
+			);
+		}
 
-		return is_array( $row ) ? $row : null;
+		return is_array( $rows ) ? $rows : array();
 	}
 
 	/**

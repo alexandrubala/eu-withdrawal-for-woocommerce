@@ -15,6 +15,22 @@ defined( 'ABSPATH' ) || exit;
 final class Order_Validator {
 
 	/**
+	 * Withdrawal service used to detect remaining returnable quantities.
+	 *
+	 * @var Withdrawal_Service
+	 */
+	private Withdrawal_Service $withdrawal_service;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param Withdrawal_Service $withdrawal_service Withdrawal product resolver.
+	 */
+	public function __construct( Withdrawal_Service $withdrawal_service ) {
+		$this->withdrawal_service = $withdrawal_service;
+	}
+
+	/**
 	 * Validate order number and billing email combination within the return window.
 	 *
 	 * @param string $order_number Order number entered by the customer.
@@ -41,7 +57,7 @@ final class Order_Validator {
 			return null;
 		}
 
-		if ( ! $this->is_within_return_window( $order ) ) {
+		if ( ! $this->is_eligible( $order ) ) {
 			return null;
 		}
 
@@ -70,7 +86,7 @@ final class Order_Validator {
 			return null;
 		}
 
-		if ( ! $this->is_within_return_window( $order ) ) {
+		if ( ! $this->is_eligible( $order ) ) {
 			return null;
 		}
 
@@ -78,7 +94,7 @@ final class Order_Validator {
 	}
 
 	/**
-	 * Eligible orders for a logged-in customer (within return window).
+	 * Eligible orders for a logged-in customer (within return window, with remaining items).
 	 *
 	 * Queries are bounded by Settings::return_days() so older orders are never loaded.
 	 *
@@ -111,12 +127,26 @@ final class Order_Validator {
 		foreach ( $order_ids as $order_id ) {
 			$order = wc_get_order( $order_id );
 
-			if ( $order instanceof \WC_Order && $this->is_within_return_window( $order ) ) {
+			if ( $order instanceof \WC_Order && $this->is_eligible( $order ) ) {
 				$eligible[] = $order;
 			}
 		}
 
 		return $eligible;
+	}
+
+	/**
+	 * Whether the order can accept a new withdrawal request.
+	 *
+	 * @param \WC_Order $order WooCommerce order.
+	 * @return bool
+	 */
+	public function is_eligible( \WC_Order $order ): bool {
+		if ( ! $this->is_within_return_window( $order ) ) {
+			return false;
+		}
+
+		return $this->withdrawal_service->has_returnable_items( $order->get_id() );
 	}
 
 	/**
@@ -139,9 +169,9 @@ final class Order_Validator {
 			return false;
 		}
 
-		$order_ts  = $date->getTimestamp();
-		$deadline  = $order_ts + ( $days * DAY_IN_SECONDS );
-		$now       = current_time( 'timestamp' );
+		$order_ts = $date->getTimestamp();
+		$deadline = $order_ts + ( $days * DAY_IN_SECONDS );
+		$now      = current_time( 'timestamp' );
 
 		return $now <= $deadline;
 	}
@@ -160,7 +190,7 @@ final class Order_Validator {
 			return 0;
 		}
 
-		$deadline = $date->getTimestamp() + ( $days * DAY_IN_SECONDS );
+		$deadline  = $date->getTimestamp() + ( $days * DAY_IN_SECONDS );
 		$remaining = (int) ceil( ( $deadline - current_time( 'timestamp' ) ) / DAY_IN_SECONDS );
 
 		return max( 0, $remaining );
