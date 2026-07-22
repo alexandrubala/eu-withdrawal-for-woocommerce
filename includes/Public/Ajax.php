@@ -546,22 +546,55 @@ final class Ajax {
 	/**
 	 * Enforce a simple per-IP hourly rate limit via transients.
 	 *
+	 * Uses a fixed window keyed by IP. Retrying after being limited must NOT
+	 * refresh the TTL — otherwise every click extends the lockout forever.
+	 * Shop managers are exempt so merchants can test their own storefront.
+	 *
 	 * @return bool True when the request is allowed.
 	 */
 	private function check_rate_limit(): bool {
+		if ( current_user_can( 'manage_woocommerce' ) ) {
+			return true;
+		}
+
 		$ip = $this->get_client_ip();
 
 		if ( '' === $ip ) {
 			return true;
 		}
 
-		$key    = self::RATE_LIMIT_PREFIX . md5( $ip );
-		$count  = (int) get_transient( $key );
-		$count += 1;
+		$key  = self::RATE_LIMIT_PREFIX . md5( $ip );
+		$data = get_transient( $key );
+		$now  = time();
 
-		set_transient( $key, $count, self::RATE_LIMIT_WINDOW );
+		// Migrate legacy integer counters (and any corrupt values) to a fresh window.
+		if ( ! is_array( $data ) || ! isset( $data['count'], $data['start'] ) ) {
+			$data = array(
+				'count' => 0,
+				'start' => $now,
+			);
+		}
 
-		return $count <= self::RATE_LIMIT_MAX;
+		$elapsed = $now - (int) $data['start'];
+
+		if ( $elapsed >= self::RATE_LIMIT_WINDOW ) {
+			$data = array(
+				'count' => 0,
+				'start' => $now,
+			);
+			$elapsed = 0;
+		}
+
+		if ( (int) $data['count'] >= self::RATE_LIMIT_MAX ) {
+			return false;
+		}
+
+		$data['count'] = (int) $data['count'] + 1;
+		$remaining     = max( 1, self::RATE_LIMIT_WINDOW - $elapsed );
+
+		set_transient( $key, $data, $remaining );
+
+		return true;
 	}
 
 	/**
