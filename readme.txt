@@ -4,7 +4,7 @@ Tags: woocommerce, eu directive, withdrawal, refund, compliance
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -144,6 +144,10 @@ All personal data remains **100% under the control of the online store owner** o
 
 == Changelog ==
 
+= 1.2.0 =
+* Photo upload on withdrawal requests (JPG, PNG, GIF, WebP, max 5 MB) with validation and admin display.
+* DB schema bump for attachment storage on withdrawal requests.
+
 = 1.1.0 =
 * Multi-step return / refund flow with product selection, images, and attributes.
 * Configurable return window, courier instructions, and IBAN collection in WooCommerce settings.
@@ -154,6 +158,9 @@ All personal data remains **100% under the control of the online store owner** o
 * Initial release. Fully compliant with EU Directive 2023/2673 Article 11a.
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+Adds optional photo attachments to withdrawal requests. Existing installs run a light DB upgrade on next load.
 
 = 1.1.0 =
 Adds return/refund UX, settings, and My Account integration. Re-save permalinks if the My Account menu item 404s.
