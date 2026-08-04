@@ -141,6 +141,13 @@ final class Withdrawals_List_Table extends \WP_List_Table {
 
 		$this->items = $result['items'];
 
+		// Required for custom admin screens; without this, WP_List_Table has no columns and rows render blank.
+		$this->_column_headers = array(
+			$this->get_columns(),
+			array(),
+			$this->get_sortable_columns(),
+		);
+
 		$this->set_pagination_args(
 			array(
 				'total_items' => $result['total'],
