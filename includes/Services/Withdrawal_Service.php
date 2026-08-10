@@ -117,7 +117,7 @@ final class Withdrawal_Service {
 			: Request_Type::REFUND;
 
 		$courier_notes = $input->courier_notes;
-		if ( '' === $courier_notes && Request_Type::RETURN === $request_type ) {
+		if ( '' === $courier_notes ) {
 			$courier_notes = Settings::courier_instructions_html();
 		}
 

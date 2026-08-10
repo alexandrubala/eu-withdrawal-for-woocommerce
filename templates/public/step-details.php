@@ -47,20 +47,14 @@ $days_remaining = $days_remaining ?? 0;
 	</p>
 
 	<input type="hidden" name="session_token" value="<?php echo esc_attr( $session_token ); ?>" />
+	<input type="hidden" name="request_type" value="<?php echo esc_attr( Request_Type::REFUND ); ?>" />
 
-	<fieldset class="eu-withdrawal__fieldset">
-		<legend><?php echo esc_html( Legal_String_Catalog::translate( 'request_type_legend' ) ); ?></legend>
-		<label class="eu-withdrawal__choice">
-			<input type="radio" name="request_type" value="<?php echo esc_attr( Request_Type::RETURN ); ?>" required />
-			<span class="eu-withdrawal__choice-title"><?php echo esc_html( Request_Type::label( Request_Type::RETURN ) ); ?></span>
-			<span class="eu-withdrawal__choice-desc"><?php echo esc_html( Legal_String_Catalog::translate( 'return_choice_desc' ) ); ?></span>
-		</label>
-		<label class="eu-withdrawal__choice">
-			<input type="radio" name="request_type" value="<?php echo esc_attr( Request_Type::REFUND ); ?>" />
+	<div class="eu-withdrawal__fieldset eu-withdrawal__fieldset--single">
+		<p class="eu-withdrawal__choice eu-withdrawal__choice--selected">
 			<span class="eu-withdrawal__choice-title"><?php echo esc_html( Request_Type::label( Request_Type::REFUND ) ); ?></span>
 			<span class="eu-withdrawal__choice-desc"><?php echo esc_html( Legal_String_Catalog::translate( 'refund_choice_desc' ) ); ?></span>
-		</label>
-	</fieldset>
+		</p>
+	</div>
 
 	<div class="eu-withdrawal__products">
 		<h3 class="eu-withdrawal__subheading"><?php echo esc_html( Legal_String_Catalog::translate( 'select_products' ) ); ?></h3>
@@ -132,7 +126,18 @@ $days_remaining = $days_remaining ?? 0;
 		<?php endif; ?>
 	</div>
 
-	<div class="eu-withdrawal__iban-panel" data-require-iban="<?php echo esc_attr( $require_iban ); ?>" hidden>
+	<div class="eu-withdrawal__courier-panel">
+		<h3 class="eu-withdrawal__subheading"><?php echo esc_html( Legal_String_Catalog::translate( 'courier_heading' ) ); ?></h3>
+		<?php if ( '' !== trim( $courier_text ) ) : ?>
+			<div class="eu-withdrawal__courier-box">
+				<?php echo nl2br( esc_html( $courier_text ) ); ?>
+			</div>
+		<?php else : ?>
+			<p class="eu-withdrawal__note"><?php echo esc_html( Legal_String_Catalog::translate( 'courier_fallback' ) ); ?></p>
+		<?php endif; ?>
+	</div>
+
+	<div class="eu-withdrawal__iban-panel" data-require-iban="<?php echo esc_attr( $require_iban ); ?>">
 		<h3 class="eu-withdrawal__subheading"><?php echo esc_html( Legal_String_Catalog::translate( 'refund_account_heading' ) ); ?></h3>
 		<?php if ( '' !== $refund_note ) : ?>
 			<p class="eu-withdrawal__note"><?php echo esc_html( $refund_note ); ?></p>
@@ -152,17 +157,6 @@ $days_remaining = $days_remaining ?? 0;
 				</label>
 				<input type="text" id="eu-withdrawal-account-name" name="refund_account_name" autocomplete="name" />
 			</p>
-		<?php endif; ?>
-	</div>
-
-	<div class="eu-withdrawal__courier-panel" hidden>
-		<h3 class="eu-withdrawal__subheading"><?php echo esc_html( Legal_String_Catalog::translate( 'courier_heading' ) ); ?></h3>
-		<?php if ( '' !== trim( $courier_text ) ) : ?>
-			<div class="eu-withdrawal__courier-box">
-				<?php echo nl2br( esc_html( $courier_text ) ); ?>
-			</div>
-		<?php else : ?>
-			<p class="eu-withdrawal__note"><?php echo esc_html( Legal_String_Catalog::translate( 'courier_fallback' ) ); ?></p>
 		<?php endif; ?>
 	</div>
 

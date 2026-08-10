@@ -259,14 +259,8 @@ final class Ajax {
 
 			$fields = Sanitizer::details_fields( $_POST );
 
-			if ( ! Request_Type::is_valid( (string) $fields['request_type'] ) ) {
-				wp_send_json_error(
-					array(
-						'code'    => 'invalid_type',
-						'message' => __( 'Please choose whether you want to return products or receive a refund.', 'eu-withdrawal-for-woocommerce' ),
-					)
-				);
-			}
+			// Public flow is refund / withdrawal only (return shipping + IBAN on the same step).
+			$fields['request_type'] = Request_Type::REFUND;
 
 			$selected = $this->withdrawal_service->resolve_selected_products(
 				$input->order_id,
@@ -288,7 +282,7 @@ final class Ajax {
 			$iban         = (string) $fields['refund_iban'];
 			$account_name = (string) $fields['refund_account_name'];
 
-			if ( Request_Type::REFUND === $fields['request_type'] && $require_iban ) {
+			if ( $require_iban ) {
 				if ( '' === $iban || ! Sanitizer::is_valid_iban( $iban ) ) {
 					wp_send_json_error(
 						array(
@@ -306,15 +300,9 @@ final class Ajax {
 						)
 					);
 				}
-			} else {
-				$iban         = Request_Type::REFUND === $fields['request_type'] ? $iban : '';
-				$account_name = Request_Type::REFUND === $fields['request_type'] ? $account_name : '';
 			}
 
-			$courier_notes = '';
-			if ( Request_Type::RETURN === $fields['request_type'] ) {
-				$courier_notes = Settings::courier_instructions_html();
-			}
+			$courier_notes = Settings::courier_instructions_html();
 
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- validated inside Attachment_Uploader.
 			$files   = isset( $_FILES['reason_photos'] ) && is_array( $_FILES['reason_photos'] ) ? $_FILES['reason_photos'] : array();

@@ -111,9 +111,11 @@
 	cursor: pointer;
 }
 
-.eu-withdrawal__choice:has(input:checked) {
+.eu-withdrawal__choice:has(input:checked),
+.eu-withdrawal__choice--selected {
 	border-color: var(--eu-wd-accent);
 	background: var(--eu-wd-accent-soft);
+	cursor: default;
 }
 
 .eu-withdrawal__choice input {
@@ -132,6 +134,10 @@
 	margin: 0.25rem 0 0 1.4rem;
 	color: var(--eu-wd-muted);
 	font-size: 0.92em;
+}
+
+.eu-withdrawal__choice--selected .eu-withdrawal__choice-desc {
+	margin-left: 0;
 }
 
 .eu-withdrawal__product-list {

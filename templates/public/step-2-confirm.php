@@ -114,7 +114,7 @@ $session_token = $session_token ?? '';
 		</ul>
 	<?php endif; ?>
 
-	<?php if ( Request_Type::RETURN === $input->request_type && '' !== trim( $input->courier_notes ) ) : ?>
+	<?php if ( '' !== trim( $input->courier_notes ) ) : ?>
 		<h3 class="eu-withdrawal__subheading"><?php echo esc_html( Legal_String_Catalog::translate( 'courier_heading' ) ); ?></h3>
 		<div class="eu-withdrawal__courier-box">
 			<?php echo nl2br( esc_html( $input->courier_notes ) ); ?>

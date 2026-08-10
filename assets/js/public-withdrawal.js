@@ -151,22 +151,20 @@
 	}
 
 	/**
-	 * Toggle IBAN / courier panels based on request type selection.
+	 * Ensure courier + IBAN panels stay visible (refund / withdrawal flow only).
 	 *
 	 * @param {HTMLElement} root Details form root.
 	 */
 	function syncRequestTypePanels(root) {
-		var selected = root.querySelector('input[name="request_type"]:checked');
-		var type = selected ? selected.value : '';
 		var ibanPanel = root.querySelector('.eu-withdrawal__iban-panel');
 		var courierPanel = root.querySelector('.eu-withdrawal__courier-panel');
 
 		if (ibanPanel) {
-			ibanPanel.hidden = type !== 'refund';
+			ibanPanel.hidden = false;
 		}
 
 		if (courierPanel) {
-			courierPanel.hidden = type !== 'return';
+			courierPanel.hidden = false;
 		}
 	}
 
