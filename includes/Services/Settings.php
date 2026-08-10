@@ -28,7 +28,6 @@ final class Settings {
 		return array(
 			'return_days'           => 14,
 			'courier_name'          => '',
-			'courier_phone'         => '',
 			'courier_instructions'  => '',
 			'return_address'        => '',
 			'require_iban'          => 'always',
@@ -159,15 +158,6 @@ final class Settings {
 			);
 		}
 
-		$phone = trim( (string) self::get( 'courier_phone', '' ) );
-		if ( '' !== $phone ) {
-			$parts[] = sprintf(
-				/* translators: %s: courier phone */
-				__( 'Phone: %s', 'eu-withdrawal-for-woocommerce' ),
-				$phone
-			);
-		}
-
 		$address = trim( (string) self::get( 'return_address', '' ) );
 		if ( '' !== $address ) {
 			$parts[] = sprintf(
@@ -203,7 +193,6 @@ final class Settings {
 
 		$clean['return_days'] = max( 1, absint( $settings['return_days'] ?? 14 ) );
 		$clean['courier_name'] = sanitize_text_field( (string) ( $settings['courier_name'] ?? '' ) );
-		$clean['courier_phone'] = sanitize_text_field( (string) ( $settings['courier_phone'] ?? '' ) );
 		$clean['courier_instructions'] = sanitize_textarea_field( (string) ( $settings['courier_instructions'] ?? '' ) );
 		$clean['return_address'] = sanitize_textarea_field( (string) ( $settings['return_address'] ?? '' ) );
 		$clean['refund_note'] = sanitize_textarea_field( (string) ( $settings['refund_note'] ?? '' ) );

@@ -67,7 +67,6 @@ final class Settings_Page {
 			array(
 				'return_days'          => $_POST['return_days'] ?? 14,
 				'courier_name'         => $_POST['courier_name'] ?? '',
-				'courier_phone'        => $_POST['courier_phone'] ?? '',
 				'courier_instructions' => $_POST['courier_instructions'] ?? '',
 				'return_address'       => $_POST['return_address'] ?? '',
 				'require_iban'         => $_POST['require_iban'] ?? 'always',
@@ -139,9 +138,6 @@ final class Settings_Page {
 
 		echo '<tr><th scope="row"><label for="eu-wd-courier-name">' . esc_html__( 'Courier name', 'eu-withdrawal-for-woocommerce' ) . '</label></th>';
 		echo '<td><input name="courier_name" type="text" id="eu-wd-courier-name" value="' . esc_attr( (string) $settings['courier_name'] ) . '" class="regular-text"></td></tr>';
-
-		echo '<tr><th scope="row"><label for="eu-wd-courier-phone">' . esc_html__( 'Courier phone', 'eu-withdrawal-for-woocommerce' ) . '</label></th>';
-		echo '<td><input name="courier_phone" type="text" id="eu-wd-courier-phone" value="' . esc_attr( (string) $settings['courier_phone'] ) . '" class="regular-text"></td></tr>';
 
 		echo '<tr><th scope="row"><label for="eu-wd-return-address">' . esc_html__( 'Return address', 'eu-withdrawal-for-woocommerce' ) . '</label></th>';
 		echo '<td><textarea name="return_address" id="eu-wd-return-address" rows="3" class="large-text">' . esc_textarea( (string) $settings['return_address'] ) . '</textarea></td></tr>';
