@@ -4,7 +4,7 @@ Tags: woocommerce, eu directive, withdrawal, refund, compliance
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,10 +137,9 @@ All personal data remains **100% under the control of the online store owner** o
 
 == Screenshots ==
 
-1. Frontend withdrawal form — Step 1 order lookup and legal withdrawal statement displayed to the customer.
-2. Admin dashboard — List of withdrawal requests with status filters, search, and CSV/print export actions.
-3. Order meta box — Withdrawal requests linked to a WooCommerce order on the order edit screen.
-4. Audit log details — Individual request view showing immutable HMAC audit entries and event timeline.
+1. Request details — The customer picks the request type, selects products and quantities, then optionally adds a reason and photos.
+2. Confirm request — Final review of personal details, IBAN, selected products, and return shipping instructions before submitting.
+3. Admin request detail — Merchants manage a request with customer address, full IBAN, linked order, products, status updates, and audit proof.
 
 == Changelog ==
 

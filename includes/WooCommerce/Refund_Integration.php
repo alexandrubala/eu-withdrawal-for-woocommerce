@@ -11,6 +11,7 @@ use EUWithdrawal\Data\Event_Repository;
 use EUWithdrawal\Data\Withdrawal_Repository;
 use EUWithdrawal\Domain\Event_Type;
 use EUWithdrawal\Domain\Withdrawal_Status;
+use EUWithdrawal\Services\Email_Service;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -34,17 +35,27 @@ final class Refund_Integration {
 	private Event_Repository $event_repository;
 
 	/**
+	 * Email service.
+	 *
+	 * @var Email_Service
+	 */
+	private Email_Service $email_service;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param Withdrawal_Repository $withdrawal_repository Withdrawal persistence.
 	 * @param Event_Repository      $event_repository      Event persistence.
+	 * @param Email_Service         $email_service         Customer emails.
 	 */
 	public function __construct(
 		Withdrawal_Repository $withdrawal_repository,
-		Event_Repository $event_repository
+		Event_Repository $event_repository,
+		Email_Service $email_service
 	) {
 		$this->withdrawal_repository = $withdrawal_repository;
 		$this->event_repository      = $event_repository;
+		$this->email_service         = $email_service;
 	}
 
 	/**
@@ -107,5 +118,26 @@ final class Refund_Integration {
 				),
 			)
 		);
+
+		$sent = $this->email_service->send_customer_status_update(
+			(string) ( $request['customer_email'] ?? '' ),
+			array(
+				'request_uuid'  => (string) ( $request['uuid'] ?? '' ),
+				'order_number'  => (string) ( $request['order_number'] ?? '' ),
+				'customer_name' => (string) ( $request['customer_name'] ?? '' ),
+				'status'        => Withdrawal_Status::REFUNDED,
+			)
+		);
+
+		if ( ! $sent ) {
+			$this->event_repository->insert(
+				array(
+					'request_id' => $request_id,
+					'event_type' => Event_Type::EMAIL_FAILED,
+					'actor_type' => 'system',
+					'message'    => __( 'Customer status update email could not be sent.', 'eu-withdrawal-for-woocommerce' ),
+				)
+			);
+		}
 	}
 }

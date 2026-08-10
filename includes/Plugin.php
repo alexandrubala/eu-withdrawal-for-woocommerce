@@ -205,7 +205,8 @@ final class Plugin {
 	private function bootstrap_woocommerce_integrations(): void {
 		$refund_integration = new Refund_Integration(
 			new Withdrawal_Repository(),
-			new Event_Repository()
+			new Event_Repository(),
+			new Email_Service()
 		);
 
 		$refund_integration->register_hooks();

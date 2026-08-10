@@ -786,3 +786,27 @@ msgstr "Emailul de notificare către magazin nu a putut fi trimis."
 
 msgid "Address"
 msgstr "Adresă"
+
+msgid "Update on your return / withdrawal – order %s"
+msgstr "Actualizare la cererea ta de retur / retragere – comanda %s"
+
+msgid "Your refund has been completed"
+msgstr "Rambursarea ta a fost finalizată"
+
+msgid "Good news — your return / withdrawal request has been refunded. The money should appear according to your bank or card provider timelines."
+msgstr "Veste bună — cererea ta de retur / retragere a fost rambursată. Banii ar trebui să apară în funcție de termenele băncii sau ale emitentului cardului."
+
+msgid "Your request is being processed"
+msgstr "Cererea ta este în curs de procesare"
+
+msgid "We have started processing your return / withdrawal request. We will update you again when the refund is completed."
+msgstr "Am început procesarea cererii tale de retur / retragere. Te vom anunța din nou când rambursarea este finalizată."
+
+msgid "Hello %s,"
+msgstr "Bună %s,"
+
+msgid "If you have questions, reply to this email or contact the store."
+msgstr "Dacă ai întrebări, răspunde la acest email sau contactează magazinul."
+
+msgid "Customer status update email could not be sent."
+msgstr "Emailul de actualizare a statusului către client nu a putut fi trimis."

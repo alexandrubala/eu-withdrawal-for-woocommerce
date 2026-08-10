@@ -44,6 +44,39 @@ final class Email_Service {
 	}
 
 	/**
+	 * Notify the customer that their request status changed (processed / refunded).
+	 *
+	 * @param string               $to            Recipient email address.
+	 * @param array<string, mixed> $template_args Variables for the email template.
+	 * @return bool
+	 */
+	public function send_customer_status_update( string $to, array $template_args ): bool {
+		if ( ! is_email( $to ) ) {
+			return false;
+		}
+
+		$status = (string) ( $template_args['status'] ?? '' );
+
+		if ( ! in_array( $status, array( 'processed', 'refunded' ), true ) ) {
+			return false;
+		}
+
+		$subject = sprintf(
+			/* translators: %s: order number */
+			__( 'Update on your return / withdrawal – order %s', 'eu-withdrawal-for-woocommerce' ),
+			(string) ( $template_args['order_number'] ?? '' )
+		);
+
+		$body = Template_Loader::load_email( 'customer-status-update.php', $template_args );
+
+		if ( '' === $body ) {
+			return false;
+		}
+
+		return $this->send_html_mail( $to, $subject, $body );
+	}
+
+	/**
 	 * Notify the shop about a new withdrawal request.
 	 *
 	 * Uses the same recipient(s) as WooCommerce "New order" emails.

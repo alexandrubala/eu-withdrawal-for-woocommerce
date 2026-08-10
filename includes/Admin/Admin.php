@@ -10,6 +10,7 @@ namespace EUWithdrawal\Admin;
 use EUWithdrawal\Data\Audit_Repository;
 use EUWithdrawal\Data\Event_Repository;
 use EUWithdrawal\Data\Withdrawal_Repository;
+use EUWithdrawal\Services\Email_Service;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -74,7 +75,8 @@ final class Admin {
 		$this->detail_page           = new Withdrawal_Detail_Page(
 			$withdrawal_repository,
 			$event_repository,
-			$audit_repository
+			$audit_repository,
+			new Email_Service()
 		);
 	}
 
