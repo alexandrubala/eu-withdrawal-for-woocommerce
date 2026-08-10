@@ -783,3 +783,6 @@ msgstr "Cerere nouă de retragere – comanda %s"
 
 msgid "Shop notification email could not be sent."
 msgstr "Emailul de notificare către magazin nu a putut fi trimis."
+
+msgid "Address"
+msgstr "Adresă"

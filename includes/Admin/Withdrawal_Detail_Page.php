@@ -109,13 +109,21 @@ final class Withdrawal_Detail_Page {
 
 		echo '<div class="eu-wd-detail__main">';
 
+		$customer_fields = array(
+			__( 'Name', 'eu-withdrawal-for-woocommerce' )  => (string) ( $request['customer_name'] ?? '' ),
+			__( 'Email', 'eu-withdrawal-for-woocommerce' ) => (string) ( $request['customer_email'] ?? '' ),
+			__( 'Phone', 'eu-withdrawal-for-woocommerce' ) => (string) ( $request['customer_phone'] ?? '—' ),
+		);
+
+		$customer_address = $this->get_order_customer_address( $order_id );
+		if ( '' !== $customer_address ) {
+			$customer_fields[ __( 'Address', 'eu-withdrawal-for-woocommerce' ) ] = nl2br( esc_html( $customer_address ) );
+		}
+
 		$this->render_section(
 			__( 'Customer Details', 'eu-withdrawal-for-woocommerce' ),
-			array(
-				__( 'Name', 'eu-withdrawal-for-woocommerce' )  => (string) ( $request['customer_name'] ?? '' ),
-				__( 'Email', 'eu-withdrawal-for-woocommerce' ) => (string) ( $request['customer_email'] ?? '' ),
-				__( 'Phone', 'eu-withdrawal-for-woocommerce' ) => (string) ( $request['customer_phone'] ?? '—' ),
-			)
+			$customer_fields,
+			true
 		);
 
 		$request_type = (string) ( $request['request_type'] ?? Request_Type::REFUND );
@@ -134,16 +142,6 @@ final class Withdrawal_Detail_Page {
 			__( 'Request', 'eu-withdrawal-for-woocommerce' ),
 			$request_fields
 		);
-
-		if ( ! empty( $request['courier_notes'] ) ) {
-			$this->render_section(
-				__( 'Courier / return instructions', 'eu-withdrawal-for-woocommerce' ),
-				array(
-					'' => nl2br( esc_html( (string) $request['courier_notes'] ) ),
-				),
-				true
-			);
-		}
 
 		$this->render_section(
 			__( 'Order', 'eu-withdrawal-for-woocommerce' ),
@@ -243,6 +241,51 @@ final class Withdrawal_Detail_Page {
 		);
 
 		return true;
+	}
+
+	/**
+	 * Customer address from the linked order (shipping first, then billing).
+	 *
+	 * @param int $order_id WooCommerce order ID.
+	 * @return string Plain-text multi-line address, or empty when unavailable.
+	 */
+	private function get_order_customer_address( int $order_id ): string {
+		if ( $order_id <= 0 || ! function_exists( 'wc_get_order' ) ) {
+			return '';
+		}
+
+		$order = wc_get_order( $order_id );
+
+		if ( ! $order instanceof \WC_Order ) {
+			return '';
+		}
+
+		$shipping = (string) $order->get_formatted_shipping_address();
+		if ( '' !== trim( wp_strip_all_tags( $shipping ) ) ) {
+			return $this->plain_address_from_html( $shipping );
+		}
+
+		$billing = (string) $order->get_formatted_billing_address();
+		if ( '' !== trim( wp_strip_all_tags( $billing ) ) ) {
+			return $this->plain_address_from_html( $billing );
+		}
+
+		return '';
+	}
+
+	/**
+	 * Convert a WooCommerce formatted address HTML blob to plain text lines.
+	 *
+	 * @param string $html Formatted address HTML.
+	 * @return string
+	 */
+	private function plain_address_from_html( string $html ): string {
+		$text = str_ireplace( array( '<br />', '<br/>', '<br>' ), "\n", $html );
+		$text = wp_strip_all_tags( $text );
+		$text = preg_replace( "/[ \t]+/", ' ', $text ) ?? $text;
+		$text = preg_replace( "/\n{2,}/", "\n", $text ) ?? $text;
+
+		return trim( $text );
 	}
 
 	/**
