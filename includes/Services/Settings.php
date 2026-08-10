@@ -160,10 +160,11 @@ final class Settings {
 
 		$address = trim( (string) self::get( 'return_address', '' ) );
 		if ( '' !== $address ) {
+			// Keep the label on its own line so multi-line addresses stay left-aligned and readable.
 			$parts[] = sprintf(
-				/* translators: %s: return address */
+				/* translators: %s: return address (may contain multiple lines) */
 				__( 'Return address: %s', 'eu-withdrawal-for-woocommerce' ),
-				$address
+				"\n" . $address
 			);
 		}
 
@@ -172,6 +173,7 @@ final class Settings {
 			$parts[] = $instructions;
 		}
 
+		// Single blank line between sections; templates render with nl2br (do not also use CSS pre-wrap).
 		$text = implode( "\n\n", $parts );
 
 		/**

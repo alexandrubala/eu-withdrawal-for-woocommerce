@@ -227,7 +227,8 @@
 	border-radius: 8px;
 	background: var(--eu-wd-accent-soft);
 	border: 1px solid #c5d6e6;
-	white-space: pre-wrap;
+	text-align: left;
+	line-height: 1.5;
 }
 
 .eu-withdrawal__iban-panel,
