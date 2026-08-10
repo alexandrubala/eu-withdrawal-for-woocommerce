@@ -765,3 +765,21 @@ msgstr "Comanda #%1$s — %2$s — %3$s"
 msgid "Request withdrawal"
 msgstr "Cerere retragere"
 
+
+msgid "New return / withdrawal request"
+msgstr "Cerere nouă de retur / retragere"
+
+msgid "A customer submitted a return / withdrawal request on your store."
+msgstr "Un client a trimis o cerere de retur / retragere pe magazinul tău."
+
+msgid "Customer details"
+msgstr "Detalii client"
+
+msgid "View request in admin"
+msgstr "Vezi cererea în admin"
+
+msgid "New withdrawal request – order %s"
+msgstr "Cerere nouă de retragere – comanda %s"
+
+msgid "Shop notification email could not be sent."
+msgstr "Emailul de notificare către magazin nu a putut fi trimis."

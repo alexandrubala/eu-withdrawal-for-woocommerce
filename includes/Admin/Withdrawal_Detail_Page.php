@@ -125,7 +125,8 @@ final class Withdrawal_Detail_Page {
 		);
 
 		if ( Request_Type::REFUND === $request_type ) {
-			$request_fields[ __( 'IBAN', 'eu-withdrawal-for-woocommerce' ) ] = '' !== $iban ? $this->mask_iban( $iban ) : '—';
+			// Full IBAN for shop staff who need to send the refund.
+			$request_fields[ __( 'IBAN', 'eu-withdrawal-for-woocommerce' ) ] = '' !== $iban ? $iban : '—';
 			$request_fields[ __( 'Account holder', 'eu-withdrawal-for-woocommerce' ) ] = (string) ( $request['refund_account_name'] ?? '—' );
 		}
 
@@ -363,23 +364,6 @@ final class Withdrawal_Detail_Page {
 
 		echo '</tbody></table>';
 		echo '</div>';
-	}
-
-	/**
-	 * Mask an IBAN for list/detail display (keep country + last 4).
-	 *
-	 * @param string $iban Full IBAN.
-	 * @return string
-	 */
-	private function mask_iban( string $iban ): string {
-		$iban = strtoupper( preg_replace( '/\s+/', '', $iban ) ?? '' );
-		$len  = strlen( $iban );
-
-		if ( $len <= 8 ) {
-			return $iban;
-		}
-
-		return substr( $iban, 0, 4 ) . str_repeat( '•', max( 0, $len - 8 ) ) . substr( $iban, -4 );
 	}
 
 	/**

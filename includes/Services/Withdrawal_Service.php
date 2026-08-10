@@ -207,20 +207,29 @@ final class Withdrawal_Service {
 			)
 		);
 
-		$email_sent = $this->email_service->send_customer_confirmation(
-			$input->email,
-			array(
-				'request_uuid'  => $request_uuid,
-				'order_number'  => $input->order_number,
-				'submitted_at'  => $submitted_at,
-				'customer_name' => $input->name,
-				'customer_email'=> $input->email,
-				'customer_phone'=> $input->phone,
-				'reason'        => $input->reason,
-				'products'      => $products,
-				'request_type'  => $request_type,
-			)
+		$email_args = array(
+			'request_uuid'        => $request_uuid,
+			'order_number'        => $input->order_number,
+			'submitted_at'        => $submitted_at,
+			'customer_name'       => $input->name,
+			'customer_email'      => $input->email,
+			'customer_phone'      => $input->phone,
+			'reason'              => $input->reason,
+			'products'            => $products,
+			'request_type'        => $request_type,
+			'refund_iban'         => $input->refund_iban,
+			'refund_account_name' => $input->refund_account_name,
+			'admin_url'           => add_query_arg(
+				array(
+					'page'       => 'eu-withdrawals',
+					'action'     => 'view',
+					'request_id' => $request_id,
+				),
+				admin_url( 'admin.php' )
+			),
 		);
+
+		$email_sent = $this->email_service->send_customer_confirmation( $input->email, $email_args );
 
 		if ( ! $email_sent ) {
 			$this->event_repository->insert(
@@ -229,6 +238,19 @@ final class Withdrawal_Service {
 					'event_type' => 'email_failed',
 					'actor_type' => 'system',
 					'message'    => __( 'Customer confirmation email could not be sent.', 'eu-withdrawal-for-woocommerce' ),
+				)
+			);
+		}
+
+		$admin_email_sent = $this->email_service->send_admin_notification( $email_args );
+
+		if ( ! $admin_email_sent ) {
+			$this->event_repository->insert(
+				array(
+					'request_id' => $request_id,
+					'event_type' => 'email_failed',
+					'actor_type' => 'system',
+					'message'    => __( 'Shop notification email could not be sent.', 'eu-withdrawal-for-woocommerce' ),
 				)
 			);
 		}
