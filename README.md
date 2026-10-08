@@ -8,7 +8,7 @@
 **Stable tag:** 1.3.0  
 **License:** [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)
 
-Complete Art. 11a withdrawal compliance for WooCommerce: two-step flow, HMAC audit log, email proof, guest checkout & HPOS.
+Complete Art. 11a withdrawal compliance for WooCommerce: multi-step refund / withdrawal flow, HMAC audit log, email proof, guest checkout & HPOS.
 
 ## Description
 
@@ -16,16 +16,19 @@ Complete Art. 11a withdrawal compliance for WooCommerce: two-step flow, HMAC aud
 
 If you operate a WooCommerce store that sells to consumers in the European Union, this plugin implements the legally required withdrawal workflow—from the customer-facing request form through immutable record-keeping and proof of receipt—so you can meet your obligations under the updated Consumer Rights Directive without custom development.
 
+The plugin registers the request, keeps an audit trail, and sends confirmation emails to the customer and the shop. **Important: it does not transfer money automatically.** You complete the refund yourself in WooCommerce / your bank after reviewing the request. The plugin gives you the data you need (selected products, IBAN, customer address) and the request status.
+
 ### Key features
 
-* **Strict two-step withdrawal flow** — Customers first identify their order and review the legal withdrawal statement, then explicitly confirm their request. This mirrors the deliberate, informed consent required under EU consumer law and reduces invalid or accidental submissions.
+* **Clear multi-step withdrawal / refund flow** — Customers identify their order (or pick an eligible order from My Account), select products and quantities, follow return shipping instructions, provide IBAN when required, optionally add a reason and photos, then explicitly confirm. This mirrors the deliberate, informed consent required under EU consumer law and reduces invalid or accidental submissions.
 * **Immutable HMAC audit log** — Every withdrawal request is recorded with SHA-256 payload hashing and HMAC-SHA256 security signatures. The audit trail is tamper-evident and suitable for demonstrating compliance to supervisory authorities or in dispute resolution.
 * **100% HPOS compatible** — Fully declared compatible with WooCommerce High-Performance Order Storage (custom order tables). Order meta boxes, admin links, and validation work seamlessly whether HPOS is enabled or not.
-* **Full guest checkout support** — Customers do not need a WordPress account. The flow validates orders by order number and billing email, making it accessible to all purchasers regardless of how they checked out.
-* **Email confirmation (durable medium)** — Upon successful submission, the customer receives an HTML confirmation email containing the request UUID, submission timestamp, and withdrawal details—satisfying the requirement to provide confirmation on a durable medium. The shop also receives a notification on the WooCommerce “New order” recipient address, and customers get updates when a request is marked processed or refunded.
+* **Full guest checkout support** — Customers do not need a WordPress account. The flow validates orders by order number and billing email, making it accessible to all purchasers regardless of how they checked out. Logged-in customers can also use **My Account → Returns & withdrawals**.
+* **Email confirmation (durable medium)** — Upon successful submission, the customer receives an HTML confirmation email containing the request UUID, submission timestamp, and withdrawal details—satisfying the requirement to provide confirmation on a durable medium. The shop also receives a notification on the WooCommerce “New order” recipient address, and customers get updates when a request is marked **processed** or **refunded**.
+* **Configurable return settings** — Return window (days), IBAN collection policy, customer-facing refund note, courier name, return address, and return shipping instructions under **WooCommerce → Retururi – setări**.
 * **Native Gutenberg block** — Insert the withdrawal button and form anywhere using the **Withdrawal Button** block (`eu-withdrawal/withdrawal-button`) in the block editor, with optional wide/full alignment support.
 * **Shortcode fallback** — Prefer classic editors or page builders? Use `[eu_withdrawal_button]` with an optional `label` attribute to render the same compliant flow.
-* **Admin dashboard** — Manage all withdrawal requests from a dedicated admin screen: filter by status, search by order or customer, update request status, and inspect the full event timeline.
+* **Admin dashboard** — Manage all withdrawal requests from **WooCommerce → Contract Withdrawals**: filter by status (Pending, Processed, Rejected, Refunded), search by order or customer, update request status, inspect the event timeline, and export CSV / print.
 * **Order meta box** — View linked withdrawal requests directly on the WooCommerce order edit screen (classic and HPOS).
 * **Export for authorities** — Export filtered withdrawal records as CSV or open a print-friendly view for PDF archiving from the admin dashboard.
 * **Rate limiting & security** — Built-in IP rate limiting, nonce verification, and cache-aware nonce refresh protect the public endpoints from abuse.
@@ -76,10 +79,84 @@ Optional attribute:
 [eu_withdrawal_button label="Request withdrawal"]
 ```
 
+Logged-in customers can also use the **My Account → Returns & withdrawals** endpoint (no separate page required for account holders).
+
+### Configure shop settings (before the first customer)
+
+Go to **WooCommerce → Retururi – setări** and fill in:
+
+| Setting | What to put |
+| --- | --- |
+| **Return / withdrawal window (days)** | e.g. **14**. How long after order completion (or creation) the customer may still submit a request. |
+| **Collect bank account (IBAN)** | Recommended: **Always for refunds**, so the customer provides IBAN + account holder name. Other options: only when payment was not by card, or never. |
+| **Refund note for customers** | Text shown on refund requests (e.g. “Refunds are made within 5–14 business days to the IBAN you provide…”). |
+| **Courier name** | e.g. Fan Courier. |
+| **Return address** | Your company address where parcels should be sent (one line per row). |
+| **Return shipping instructions** | How to pack, what to write on the parcel, how to ship, keep the AWB, etc. |
+
+**Tip:** After saving settings, link the “Returns & withdrawals” page from your footer, terms, or order confirmation emails so customers can find it easily.
+
 ### After setup
 
-* Visit **EU Withdrawals** in the WordPress admin menu to review incoming requests.
-* Link the withdrawal page from your footer, terms, or order confirmation emails so customers can easily find it.
+* Visit **WooCommerce → Contract Withdrawals** to review incoming requests.
+* Confirm the My Account menu item and/or your public page (block / shortcode) are visible.
+* Run a quick test with a recent eligible order: full request → admin list + detail → emails.
+
+## Usage guide
+
+### What the customer does (storefront flow)
+
+**Logged-in customers** open **My Account → Returns & withdrawals**. **Guests** use the same page / shortcode / block with **order number + billing email**.
+
+1. **Choose an eligible order** — Orders still inside the return window (e.g. 14 days) are listed. The customer selects the order and continues.
+2. **Request details** — Request type is **Refund / withdrawal**. The customer selects products and quantities, reads return shipping instructions (courier + shop return address), completes **IBAN** and **account holder name** when required, and may add a reason and photos.
+3. **Confirm and submit** — The customer reviews the summary (personal details, IBAN, products, courier instructions) and submits the request.
+4. **Request received** — On-screen confirmation shows date, time, and the **request UUID**. Emails go out: confirmation to the customer + notification to the shop (WooCommerce → Emails → New order recipients).
+
+### What the shop does when a request arrives
+
+Open **WooCommerce → Contract Withdrawals**. Use status filters (**Pending**, **Processed**, **Rejected**, **Refunded**), search, and **Export CSV** / **Print**.
+
+On each request detail, check:
+
+* **Customer details** — name, email, phone, **order address** (where the goods were delivered / from where they may be collected).
+* **Request** — type, **full IBAN** and account holder (where to send money).
+* **Order** — quick link to the WooCommerce order.
+* **Products** — what the customer selected and quantities.
+* **Status** — update as you work the request.
+* **Audit proof** — UUID + hashes (technical / compliance evidence).
+
+#### Recommended statuses
+
+| Status | Meaning |
+| --- | --- |
+| **Pending** | New request, not yet reviewed. |
+| **Processed** | You have taken the request / are waiting for the parcel or preparing the refund. Customer gets a status email. |
+| **Rejected** | Invalid request / outside policy. |
+| **Refunded** | Money has been returned. Customer gets a “refund completed” email. |
+
+#### Practical steps after you receive a request
+
+1. Read the request detail (products, reason, photos if any).
+2. Contact the customer if something is missing; wait for the parcel when applicable.
+3. Mark **Processed** when you start work (customer is notified by email).
+4. Issue the refund to the IBAN / via the original WooCommerce payment method.
+5. Mark **Refunded** (or let a WooCommerce refund sync the status where applicable).
+6. Keep CSV / PDF exports if you need them for authorities or accounting.
+
+### Automatic emails (summary)
+
+* **On submission:** confirmation to the **customer** + notification to the **shop** (WooCommerce “New order” recipients).
+* **Status Processed:** email to the customer (“your request is being processed”).
+* **Status Refunded:** email to the customer (“your refund has been completed”).
+* If an email fails, check the request **Timeline** and your SMTP / spam settings.
+
+### Quick checklist
+
+- [ ] Settings filled (days, IBAN policy, note, courier, address, instructions).
+- [ ] Public page and/or My Account endpoint visible to customers.
+- [ ] Test: recent order → full request → verify list + detail + emails.
+- [ ] Internal process clear: who reviews requests and who issues the refund.
 
 ## Frequently Asked Questions
 
@@ -89,15 +166,19 @@ If you sell goods or services to **consumers in the European Union** under dista
 
 ### Does it work without a customer account (guest checkout)?
 
-**Yes.** The withdrawal flow is fully available to guest purchasers. Customers identify themselves with their **order number** and **billing email address**—the same details provided at checkout—without needing to log in to WordPress or WooCommerce My Account.
+**Yes.** The withdrawal flow is fully available to guest purchasers. Customers identify themselves with their **order number** and **billing email address**—the same details provided at checkout—without needing to log in to WordPress or WooCommerce My Account. Logged-in customers can use **My Account → Returns & withdrawals** for the same flow with eligible orders listed automatically.
 
-### How does the two-step process work?
+### How does the customer flow work?
 
-**Step 1:** The customer enters their order details and sees the standardized withdrawal information and legal statement. **Step 2:** They review a summary of the order and must actively confirm the withdrawal request. Only after confirmation is the request persisted, logged in the audit trail, and emailed to the customer. This design supports the informed, deliberate exercise of the withdrawal right.
+**Step 1:** The customer picks (or looks up) an eligible order still inside the configured return window. **Step 2:** They select products/quantities, review return shipping instructions, provide IBAN when required, and may add a reason and photos. **Step 3:** They review a full summary and must actively confirm. Only after confirmation is the request persisted, logged in the audit trail, and emailed to the customer and the shop. This design supports the informed, deliberate exercise of the withdrawal right.
+
+### Does the plugin refund money automatically?
+
+**No.** The plugin records the request and helps you process it (IBAN, address, products, status, emails). You issue the refund yourself in WooCommerce or via your bank after verification.
 
 ### How can I export data for authorities or audits?
 
-From **EU Withdrawals** in the WordPress admin:
+From **WooCommerce → Contract Withdrawals** in the WordPress admin:
 
 * Click **Export CSV** to download withdrawal records matching your current filters (status, search, sort order).
 * Click **Print view** to open a print-friendly HTML page—use your browser’s **Print → Save as PDF** to archive or share a PDF with consumer protection authorities or your legal team.
@@ -122,8 +203,12 @@ When a customer submits a withdrawal request, the plugin may store:
 
 * **Name** — from the order billing details
 * **Email address** — from the order billing details, used to identify the customer and send confirmation
+* **Phone** — when provided on the request
 * **IP address** — captured at submission for abuse prevention and audit integrity
 * **Order number** — to link the withdrawal request to the originating WooCommerce order
+* **IBAN and account holder** — when IBAN collection is enabled for refunds
+* **Selected products / quantities, reason, and optional photos** — as submitted by the customer
+* **Shipping / billing address from the order** — shown in admin for fulfilment of the return
 
 All such data is stored **exclusively in your WordPress site's local database**, in a dedicated custom audit table designed to be immutable and tamper-evident (HMAC audit log).
 
@@ -143,19 +228,19 @@ All personal data remains **100% under the control of the online store owner** o
 
 ### 1. Request details
 
-The customer picks the request type, selects products and quantities, then optionally adds a reason and photos. Remaining days in the return window are shown next to the order number.
+The customer picks the request type (**Refund / withdrawal**), selects products and quantities, reads return shipping instructions, then optionally adds a reason and photos. Remaining days in the return window are shown next to the order number. IBAN and account holder fields appear when collection is enabled.
 
 ![Request details — product selection, reason, and optional photos](assets/screenshots/screenshot-1.png)
 
 ### 2. Confirm request
 
-Final review of personal details, IBAN, selected products, and return shipping instructions before submitting. This is the last step before the request is saved and confirmation emails are sent.
+Final review of personal details, IBAN, selected products, and return shipping instructions before submitting. This is the last step before the request is saved and confirmation emails are sent to the customer and the shop.
 
 ![Confirm request — IBAN, products, and return shipping instructions](assets/screenshots/screenshot-2.png)
 
 ### 3. Admin request detail
 
-Merchants manage a request with customer address, full IBAN, linked order, products, status updates, and audit proof (UUID + HMAC hashes) for compliance evidence.
+Merchants manage a request with customer address, full IBAN, linked order, products, status updates (**Pending / Processed / Rejected / Refunded**), and audit proof (UUID + HMAC hashes) for compliance evidence.
 
 ![Admin request detail — customer address, IBAN, products, status, and audit proof](assets/screenshots/screenshot-3.png)
 
