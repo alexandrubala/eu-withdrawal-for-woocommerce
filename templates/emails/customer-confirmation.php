@@ -11,7 +11,10 @@
  * @var string               $customer_name  Customer full name.
  * @var string               $customer_email Customer email address.
  * @var string               $customer_phone Optional phone number.
- * @var string               $reason         Optional withdrawal reason.
+ * @var string               $reason         Optional additional details.
+ * @var string               $reason_label   Optional return reason.
+ * @var string               $product_opened Optional yes|no.
+ * @var array<int, array<string, mixed>> $photos Optional reason photos.
  * @var array<int, array<string, mixed>> $products Order line items.
  */
 
@@ -26,6 +29,9 @@ $customer_name  = $customer_name ?? '';
 $customer_email = $customer_email ?? '';
 $customer_phone = $customer_phone ?? '';
 $reason         = $reason ?? '';
+$reason_label   = $reason_label ?? '';
+$product_opened = $product_opened ?? '';
+$photos         = $photos ?? array();
 $products       = $products ?? array();
 
 $timestamp = strtotime( $submitted_at );
@@ -126,13 +132,45 @@ $site_name = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 									</td>
 								</tr>
 								<?php endif; ?>
+								<?php if ( '' !== $reason_label ) : ?>
+								<tr>
+									<td style="padding:6px 0;font-size:13px;color:#6b7280;vertical-align:top;">
+										<?php echo esc_html( Legal_String_Catalog::translate( 'return_reason' ) ); ?>
+									</td>
+									<td style="padding:6px 0;font-size:14px;color:#111827;">
+										<?php echo esc_html( $reason_label ); ?>
+									</td>
+								</tr>
+								<?php endif; ?>
+								<?php if ( '' !== $product_opened ) : ?>
+								<tr>
+									<td style="padding:6px 0;font-size:13px;color:#6b7280;vertical-align:top;">
+										<?php echo esc_html( Legal_String_Catalog::translate( 'product_opened' ) ); ?>
+									</td>
+									<td style="padding:6px 0;font-size:14px;color:#111827;">
+										<?php echo esc_html( Legal_String_Catalog::product_opened_label( $product_opened ) ); ?>
+									</td>
+								</tr>
+								<?php endif; ?>
 								<?php if ( '' !== $reason ) : ?>
 								<tr>
 									<td style="padding:6px 0;font-size:13px;color:#6b7280;vertical-align:top;">
-										<?php echo esc_html( Legal_String_Catalog::translate( 'reason_for_withdrawal' ) ); ?>
+										<?php echo esc_html( Legal_String_Catalog::translate( 'additional_details' ) ); ?>
 									</td>
 									<td style="padding:6px 0;font-size:14px;color:#111827;">
 										<?php echo esc_html( $reason ); ?>
+									</td>
+								</tr>
+								<?php endif; ?>
+								<?php if ( ! empty( $photos ) ) : ?>
+								<tr>
+									<td style="padding:6px 0;font-size:13px;color:#6b7280;vertical-align:top;">
+										<?php echo esc_html( Legal_String_Catalog::translate( 'reason_photos' ) ); ?>
+									</td>
+									<td style="padding:6px 0;font-size:14px;color:#111827;">
+										<?php foreach ( $photos as $photo ) : ?>
+											<a href="<?php echo esc_url( (string) ( $photo['url'] ?? '' ) ); ?>"><img src="<?php echo esc_url( (string) ( $photo['thumb'] ?? '' ) ); ?>" alt="<?php echo esc_attr( (string) ( $photo['name'] ?? '' ) ); ?>" width="72" height="72" style="display:inline-block;margin:0 6px 6px 0;border-radius:4px;" /></a>
+										<?php endforeach; ?>
 									</td>
 								</tr>
 								<?php endif; ?>

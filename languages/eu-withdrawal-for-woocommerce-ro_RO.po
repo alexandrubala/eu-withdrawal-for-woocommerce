@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: EU Withdrawal for WooCommerce 1.2.0\n"
-"Report-Msgid-Bugs-To: https://github.com/alexandrubala/eu-withdrawal-for-woocommerce\n"
-"POT-Creation-Date: 2026-07-28 14:40+0000\n"
+"Project-Id-Version: EU Withdrawal for WooCommerce 1.4.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/eu-withdrawal-for-woocommerce\n"
+"POT-Creation-Date: 2026-11-09T14:43:03+00:00\n"
 "PO-Revision-Date: 2026-07-28 14:40+0000\n"
 "Last-Translator: Alexandru Bala\n"
 "Language-Team: Romanian\n"
@@ -15,52 +15,314 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100>0 && n%100<20)) ? 1 : 2);\n"
 "X-Domain: eu-withdrawal-for-woocommerce\n"
 
+#. Plugin Name of the plugin
+#: eu-withdrawal-for-woocommerce.php
+msgid "EU Withdrawal for WooCommerce"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: eu-withdrawal-for-woocommerce.php
+msgid "https://github.com/alexandrubala/eu-withdrawal-for-woocommerce"
+msgstr ""
+
+#. Description of the plugin
+#: eu-withdrawal-for-woocommerce.php
+msgid "EU Directive 2023/2673 Art. 11a compliant withdrawal flow for WooCommerce stores."
+msgstr ""
+
+#. Author of the plugin
+#: eu-withdrawal-for-woocommerce.php
+msgid "Alexandru Bala"
+msgstr ""
+
+#. Author URI of the plugin
+#: eu-withdrawal-for-woocommerce.php
+msgid "https://github.com/alexandrubala"
+msgstr ""
+
+#: includes/Activator.php:28
+msgid "EU Withdrawal for WooCommerce requires WooCommerce. Please activate WooCommerce and try again."
+msgstr "EU Withdrawal for WooCommerce necesită WooCommerce. Activează WooCommerce și încearcă din nou."
+
 #: includes/Activator.php:32
 msgid "Missing dependency"
 msgstr "Dependență lipsă"
 
-#: includes/WooCommerce/Refund_Integration.php:97
-msgid "WooCommerce refund #%d completed. Withdrawal marked as refunded."
-msgstr "Rambursarea WooCommerce #%d a fost finalizată. Retragerea a fost marcată ca rambursată."
+#: includes/Admin/Admin.php:102 includes/Admin/Admin.php:233
+#: includes/Services/Export_Service.php:144
+msgid "Contract Withdrawals"
+msgstr "Retrageri din contract"
+
+#: includes/Admin/Admin.php:103
+msgid "Retrageri contract"
+msgstr "Retrageri contract"
+
+#: includes/Admin/Admin.php:121 includes/Admin/Export_Controller.php:77
+#: includes/Admin/Settings_Page.php:67
+msgid "You do not have permission to perform this action."
+msgstr "Nu ai permisiunea să efectuezi această acțiune."
+
+#: includes/Admin/Admin.php:185
+msgid "Are you sure you want to reject this withdrawal request?"
+msgstr "Sigur vrei să respingi această cerere de retragere?"
+
+#: includes/Admin/Admin.php:186
+msgid "Are you sure you want to mark this request as processed?"
+msgstr "Sigur vrei să marchezi această cerere ca procesată?"
+
+#: includes/Admin/Admin.php:187
+msgid "Are you sure you want to mark this request as refunded?"
+msgstr "Sigur vrei să marchezi această cerere ca rambursată?"
+
+#: includes/Admin/Admin.php:188
+msgid "Are you sure you want to set this request back to pending?"
+msgstr "Sigur vrei să setezi această cerere înapoi la în așteptare?"
+
+#: includes/Admin/Admin.php:189
+msgid "Are you sure you want to change the status of this request?"
+msgstr "Sigur vrei să schimbi statusul acestei cereri?"
+
+#: includes/Admin/Admin.php:202 includes/Admin/Settings_Page.php:116
+msgid "You do not have permission to access this page."
+msgstr "Nu ai permisiunea să accesezi această pagină."
+
+#: includes/Admin/Admin.php:241
+msgid "Search Requests"
+msgstr "Caută cereri"
+
+#: includes/Admin/Export_Controller.php:81
+msgid "Security check failed."
+msgstr "Verificarea de securitate a eșuat."
+
+#: includes/Admin/Order_Meta_Box.php:68
+msgid "Contract Withdrawal"
+msgstr "Retragere din contract"
+
+#: includes/Admin/Order_Meta_Box.php:86
+msgid "Unable to determine order ID."
+msgstr "Nu s-a putut determina ID-ul comenzii."
+
+#: includes/Admin/Order_Meta_Box.php:93
+msgid "No withdrawal request is linked to this order."
+msgstr "Nicio cerere de retragere nu este legată de această comandă."
+
+#: includes/Admin/Order_Meta_Box.php:112
+#: includes/Admin/Withdrawal_Detail_Page.php:165
+msgid "Request"
+msgstr "Cerere"
+
+#: includes/Admin/Order_Meta_Box.php:113
+#: includes/Admin/Withdrawals_List_Table.php:62
+#: includes/Services/Export_Service.php:79
+#: includes/Services/Export_Service.php:194
+#: templates/emails/customer-status-update.php:88
+msgid "Status"
+msgstr "Status"
+
+#: includes/Admin/Order_Meta_Box.php:115
+#: includes/Services/Export_Service.php:192
+msgid "Customer"
+msgstr "Client"
+
+#: includes/Admin/Order_Meta_Box.php:116
+#: includes/Admin/Withdrawal_Detail_Page.php:179
+#: includes/Services/Export_Service.php:195
+msgid "Submitted"
+msgstr "Trimisă"
+
+#: includes/Admin/Order_Meta_Box.php:122 includes/Admin/Settings_Page.php:194
+#: includes/Admin/Withdrawal_Detail_Page.php:157
+#: includes/Integrations/Legal_String_Catalog.php:59
+#: includes/Services/Export_Service.php:80
+msgid "Return reason"
+msgstr "Motivul returnării"
+
+#: includes/Admin/Order_Meta_Box.php:126 includes/Admin/Settings_Page.php:195
+#: includes/Admin/Withdrawal_Detail_Page.php:161
+#: includes/Services/Export_Service.php:81
+msgid "Product opened"
+msgstr "Produs deschis"
+
+#: includes/Admin/Order_Meta_Box.php:132
+msgid "View Withdrawal Details"
+msgstr "Vezi detaliile retragerii"
+
+#: includes/Admin/Settings_Page.php:48 includes/Admin/Settings_Page.php:122
+msgid "Return / Withdrawal Settings"
+msgstr "Setări retur / retragere"
+
+#: includes/Admin/Settings_Page.php:49
+msgid "Retururi – setări"
+msgstr "Retururi – setări"
+
+#: includes/Admin/Settings_Page.php:125
+msgid "Settings saved."
+msgstr "Setările au fost salvate."
+
+#: includes/Admin/Settings_Page.php:133
+msgid "Some texts were not saved. Check the fields marked below."
+msgstr "Unele texte nu au fost salvate. Verifică câmpurile marcate mai jos."
+
+#: includes/Admin/Settings_Page.php:142
+msgid "Return / withdrawal window (days)"
+msgstr "Perioada de retur / retragere (zile)"
+
+#: includes/Admin/Settings_Page.php:144
+msgid "Number of days after order completion (or creation) during which customers can submit a return or withdrawal. Orders older than this window are not queried."
+msgstr "Numărul de zile după finalizarea (sau crearea) comenzii în care clienții pot trimite o cerere de retur sau retragere. Comenzile mai vechi nu sunt interogate."
+
+#: includes/Admin/Settings_Page.php:146
+msgid "Collect bank account (IBAN)"
+msgstr "Colectare cont bancar (IBAN)"
+
+#: includes/Admin/Settings_Page.php:149
+msgid "Always for refunds"
+msgstr "Întotdeauna la rambursări"
+
+#: includes/Admin/Settings_Page.php:150
+msgid "Only when payment was not by card"
+msgstr "Doar când plata nu a fost cu cardul"
+
+#: includes/Admin/Settings_Page.php:151
+msgid "Never"
+msgstr "Niciodată"
+
+#: includes/Admin/Settings_Page.php:163
+msgid "Refund note for customers"
+msgstr "Notă rambursare pentru clienți"
+
+#: includes/Admin/Settings_Page.php:165
+msgid "Shown when the customer chooses a refund (e.g. how and when money is returned)."
+msgstr "Afișată când clientul alege o rambursare (ex.: cum și când se returnează banii)."
+
+#: includes/Admin/Settings_Page.php:167
+msgid "Courier name"
+msgstr "Nume curier"
+
+#: includes/Admin/Settings_Page.php:170
+msgid "Return address"
+msgstr "Adresă retur"
+
+#: includes/Admin/Settings_Page.php:173
+msgid "Return shipping instructions"
+msgstr "Instrucțiuni expediere retur"
+
+#: includes/Admin/Settings_Page.php:175
+msgid "Shown when the customer chooses to return products. No courier plugin is required — paste instructions, pickup details, or a tracking link."
+msgstr "Afișate când clientul alege returnarea produselor. Nu e nevoie de plugin de curier — lipește instrucțiuni, detalii ridicare sau un link de tracking."
+
+#: includes/Admin/Settings_Page.php:182
+msgid "Save settings"
+msgstr "Salvează setările"
+
+#: includes/Admin/Settings_Page.php:196
+#: includes/Admin/Withdrawal_Detail_Page.php:186
+#: includes/Integrations/Legal_String_Catalog.php:69
+#: includes/Services/Export_Service.php:82
+msgid "Additional details"
+msgstr "Detalii suplimentare"
+
+#: includes/Admin/Settings_Page.php:197
+#: includes/Admin/Withdrawal_Detail_Page.php:401
+#: includes/Integrations/Legal_String_Catalog.php:70
+#: includes/Services/Export_Service.php:83
+msgid "Photos"
+msgstr "Fotografii"
+
+#: includes/Admin/Settings_Page.php:198
+#: includes/Admin/Withdrawal_Detail_Page.php:127
+#: includes/Integrations/Legal_String_Catalog.php:57
+msgid "Phone"
+msgstr "Telefon"
+
+#: includes/Admin/Settings_Page.php:199
+msgid "Product code (SKU)"
+msgstr "Cod produs (SKU)"
+
+#: includes/Admin/Settings_Page.php:200
+msgid "Customer data summary"
+msgstr "Rezumat date"
+
+#: includes/Admin/Settings_Page.php:201
+msgid "The \"Refund / withdrawal\" box with \"What would you like to do?\""
+msgstr "Caseta „Rambursare / retragere” cu „Ce ai vrea să faci?”"
+
+#: includes/Admin/Settings_Page.php:204
+msgid "Form fields"
+msgstr "Câmpuri formular"
+
+#: includes/Admin/Settings_Page.php:205
+msgid "A hidden field is not displayed, validated or saved. The return reason, product opened, additional details and photos always stay optional for the customer."
+msgstr "Un câmp ascuns nu se afișează, nu se validează și nu se salvează. Motivul returnării, produsul deschis, detaliile suplimentare și pozele rămân mereu opționale pentru client."
+
+#: includes/Admin/Settings_Page.php:216
+msgid "Show in the form"
+msgstr "Afișează în formular"
+
+#: includes/Admin/Settings_Page.php:220
+msgid "Maximum number of photos"
+msgstr "Numărul maxim de poze"
+
+#: includes/Admin/Settings_Page.php:232
+msgid "Return reason options"
+msgstr "Opțiuni pentru motivul returnării"
+
+#: includes/Admin/Settings_Page.php:238
+msgid "One option per line. Leave empty to use the default list."
+msgstr "O opțiune pe linie. Lasă gol pentru a folosi lista implicită."
+
+#: includes/Admin/Settings_Page.php:253
+msgid "Form texts"
+msgstr "Texte formular"
+
+#: includes/Admin/Settings_Page.php:254
+#, php-format
+msgid "Leave a field empty to use the default text, shown in gray. Keep placeholders such as %d or %1$s exactly as in the default text."
+msgstr "Lasă un câmp gol pentru a folosi textul implicit, afișat cu gri. Păstrează substituenții precum %d sau %1$s exact ca în textul implicit."
+
+#: includes/Admin/Settings_Page.php:306
+msgid "This text must clearly say that you are withdrawing from the contract or order."
+msgstr "Acest text trebuie să spună clar că renunți la contract sau comandă."
+
+#: includes/Admin/Settings_Page.php:310
+msgid "Not saved: the placeholders must be the same as in the default text."
+msgstr "Nu s-a salvat: substituenții trebuie să fie aceiași ca în textul implicit."
+
+#: includes/Admin/Settings_Page.php:310
+msgid "Refused text:"
+msgstr "Text refuzat:"
 
 #: includes/Admin/Withdrawals_List_Table.php:57
-#: includes/Services/Export_Service.php:69
-#: includes/Services/Export_Service.php:183
+#: includes/Services/Export_Service.php:70
+#: includes/Services/Export_Service.php:190
 msgid "ID"
 msgstr "ID"
 
 #: includes/Admin/Withdrawals_List_Table.php:58
-#: includes/Services/Export_Service.php:70
-#: includes/Services/Export_Service.php:184
+#: includes/Services/Export_Service.php:71
+#: includes/Services/Export_Service.php:191
 msgid "UUID"
 msgstr "UUID"
 
 #: includes/Admin/Withdrawals_List_Table.php:59
-#: includes/Services/Export_Service.php:71
+#: includes/Services/Export_Service.php:72
 msgid "Customer Name"
 msgstr "Nume client"
 
 #: includes/Admin/Withdrawals_List_Table.php:60
-#: includes/Admin/Withdrawal_Detail_Page.php:148
-#: includes/Services/Export_Service.php:186
+#: includes/Admin/Withdrawal_Detail_Page.php:170
+#: includes/Services/Export_Service.php:193
 msgid "Order"
 msgstr "Comandă"
 
 #: includes/Admin/Withdrawals_List_Table.php:61
-#: includes/Admin/Withdrawal_Detail_Page.php:124
-#: includes/Services/Export_Service.php:75
+#: includes/Admin/Withdrawal_Detail_Page.php:144
+#: includes/Services/Export_Service.php:76
 msgid "Type"
 msgstr "Tip"
 
-#: includes/Admin/Withdrawals_List_Table.php:62
-#: includes/Admin/Order_Meta_Box.php:112
-#: includes/Services/Export_Service.php:78
-#: includes/Services/Export_Service.php:187
-msgid "Status"
-msgstr "Status"
-
 #: includes/Admin/Withdrawals_List_Table.php:63
-#: includes/Integrations/Legal_String_Catalog.php:66
+#: includes/Integrations/Legal_String_Catalog.php:100
 msgid "Date"
 msgstr "Data"
 
@@ -68,610 +330,182 @@ msgstr "Data"
 msgid "All"
 msgstr "Toate"
 
-#: includes/Admin/Withdrawals_List_Table.php:303
+#: includes/Admin/Withdrawals_List_Table.php:310
 msgid "Export CSV"
 msgstr "Export CSV"
 
-#: includes/Admin/Withdrawals_List_Table.php:309
+#: includes/Admin/Withdrawals_List_Table.php:316
 msgid "Print / PDF"
 msgstr "Print / PDF"
 
-#: includes/Admin/Withdrawals_List_Table.php:361
-#: includes/Services/Export_Service.php:194
+#: includes/Admin/Withdrawals_List_Table.php:368
+#: includes/Services/Export_Service.php:201
 msgid "No withdrawal requests found."
 msgstr "Nu au fost găsite cereri de retragere."
 
-#: includes/Admin/Settings_Page.php:42
-#: includes/Admin/Settings_Page.php:103
-msgid "Return / Withdrawal Settings"
-msgstr "Setări retur / retragere"
-
-#: includes/Admin/Settings_Page.php:43
-msgid "Retururi – setări"
-msgstr "Retururi – setări"
-
-#: includes/Admin/Settings_Page.php:61
-#: includes/Admin/Export_Controller.php:77
-#: includes/Admin/Admin.php:119
-msgid "You do not have permission to perform this action."
-msgstr "Nu ai permisiunea să efectuezi această acțiune."
-
-#: includes/Admin/Settings_Page.php:97
-#: includes/Admin/Admin.php:200
-msgid "You do not have permission to access this page."
-msgstr "Nu ai permisiunea să accesezi această pagină."
-
-#: includes/Admin/Settings_Page.php:106
-msgid "Settings saved."
-msgstr "Setările au fost salvate."
-
-#: includes/Admin/Settings_Page.php:115
-msgid "Return / withdrawal window (days)"
-msgstr "Perioada de retur / retragere (zile)"
-
-#: includes/Admin/Settings_Page.php:117
-msgid "Number of days after order completion (or creation) during which customers can submit a return or withdrawal. Orders older than this window are not queried."
-msgstr "Numărul de zile după finalizarea (sau crearea) comenzii în care clienții pot trimite o cerere de retur sau retragere. Comenzile mai vechi nu sunt interogate."
-
-#: includes/Admin/Settings_Page.php:119
-msgid "Collect bank account (IBAN)"
-msgstr "Colectare cont bancar (IBAN)"
-
-#: includes/Admin/Settings_Page.php:122
-msgid "Always for refunds"
-msgstr "Întotdeauna la rambursări"
-
-#: includes/Admin/Settings_Page.php:123
-msgid "Only when payment was not by card"
-msgstr "Doar când plata nu a fost cu cardul"
-
-#: includes/Admin/Settings_Page.php:124
-msgid "Never"
-msgstr "Niciodată"
-
-#: includes/Admin/Settings_Page.php:136
-msgid "Refund note for customers"
-msgstr "Notă rambursare pentru clienți"
-
-#: includes/Admin/Settings_Page.php:138
-msgid "Shown when the customer chooses a refund (e.g. how and when money is returned)."
-msgstr "Afișată când clientul alege o rambursare (ex.: cum și când se returnează banii)."
-
-#: includes/Admin/Settings_Page.php:140
-msgid "Courier name"
-msgstr "Nume curier"
-
-#: includes/Admin/Settings_Page.php:143
-msgid "Courier phone"
-msgstr "Telefon curier"
-
-#: includes/Admin/Settings_Page.php:146
-msgid "Return address"
-msgstr "Adresă retur"
-
-#: includes/Admin/Settings_Page.php:149
-msgid "Return shipping instructions"
-msgstr "Instrucțiuni expediere retur"
-
-#: includes/Admin/Settings_Page.php:151
-msgid "Shown when the customer chooses to return products. No courier plugin is required — paste instructions, pickup details, or a tracking link."
-msgstr "Afișate când clientul alege returnarea produselor. Nu e nevoie de plugin de curier — lipește instrucțiuni, detalii ridicare sau un link de tracking."
-
-#: includes/Admin/Settings_Page.php:155
-msgid "Save settings"
-msgstr "Salvează setările"
-
-#: includes/Admin/Withdrawal_Detail_Page.php:75
-#: includes/Admin/Withdrawal_Detail_Page.php:90
+#: includes/Admin/Withdrawal_Detail_Page.php:87
+#: includes/Admin/Withdrawal_Detail_Page.php:102
 msgid "Withdrawal Request"
 msgstr "Cerere de retragere"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:76
-#: includes/Admin/Withdrawal_Detail_Page.php:206
+#: includes/Admin/Withdrawal_Detail_Page.php:88
+#: includes/Admin/Withdrawal_Detail_Page.php:228
 #: includes/REST/Withdrawal_Controller.php:80
 msgid "Withdrawal request not found."
 msgstr "Cererea de retragere nu a fost găsită."
 
-#: includes/Admin/Withdrawal_Detail_Page.php:95
+#: includes/Admin/Withdrawal_Detail_Page.php:107
 msgid "Status updated successfully."
 msgstr "Statusul a fost actualizat cu succes."
 
-#: includes/Admin/Withdrawal_Detail_Page.php:99
+#: includes/Admin/Withdrawal_Detail_Page.php:111
 msgid "Could not update the request status."
 msgstr "Statusul cererii nu a putut fi actualizat."
 
-#: includes/Admin/Withdrawal_Detail_Page.php:105
+#: includes/Admin/Withdrawal_Detail_Page.php:117
 msgid "Back to all requests"
 msgstr "Înapoi la toate cererile"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:113
-msgid "Customer Details"
-msgstr "Detalii client"
-
-#: includes/Admin/Withdrawal_Detail_Page.php:115
+#: includes/Admin/Withdrawal_Detail_Page.php:125
 msgid "Name"
 msgstr "Nume"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:116
-#: includes/Integrations/Legal_String_Catalog.php:34
+#: includes/Admin/Withdrawal_Detail_Page.php:126
+#: includes/Integrations/Legal_String_Catalog.php:48
 msgid "Email"
 msgstr "Email"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:117
-#: includes/Integrations/Legal_String_Catalog.php:40
-msgid "Phone"
-msgstr "Telefon"
+#: includes/Admin/Withdrawal_Detail_Page.php:132
+msgid "Address"
+msgstr "Adresă"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:128
-#: includes/Integrations/Legal_String_Catalog.php:56
-#: includes/Services/Export_Service.php:76
+#: includes/Admin/Withdrawal_Detail_Page.php:136
+msgid "Customer Details"
+msgstr "Detalii client"
+
+#: includes/Admin/Withdrawal_Detail_Page.php:149
+#: includes/Integrations/Legal_String_Catalog.php:90
+#: includes/Services/Export_Service.php:77
 msgid "IBAN"
 msgstr "IBAN"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:129
-#: includes/Services/Export_Service.php:77
+#: includes/Admin/Withdrawal_Detail_Page.php:150
+#: includes/Services/Export_Service.php:78
 msgid "Account holder"
 msgstr "Titular cont"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:133
-#: includes/Admin/Order_Meta_Box.php:111
-msgid "Request"
-msgstr "Cerere"
-
-#: includes/Admin/Withdrawal_Detail_Page.php:139
-msgid "Courier / return instructions"
-msgstr "Instrucțiuni curier / retur"
-
-#: includes/Admin/Withdrawal_Detail_Page.php:150
-#: includes/Services/Export_Service.php:74
+#: includes/Admin/Withdrawal_Detail_Page.php:172
+#: includes/Services/Export_Service.php:75
 msgid "Order Number"
 msgstr "Număr comandă"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:157
-#: includes/Admin/Order_Meta_Box.php:115
-#: includes/Services/Export_Service.php:188
-msgid "Submitted"
-msgstr "Trimisă"
-
-#: includes/Admin/Withdrawal_Detail_Page.php:164
-#: includes/Integrations/Legal_String_Catalog.php:42
-#: includes/Services/Export_Service.php:79
-msgid "Reason"
-msgstr "Motiv"
-
-#: includes/Admin/Withdrawal_Detail_Page.php:200
+#: includes/Admin/Withdrawal_Detail_Page.php:222
 msgid "Invalid status."
 msgstr "Status invalid."
 
-#: includes/Admin/Withdrawal_Detail_Page.php:218
+#: includes/Admin/Withdrawal_Detail_Page.php:240
 msgid "Could not update status."
 msgstr "Statusul nu a putut fi actualizat."
 
-#: includes/Admin/Withdrawal_Detail_Page.php:231
+#. translators: 1: old status label, 2: new status label
+#: includes/Admin/Withdrawal_Detail_Page.php:253
+#, php-format
 msgid "Status changed from %1$s to %2$s."
 msgstr "Status schimbat din %1$s în %2$s."
 
-#: includes/Admin/Withdrawal_Detail_Page.php:294
-#: includes/Integrations/Legal_String_Catalog.php:43
-msgid "Photos"
-msgstr "Fotografii"
+#: includes/Admin/Withdrawal_Detail_Page.php:304
+#: includes/WooCommerce/Refund_Integration.php:138
+msgid "Customer status update email could not be sent."
+msgstr "Emailul de actualizare a statusului către client nu a putut fi trimis."
 
-#: includes/Admin/Withdrawal_Detail_Page.php:318
-#: includes/Integrations/Legal_String_Catalog.php:72
-#: includes/Services/Export_Service.php:80
+#: includes/Admin/Withdrawal_Detail_Page.php:425
+#: includes/Integrations/Legal_String_Catalog.php:112
+#: includes/Services/Export_Service.php:84
 msgid "Products"
 msgstr "Produse"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:321
+#: includes/Admin/Withdrawal_Detail_Page.php:428
 msgid "No products recorded."
 msgstr "Niciun produs înregistrat."
 
-#: includes/Admin/Withdrawal_Detail_Page.php:328
+#: includes/Admin/Withdrawal_Detail_Page.php:435
 msgid "Product"
 msgstr "Produs"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:329
+#: includes/Admin/Withdrawal_Detail_Page.php:436
 msgid "SKU"
 msgstr "SKU"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:330
+#: includes/Admin/Withdrawal_Detail_Page.php:437
 msgid "Price"
 msgstr "Preț"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:331
-#: includes/Integrations/Legal_String_Catalog.php:54
+#: includes/Admin/Withdrawal_Detail_Page.php:438
+#: includes/Integrations/Legal_String_Catalog.php:88
 msgid "Qty"
 msgstr "Cant."
 
-#: includes/Admin/Withdrawal_Detail_Page.php:393
+#: includes/Admin/Withdrawal_Detail_Page.php:483
 msgid "Timeline"
 msgstr "Istoric"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:396
+#: includes/Admin/Withdrawal_Detail_Page.php:486
 msgid "No events recorded yet."
 msgstr "Niciun eveniment înregistrat încă."
 
-#: includes/Admin/Withdrawal_Detail_Page.php:438
+#: includes/Admin/Withdrawal_Detail_Page.php:528
 msgid "Change Status"
 msgstr "Schimbă statusul"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:444
+#: includes/Admin/Withdrawal_Detail_Page.php:534
 msgid "New status"
 msgstr "Status nou"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:459
+#: includes/Admin/Withdrawal_Detail_Page.php:549
 msgid "Update Status"
 msgstr "Actualizează statusul"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:474
+#: includes/Admin/Withdrawal_Detail_Page.php:564
 msgid "Audit Proof"
 msgstr "Dovadă audit"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:477
+#: includes/Admin/Withdrawal_Detail_Page.php:567
 msgid "No audit record found for this request."
 msgstr "Nu există înregistrare de audit pentru această cerere."
 
-#: includes/Admin/Withdrawal_Detail_Page.php:483
+#: includes/Admin/Withdrawal_Detail_Page.php:573
 msgid "Request UUID"
 msgstr "UUID cerere"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:486
+#: includes/Admin/Withdrawal_Detail_Page.php:576
 msgid "Payload Hash"
 msgstr "Hash payload"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:489
+#: includes/Admin/Withdrawal_Detail_Page.php:579
 msgid "Security Hash"
 msgstr "Hash securitate"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:493
+#: includes/Admin/Withdrawal_Detail_Page.php:583
 msgid "Previous Hash"
 msgstr "Hash anterior"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:497
+#: includes/Admin/Withdrawal_Detail_Page.php:587
 msgid "Recorded At"
 msgstr "Înregistrat la"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:553
+#: includes/Admin/Withdrawal_Detail_Page.php:643
 msgid "Actor: Customer"
 msgstr "Actor: Client"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:562
+#. translators: %s: admin display name
+#: includes/Admin/Withdrawal_Detail_Page.php:652
+#, php-format
 msgid "Actor: %s"
 msgstr "Actor: %s"
 
-#: includes/Admin/Withdrawal_Detail_Page.php:569
+#: includes/Admin/Withdrawal_Detail_Page.php:659
 msgid "Actor: System"
 msgstr "Actor: Sistem"
-
-#: includes/Admin/Export_Controller.php:81
-msgid "Security check failed."
-msgstr "Verificarea de securitate a eșuat."
-
-#: includes/Admin/Admin.php:100
-#: includes/Admin/Admin.php:231
-#: includes/Services/Export_Service.php:137
-msgid "Contract Withdrawals"
-msgstr "Retrageri din contract"
-
-#: includes/Admin/Admin.php:101
-msgid "Retrageri contract"
-msgstr "Retrageri contract"
-
-#: includes/Admin/Admin.php:183
-msgid "Are you sure you want to reject this withdrawal request?"
-msgstr "Sigur vrei să respingi această cerere de retragere?"
-
-#: includes/Admin/Admin.php:184
-msgid "Are you sure you want to mark this request as processed?"
-msgstr "Sigur vrei să marchezi această cerere ca procesată?"
-
-#: includes/Admin/Admin.php:185
-msgid "Are you sure you want to mark this request as refunded?"
-msgstr "Sigur vrei să marchezi această cerere ca rambursată?"
-
-#: includes/Admin/Admin.php:186
-msgid "Are you sure you want to set this request back to pending?"
-msgstr "Sigur vrei să setezi această cerere înapoi la în așteptare?"
-
-#: includes/Admin/Admin.php:187
-msgid "Are you sure you want to change the status of this request?"
-msgstr "Sigur vrei să schimbi statusul acestei cereri?"
-
-#: includes/Admin/Admin.php:239
-msgid "Search Requests"
-msgstr "Caută cereri"
-
-#: includes/Admin/Order_Meta_Box.php:67
-msgid "Contract Withdrawal"
-msgstr "Retragere din contract"
-
-#: includes/Admin/Order_Meta_Box.php:85
-msgid "Unable to determine order ID."
-msgstr "Nu s-a putut determina ID-ul comenzii."
-
-#: includes/Admin/Order_Meta_Box.php:92
-msgid "No withdrawal request is linked to this order."
-msgstr "Nicio cerere de retragere nu este legată de această comandă."
-
-#: includes/Admin/Order_Meta_Box.php:114
-#: includes/Services/Export_Service.php:185
-msgid "Customer"
-msgstr "Client"
-
-#: includes/Admin/Order_Meta_Box.php:119
-msgid "View Withdrawal Details"
-msgstr "Vezi detaliile retragerii"
-
-#: includes/Integrations/Legal_String_Catalog.php:29
-msgid "Request return / withdrawal"
-msgstr "Cerere retur / retragere"
-
-#: includes/Integrations/Legal_String_Catalog.php:30
-msgid "Return or withdrawal request"
-msgstr "Cerere de retur sau retragere"
-
-#: includes/Integrations/Legal_String_Catalog.php:31
-msgid "Enter your order details to begin the return or withdrawal process."
-msgstr "Introdu datele comenzii pentru a începe procesul de retur sau retragere."
-
-#: includes/Integrations/Legal_String_Catalog.php:32
-msgid "You can request a return or withdrawal within %d days of order completion."
-msgstr "Poți solicita un retur sau o retragere în termen de %d zile de la finalizarea comenzii."
-
-#: includes/Integrations/Legal_String_Catalog.php:33
-msgid "Full name"
-msgstr "Nume complet"
-
-#: includes/Integrations/Legal_String_Catalog.php:35
-msgid "Order number"
-msgstr "Număr comandă"
-
-#: includes/Integrations/Legal_String_Catalog.php:36
-msgid "Select an order"
-msgstr "Selectează o comandă"
-
-#: includes/Integrations/Legal_String_Catalog.php:37
-msgid "Choose an eligible order…"
-msgstr "Alege o comandă eligibilă…"
-
-#: includes/Integrations/Legal_String_Catalog.php:38
-msgid "You have no orders eligible for return or withdrawal right now."
-msgstr "Momentan nu ai comenzi eligibile pentru retur sau retragere."
-
-#: includes/Integrations/Legal_String_Catalog.php:39
-msgid "You can still look up an order with the order number and billing email used at checkout."
-msgstr "Poți totuși căuta o comandă folosind numărul comenzii și emailul de facturare folosit la checkout."
-
-#: includes/Integrations/Legal_String_Catalog.php:41
-msgid "(optional)"
-msgstr "(opțional)"
-
-#: includes/Integrations/Legal_String_Catalog.php:44
-msgid "Add up to 5 photos (JPG, PNG, GIF, or WebP, max 5 MB each)."
-msgstr "Adaugi până la 5 fotografii (JPG, PNG, GIF sau WebP, max. 5 MB fiecare)."
-
-#: includes/Integrations/Legal_String_Catalog.php:45
-msgid "%d photo(s) already attached. Choose new files only if you want to replace them."
-msgstr "%d fotografie(i) deja atașată(e). Alege fișiere noi doar dacă vrei să le înlocuiești."
-
-#: includes/Integrations/Legal_String_Catalog.php:46
-msgid "Continue"
-msgstr "Continuă"
-
-#: includes/Integrations/Legal_String_Catalog.php:47
-msgid "What would you like to do?"
-msgstr "Ce dorești să faci?"
-
-#: includes/Integrations/Legal_String_Catalog.php:48
-msgid "Order #%1$s — %2$d day(s) remaining in the return window."
-msgstr "Comanda #%1$s — %2$d zi(le) rămase în perioada de retur."
-
-#: includes/Integrations/Legal_String_Catalog.php:49
-msgid "Request type"
-msgstr "Tip cerere"
-
-#: includes/Integrations/Legal_String_Catalog.php:50
-msgid "Send the product back and follow the courier instructions."
-msgstr "Trimite produsul înapoi și urmează instrucțiunile de curierat."
-
-#: includes/Integrations/Legal_String_Catalog.php:51
-msgid "Get your money back (withdrawal / refund)."
-msgstr "Primește banii înapoi (retragere / rambursare)."
-
-#: includes/Integrations/Legal_String_Catalog.php:52
-msgid "Select products"
-msgstr "Selectează produsele"
-
-#: includes/Integrations/Legal_String_Catalog.php:53
-msgid "No products remain available for return on this order."
-msgstr "Nu mai există produse disponibile pentru retur la această comandă."
-
-#: includes/Integrations/Legal_String_Catalog.php:55
-msgid "Where should we send the refund?"
-msgstr "Unde să trimitem rambursarea?"
-
-#: includes/Integrations/Legal_String_Catalog.php:57
-msgid "Account holder name"
-msgstr "Numele titularului contului"
-
-#: includes/Integrations/Legal_String_Catalog.php:58
-msgid "Return shipping"
-msgstr "Expediere retur"
-
-#: includes/Integrations/Legal_String_Catalog.php:59
-msgid "The store will contact you with return shipping instructions."
-msgstr "Magazinul te va contacta cu instrucțiuni pentru expedierea returului."
-
-#: includes/Integrations/Legal_String_Catalog.php:60
-msgid "Confirm your request"
-msgstr "Confirmă cererea"
-
-#: includes/Integrations/Legal_String_Catalog.php:61
-msgid "Please review your details before submitting."
-msgstr "Te rugăm să verifici datele înainte de trimitere."
-
-#: includes/Integrations/Legal_String_Catalog.php:62
-msgid "Back"
-msgstr "Înapoi"
-
-#: includes/Integrations/Legal_String_Catalog.php:63
-msgid "Submit request"
-msgstr "Trimite cererea"
-
-#: includes/Integrations/Legal_String_Catalog.php:64
-msgid "Request received"
-msgstr "Cerere primită"
-
-#: includes/Integrations/Legal_String_Catalog.php:65
-msgid "Your return / withdrawal request has been submitted successfully."
-msgstr "Cererea ta de retur / retragere a fost trimisă cu succes."
-
-#: includes/Integrations/Legal_String_Catalog.php:67
-msgid "Time"
-msgstr "Ora"
-
-#: includes/Integrations/Legal_String_Catalog.php:68
-msgid "Request number"
-msgstr "Număr cerere"
-
-#: includes/Integrations/Legal_String_Catalog.php:69
-msgid "Return / withdrawal confirmation"
-msgstr "Confirmare retur / retragere"
-
-#: includes/Integrations/Legal_String_Catalog.php:70
-msgid "We have received your declaration. Please keep this email as proof of submission."
-msgstr "Am primit declarația ta. Păstrează acest email ca dovadă a trimiterii."
-
-#: includes/Integrations/Legal_String_Catalog.php:71
-msgid "Your details"
-msgstr "Datele tale"
-
-#: includes/Integrations/Legal_String_Catalog.php:73
-msgid "This confirmation attests only to the receipt of the declaration. You will receive further instructions shortly."
-msgstr "Această confirmare atestă doar primirea declarației. Vei primi în curând instrucțiuni suplimentare."
-
-#: includes/Integrations/Legal_String_Catalog.php:74
-#: includes/Integrations/Legal_String_Catalog.php:75
-msgid "Returns & withdrawals"
-msgstr "Retururi și retrageri"
-
-#: includes/Integrations/Legal_String_Catalog.php:76
-msgid "Select an eligible order to start a return or withdrawal request."
-msgstr "Selectează o comandă eligibilă pentru a începe o cerere de retur sau retragere."
-
-#: includes/Public/Ajax.php:150
-msgid "We could not find an eligible order matching those details. Check the order number, email, that the return window has not expired, and that products remain available for return."
-msgstr "Nu am găsit o comandă eligibilă cu aceste date. Verifică numărul comenzii, emailul, că perioada de retur nu a expirat și că mai există produse disponibile pentru retur."
-
-#: includes/Public/Ajax.php:175
-msgid "Please fill in all required fields."
-msgstr "Completează toate câmpurile obligatorii."
-
-#: includes/Public/Ajax.php:184
-msgid "Please enter a valid email address."
-msgstr "Introdu o adresă de email validă."
-
-#: includes/Public/Ajax.php:205
-msgid "All products from this order have already been included in a return or withdrawal request."
-msgstr "Toate produsele din această comandă au fost deja incluse într-o cerere de retur sau retragere."
-
-#: includes/Public/Ajax.php:255
-#: includes/Public/Ajax.php:348
-#: includes/Public/Ajax.php:391
-#: includes/Public/Frontend.php:72
-msgid "Your session has expired. Please start again."
-msgstr "Sesiunea a expirat. Te rugăm să începi din nou."
-
-#: includes/Public/Ajax.php:266
-msgid "Please choose whether you want to return products or receive a refund."
-msgstr "Alege dacă vrei să returnezi produsele sau să primești o rambursare."
-
-#: includes/Public/Ajax.php:281
-#: includes/Public/Frontend.php:73
-msgid "Please select at least one product."
-msgstr "Selectează cel puțin un produs."
-
-#: includes/Public/Ajax.php:296
-msgid "Please enter a valid IBAN for the refund."
-msgstr "Introdu un IBAN valid pentru rambursare."
-
-#: includes/Public/Ajax.php:305
-msgid "Please enter the account holder name."
-msgstr "Introdu numele titularului contului."
-
-#: includes/Public/Ajax.php:400
-msgid "Your request is incomplete. Please start again."
-msgstr "Cererea este incompletă. Te rugăm să începi din nou."
-
-#: includes/Public/Ajax.php:434
-#: includes/Public/Ajax.php:447
-msgid "One or more selected products are no longer available for return. Please start again."
-msgstr "Unul sau mai multe produse selectate nu mai sunt disponibile pentru retur. Te rugăm să începi din nou."
-
-#: includes/Public/Ajax.php:474
-msgid "We could not save your withdrawal request. Please try again."
-msgstr "Nu am putut salva cererea de retragere. Te rugăm să încerci din nou."
-
-#: includes/Public/Ajax.php:544
-msgid "Too many requests. Please wait and try again later."
-msgstr "Prea multe cereri. Așteaptă și încearcă din nou mai târziu."
-
-#: includes/Public/Ajax.php:567
-msgid "Something went wrong on the server. Please try again or contact the store."
-msgstr "A apărut o eroare pe server. Încearcă din nou sau contactează magazinul."
-
-#: includes/Public/Frontend.php:69
-msgid "Something went wrong. Please try again."
-msgstr "A apărut o eroare. Te rugăm să încerci din nou."
-
-#: includes/Public/Frontend.php:70
-msgid "Network error. Please check your connection and try again."
-msgstr "Eroare de rețea. Verifică conexiunea și încearcă din nou."
-
-#: includes/Public/Frontend.php:71
-msgid "The server returned an unexpected response. Please try again or contact the store."
-msgstr "Serverul a returnat un răspuns neașteptat. Încearcă din nou sau contactează magazinul."
-
-#: includes/Public/Frontend.php:74
-msgid "Processing…"
-msgstr "Se procesează…"
-
-#: includes/Public/Frontend.php:75
-msgid "You can upload a maximum of 5 photos."
-msgstr "Poți încărca maximum 5 fotografii."
-
-#: includes/Public/Frontend.php:76
-msgid "Each photo must be at most 5 MB."
-msgstr "Fiecare fotografie trebuie să aibă cel mult 5 MB."
-
-#: includes/Public/Frontend.php:77
-#: includes/Services/Attachment_Uploader.php:307
-msgid "Only JPG, PNG, GIF, or WebP images are allowed."
-msgstr "Sunt permise doar imagini JPG, PNG, GIF sau WebP."
-
-#: includes/Domain/Withdrawal_Status.php:44
-msgid "Pending"
-msgstr "În așteptare"
-
-#: includes/Domain/Withdrawal_Status.php:45
-msgid "Processed"
-msgstr "Procesată"
-
-#: includes/Domain/Withdrawal_Status.php:46
-msgid "Rejected"
-msgstr "Respinsă"
-
-#: includes/Domain/Withdrawal_Status.php:47
-msgid "Refunded"
-msgstr "Rambursată"
-
-#: includes/Domain/Request_Type.php:48
-msgid "Return product"
-msgstr "Returnare produs"
-
-#: includes/Domain/Request_Type.php:50
-msgid "Refund / withdrawal"
-msgstr "Rambursare / retragere"
 
 #: includes/Domain/Event_Type.php:30
 msgid "Request submitted"
@@ -689,53 +523,378 @@ msgstr "Status schimbat"
 msgid "Refund completed"
 msgstr "Rambursare finalizată"
 
-#: includes/Services/Email_Service.php:33
+#: includes/Domain/Withdrawal_Status.php:44
+msgid "Pending"
+msgstr "În așteptare"
+
+#: includes/Domain/Withdrawal_Status.php:45
+msgid "Processed"
+msgstr "Procesată"
+
+#: includes/Domain/Withdrawal_Status.php:46
+msgid "Rejected"
+msgstr "Respinsă"
+
+#: includes/Domain/Withdrawal_Status.php:47
+msgid "Refunded"
+msgstr "Rambursată"
+
+#: includes/Integrations/Legal_String_Catalog.php:42
+msgid "Request return / withdrawal"
+msgstr "Cerere retur / retragere"
+
+#: includes/Integrations/Legal_String_Catalog.php:43
+msgid "Return or withdrawal request"
+msgstr "Cerere de retur sau retragere"
+
+#: includes/Integrations/Legal_String_Catalog.php:44
+msgid "Enter your order details to begin the return or withdrawal process."
+msgstr "Introdu datele comenzii pentru a începe procesul de retur sau retragere."
+
+#. translators: %d: number of days
+#: includes/Integrations/Legal_String_Catalog.php:46
+#, php-format
+msgid "You can request a return or withdrawal within %d days of order completion."
+msgstr "Poți solicita un retur sau o retragere în termen de %d zile de la finalizarea comenzii."
+
+#: includes/Integrations/Legal_String_Catalog.php:47
+msgid "Full name"
+msgstr "Nume complet"
+
+#: includes/Integrations/Legal_String_Catalog.php:49
+msgid "Order number"
+msgstr "Număr comandă"
+
+#: includes/Integrations/Legal_String_Catalog.php:50
+msgid "Order date"
+msgstr "Data comenzii"
+
+#: includes/Integrations/Legal_String_Catalog.php:51
+msgid "Select an order"
+msgstr "Selectează o comandă"
+
+#: includes/Integrations/Legal_String_Catalog.php:52
+msgid "Choose an eligible order…"
+msgstr "Alege o comandă eligibilă…"
+
+#. translators: 1: order number, 2: formatted date, 3: formatted total
+#: includes/Integrations/Legal_String_Catalog.php:54
+#, php-format
+msgid "Order #%1$s — %2$s — %3$s"
+msgstr "Comanda #%1$s — %2$s — %3$s"
+
+#: includes/Integrations/Legal_String_Catalog.php:55
+msgid "You have no orders eligible for return or withdrawal right now."
+msgstr "Momentan nu ai comenzi eligibile pentru retur sau retragere."
+
+#: includes/Integrations/Legal_String_Catalog.php:56
+msgid "You can still look up an order with the order number and billing email used at checkout."
+msgstr "Poți totuși căuta o comandă folosind numărul comenzii și emailul de facturare folosit la checkout."
+
+#: includes/Integrations/Legal_String_Catalog.php:58
+msgid "(optional)"
+msgstr "(opțional)"
+
+#: includes/Integrations/Legal_String_Catalog.php:60
+msgid "Choose a reason…"
+msgstr "Alege un motiv…"
+
+#: includes/Integrations/Legal_String_Catalog.php:61
+msgid "Product damaged in transit"
+msgstr "Produs deteriorat la transport"
+
+#: includes/Integrations/Legal_String_Catalog.php:62
+msgid "I received a different product than the one ordered"
+msgstr "Am primit alt produs decât cel comandat"
+
+#: includes/Integrations/Legal_String_Catalog.php:63
+msgid "The product does not match the description"
+msgstr "Produsul nu corespunde descrierii"
+
+#: includes/Integrations/Legal_String_Catalog.php:64
+msgid "I changed my mind"
+msgstr "M-am răzgândit"
+
+#: includes/Integrations/Legal_String_Catalog.php:65
+msgid "Other reason"
+msgstr "Alt motiv"
+
+#: includes/Integrations/Legal_String_Catalog.php:66
+msgid "The product has been opened"
+msgstr "Produsul este deschis"
+
+#: includes/Integrations/Legal_String_Catalog.php:67
+msgid "Yes"
+msgstr "Da"
+
+#: includes/Integrations/Legal_String_Catalog.php:68
+msgid "No"
+msgstr "Nu"
+
+#. translators: %d: maximum number of photos
+#: includes/Integrations/Legal_String_Catalog.php:72
+#, php-format
+msgid "Maximum photos: %d (JPG, PNG, GIF, or WebP, max 5 MB each)."
+msgstr "Număr maxim de poze: %d (JPG, PNG, GIF sau WebP, maximum 5 MB fiecare)."
+
+#. translators: %d: number of photos already uploaded
+#: includes/Integrations/Legal_String_Catalog.php:74
+#, php-format
+msgid "%d photo(s) already attached. Choose new files only if you want to replace them."
+msgstr "%d fotografie(i) deja atașată(e). Alege fișiere noi doar dacă vrei să le înlocuiești."
+
+#. translators: %d: maximum number of photos
+#: includes/Integrations/Legal_String_Catalog.php:76
+#, php-format
+msgid "Too many photos. Maximum allowed: %d."
+msgstr "Prea multe poze. Numărul maxim permis: %d."
+
+#: includes/Integrations/Legal_String_Catalog.php:77
+msgid "Continue"
+msgstr "Continuă"
+
+#: includes/Integrations/Legal_String_Catalog.php:78
+msgid "What would you like to do?"
+msgstr "Ce ai vrea să faci?"
+
+#. translators: 1: order number, 2: days remaining
+#: includes/Integrations/Legal_String_Catalog.php:80
+#, php-format
+msgid "Order #%1$s — %2$d day(s) remaining in the return window."
+msgstr "Comanda #%1$s — %2$d zi(le) rămase în perioada de retur."
+
+#: includes/Integrations/Legal_String_Catalog.php:81
+msgid "Request type"
+msgstr "Tip cerere"
+
+#: includes/Integrations/Legal_String_Catalog.php:82
+msgid "Return product"
+msgstr "Returnare produs"
+
+#: includes/Integrations/Legal_String_Catalog.php:83
+msgid "Refund / withdrawal"
+msgstr "Rambursare / retragere"
+
+#: includes/Integrations/Legal_String_Catalog.php:84
+msgid "Send the product back and follow the courier instructions."
+msgstr "Trimite produsul înapoi și urmează instrucțiunile de curierat."
+
+#: includes/Integrations/Legal_String_Catalog.php:85
+msgid "Get your money back (withdrawal / refund)."
+msgstr "Primește banii înapoi (retragere / rambursare)."
+
+#: includes/Integrations/Legal_String_Catalog.php:86
+msgid "Select products"
+msgstr "Selectează produsele"
+
+#: includes/Integrations/Legal_String_Catalog.php:87
+msgid "No products remain available for return on this order."
+msgstr "Nu mai există produse disponibile pentru retur la această comandă."
+
+#: includes/Integrations/Legal_String_Catalog.php:89
+msgid "Where should we send the refund?"
+msgstr "Unde să trimitem rambursarea?"
+
+#: includes/Integrations/Legal_String_Catalog.php:91
+msgid "Account holder name"
+msgstr "Numele titularului contului"
+
+#: includes/Integrations/Legal_String_Catalog.php:92
+msgid "Return shipping"
+msgstr "Expediere retur"
+
+#: includes/Integrations/Legal_String_Catalog.php:93
+msgid "The store will contact you with return shipping instructions."
+msgstr "Magazinul te va contacta cu instrucțiuni pentru expedierea returului."
+
+#: includes/Integrations/Legal_String_Catalog.php:94
+msgid "Confirm your request"
+msgstr "Confirmă cererea"
+
+#: includes/Integrations/Legal_String_Catalog.php:95
+msgid "Please review your details before submitting."
+msgstr "Te rugăm să verifici datele înainte de trimitere."
+
+#: includes/Integrations/Legal_String_Catalog.php:96
+msgid "Back"
+msgstr "Înapoi"
+
+#: includes/Integrations/Legal_String_Catalog.php:97
+msgid "Submit request"
+msgstr "Trimite cererea"
+
+#: includes/Integrations/Legal_String_Catalog.php:98
+msgid "Request received"
+msgstr "Cerere primită"
+
+#: includes/Integrations/Legal_String_Catalog.php:99
+msgid "Your return / withdrawal request has been submitted successfully."
+msgstr "Cererea ta de retur / retragere a fost trimisă cu succes."
+
+#: includes/Integrations/Legal_String_Catalog.php:101
+msgid "Time"
+msgstr "Ora"
+
+#: includes/Integrations/Legal_String_Catalog.php:102
+msgid "Request number"
+msgstr "Număr cerere"
+
+#. translators: %s: withdrawal request UUID
+#: includes/Integrations/Legal_String_Catalog.php:104
+#, php-format
 msgid "Withdrawal request confirmation – %s"
 msgstr "Confirmare cerere de retragere – %s"
 
-#: includes/Services/Export_Service.php:72
-msgid "Customer Email"
-msgstr "Email client"
+#. translators: %s: order number
+#: includes/Integrations/Legal_String_Catalog.php:106
+#, php-format
+msgid "Update on your return / withdrawal – order %s"
+msgstr "Actualizare la cererea ta de retur / retragere – comanda %s"
 
-#: includes/Services/Export_Service.php:73
-msgid "Customer Phone"
-msgstr "Telefon client"
+#. translators: %s: order number
+#: includes/Integrations/Legal_String_Catalog.php:108
+#, php-format
+msgid "New withdrawal request – order %s"
+msgstr "Cerere nouă de retragere – comanda %s"
 
-#: includes/Services/Export_Service.php:81
-msgid "Submitted At"
-msgstr "Trimisă la"
+#: includes/Integrations/Legal_String_Catalog.php:109
+msgid "Return / withdrawal confirmation"
+msgstr "Confirmare retur / retragere"
 
-#: includes/Services/Export_Service.php:164
-msgid "Print"
-msgstr "Printează"
+#: includes/Integrations/Legal_String_Catalog.php:110
+msgid "We have received your declaration. Please keep this email as proof of submission."
+msgstr "Am primit declarația ta. Păstrează acest email ca dovadă a trimiterii."
 
-#: includes/Services/Export_Service.php:172
-msgid "%1$s — Generated on %2$s (%3$d requests)"
-msgstr "%1$s — Generat pe %2$s (%3$d cereri)"
+#: includes/Integrations/Legal_String_Catalog.php:111
+msgid "Your details"
+msgstr "Datele tale"
 
-#: includes/Services/Settings.php:157
-msgid "Courier: %s"
-msgstr "Curier: %s"
+#: includes/Integrations/Legal_String_Catalog.php:113
+msgid "This confirmation attests only to the receipt of the declaration. You will receive further instructions shortly."
+msgstr "Această confirmare atestă doar primirea declarației. Vei primi în curând instrucțiuni suplimentare."
 
-#: includes/Services/Settings.php:166
-msgid "Phone: %s"
-msgstr "Telefon: %s"
+#: includes/Integrations/Legal_String_Catalog.php:114
+#: includes/Integrations/Legal_String_Catalog.php:115
+msgid "Returns & withdrawals"
+msgstr "Retururi și retrageri"
 
-#: includes/Services/Settings.php:175
-msgid "Return address: %s"
-msgstr "Adresă retur: %s"
+#: includes/Integrations/Legal_String_Catalog.php:116
+msgid "Select an eligible order to start a return or withdrawal request."
+msgstr "Selectează o comandă eligibilă pentru a începe o cerere de retur sau retragere."
 
-#: includes/Services/Withdrawal_Service.php:199
-msgid "Withdrawal request submitted by customer."
-msgstr "Cerere de retragere trimisă de client."
+#: includes/Integrations/Legal_String_Catalog.php:131
+msgid "Button"
+msgstr "Buton"
 
-#: includes/Services/Withdrawal_Service.php:231
-msgid "Customer confirmation email could not be sent."
-msgstr "Emailul de confirmare către client nu a putut fi trimis."
+#: includes/Integrations/Legal_String_Catalog.php:135
+msgid "Step 1: order"
+msgstr "Pasul 1: comanda"
 
-#: includes/Services/Attachment_Uploader.php:80
-msgid "You can upload a maximum of %d photos."
-msgstr "Poți încărca maximum %d fotografii."
+#: includes/Integrations/Legal_String_Catalog.php:154
+msgid "Request details"
+msgstr "Detalii cerere"
+
+#: includes/Integrations/Legal_String_Catalog.php:190
+msgid "Confirmation"
+msgstr "Confirmare"
+
+#: includes/Integrations/Legal_String_Catalog.php:194
+msgid "Success"
+msgstr "Succes"
+
+#: includes/Integrations/Legal_String_Catalog.php:198
+msgid "Emails"
+msgstr "Emailuri"
+
+#: includes/Integrations/Legal_String_Catalog.php:211
+msgid "My Account"
+msgstr "Contul meu"
+
+#: includes/Plugin.php:250
+msgid "EU Withdrawal for WooCommerce requires WooCommerce. Please activate WooCommerce to use this plugin."
+msgstr "EU Withdrawal for WooCommerce necesită WooCommerce. Activează WooCommerce pentru a folosi acest modul."
+
+#: includes/Public/Ajax.php:150
+msgid "We could not find an eligible order matching those details. Check the order number, email, that the return window has not expired, and that products remain available for return."
+msgstr "Nu am găsit o comandă eligibilă cu aceste date. Verifică numărul comenzii, emailul, că perioada de retur nu a expirat și că mai există produse disponibile pentru retur."
+
+#: includes/Public/Ajax.php:175
+msgid "Please fill in all required fields."
+msgstr "Completează toate câmpurile obligatorii."
+
+#: includes/Public/Ajax.php:184
+msgid "Please enter a valid email address."
+msgstr "Introdu o adresă de email validă."
+
+#: includes/Public/Ajax.php:205
+msgid "All products from this order have already been included in a return or withdrawal request."
+msgstr "Toate produsele din această comandă au fost deja incluse într-o cerere de retur sau retragere."
+
+#: includes/Public/Ajax.php:256 includes/Public/Ajax.php:349
+#: includes/Public/Ajax.php:392 includes/Public/Frontend.php:75
+msgid "Your session has expired. Please start again."
+msgstr "Sesiunea a expirat. Te rugăm să începi din nou."
+
+#: includes/Public/Ajax.php:276 includes/Public/Frontend.php:76
+msgid "Please select at least one product."
+msgstr "Selectează cel puțin un produs."
+
+#: includes/Public/Ajax.php:291
+msgid "Please enter a valid IBAN for the refund."
+msgstr "Introdu un IBAN valid pentru rambursare."
+
+#: includes/Public/Ajax.php:300
+msgid "Please enter the account holder name."
+msgstr "Introdu numele titularului contului."
+
+#: includes/Public/Ajax.php:401
+msgid "Your request is incomplete. Please start again."
+msgstr "Cererea este incompletă. Te rugăm să începi din nou."
+
+#: includes/Public/Ajax.php:435 includes/Public/Ajax.php:448
+msgid "One or more selected products are no longer available for return. Please start again."
+msgstr "Unul sau mai multe produse selectate nu mai sunt disponibile pentru retur. Te rugăm să începi din nou."
+
+#: includes/Public/Ajax.php:475
+msgid "We could not save your withdrawal request. Please try again."
+msgstr "Nu am putut salva cererea de retragere. Te rugăm să încerci din nou."
+
+#: includes/Public/Ajax.php:561
+msgid "Too many requests. Please wait and try again later."
+msgstr "Prea multe cereri. Așteaptă și încearcă din nou mai târziu."
+
+#: includes/Public/Ajax.php:584
+msgid "Something went wrong on the server. Please try again or contact the store."
+msgstr "A apărut o eroare pe server. Încearcă din nou sau contactează magazinul."
+
+#: includes/Public/Frontend.php:72
+msgid "Something went wrong. Please try again."
+msgstr "A apărut o eroare. Te rugăm să încerci din nou."
+
+#: includes/Public/Frontend.php:73
+msgid "Network error. Please check your connection and try again."
+msgstr "Eroare de rețea. Verifică conexiunea și încearcă din nou."
+
+#: includes/Public/Frontend.php:74
+msgid "The server returned an unexpected response. Please try again or contact the store."
+msgstr "Serverul a returnat un răspuns neașteptat. Încearcă din nou sau contactează magazinul."
+
+#: includes/Public/Frontend.php:77
+msgid "Processing…"
+msgstr "Se procesează…"
+
+#: includes/Public/Frontend.php:79
+msgid "Each photo must be at most 5 MB."
+msgstr "Fiecare fotografie trebuie să aibă cel mult 5 MB."
+
+#: includes/Public/Frontend.php:80
+#: includes/Services/Attachment_Uploader.php:307
+msgid "Only JPG, PNG, GIF, or WebP images are allowed."
+msgstr "Sunt permise doar imagini JPG, PNG, GIF sau WebP."
+
+#: includes/REST/Withdrawals_Controller.php:98
+msgid "Invalid status filter."
+msgstr "Filtru de status invalid."
 
 #: includes/Services/Attachment_Uploader.php:134
 msgid "Could not save one of the uploaded photos. Please try again."
@@ -745,68 +904,164 @@ msgstr "Nu am putut salva una dintre fotografii. Te rugăm să încerci din nou.
 msgid "One of the photos could not be uploaded. Please try again."
 msgstr "Una dintre fotografii nu a putut fi încărcată. Te rugăm să încerci din nou."
 
+#. translators: %d: maximum size in MB
 #: includes/Services/Attachment_Uploader.php:295
+#, php-format
 msgid "Each photo must be at most %d MB."
 msgstr "Fiecare fotografie trebuie să aibă cel mult %d MB."
 
-#: includes/REST/Withdrawals_Controller.php:98
-msgid "Invalid status filter."
-msgstr "Filtru de status invalid."
+#: includes/Services/Export_Service.php:73
+msgid "Customer Email"
+msgstr "Email client"
 
-#: templates/emails/customer-confirmation.php:156
+#: includes/Services/Export_Service.php:74
+msgid "Customer Phone"
+msgstr "Telefon client"
+
+#: includes/Services/Export_Service.php:85
+msgid "Submitted At"
+msgstr "Trimisă la"
+
+#: includes/Services/Export_Service.php:171
+msgid "Print"
+msgstr "Printează"
+
+#. translators: 1: site name, 2: generation datetime, 3: item count
+#: includes/Services/Export_Service.php:179
+#, php-format
+msgid "%1$s — Generated on %2$s (%3$d requests)"
+msgstr "%1$s — Generat pe %2$s (%3$d cereri)"
+
+#. translators: %s: courier name
+#: includes/Services/Settings.php:282
+#, php-format
+msgid "Courier: %s"
+msgstr "Curier: %s"
+
+#. translators: %s: return address (may contain multiple lines)
+#: includes/Services/Settings.php:292
+#, php-format
+msgid "Return address: %s"
+msgstr "Adresă retur: %s"
+
+#: includes/Services/Withdrawal_Service.php:203
+msgid "Withdrawal request submitted by customer."
+msgstr "Cerere de retragere trimisă de client."
+
+#: includes/Services/Withdrawal_Service.php:247
+msgid "Customer confirmation email could not be sent."
+msgstr "Emailul de confirmare către client nu a putut fi trimis."
+
+#: includes/Services/Withdrawal_Service.php:260
+msgid "Shop notification email could not be sent."
+msgstr "Emailul de notificare către magazin nu a putut fi trimis."
+
+#. translators: %d: WooCommerce refund ID
+#: includes/WooCommerce/Refund_Integration.php:108
+#, php-format
+msgid "WooCommerce refund #%d completed. Withdrawal marked as refunded."
+msgstr "Rambursarea WooCommerce #%d a fost finalizată. Retragerea a fost marcată ca rambursată."
+
+#: templates/emails/admin-notification.php:66
+msgid "New return / withdrawal request"
+msgstr "Cerere nouă de retur / retragere"
+
+#: templates/emails/admin-notification.php:69
+msgid "A customer submitted a return / withdrawal request on your store."
+msgstr "Un client a trimis o cerere de retur / retragere pe magazinul tău."
+
+#: templates/emails/admin-notification.php:114
+msgid "Customer details"
+msgstr "Detalii client"
+
+#. translators: 1: product name, 2: quantity
+#: templates/emails/admin-notification.php:222
+#: templates/emails/customer-confirmation.php:194
+#, php-format
 msgid "%1$s × %2$d"
 msgstr "%1$s × %2$d"
 
-#: templates/public/step-1-form.php:58
-msgid "Order #%1$s — %2$s — %3$s"
-msgstr "Comanda #%1$s — %2$s — %3$s"
+#: templates/emails/admin-notification.php:240
+msgid "View request in admin"
+msgstr "Vezi cererea în admin"
+
+#: templates/emails/customer-status-update.php:27
+msgid "Your refund has been completed"
+msgstr "Rambursarea ta a fost finalizată"
+
+#: templates/emails/customer-status-update.php:28
+msgid "Good news — your return / withdrawal request has been refunded. The money should appear according to your bank or card provider timelines."
+msgstr "Veste bună — cererea ta de retur / retragere a fost rambursată. Banii ar trebui să apară în funcție de termenele băncii sau ale emitentului cardului."
+
+#: templates/emails/customer-status-update.php:30
+msgid "Your request is being processed"
+msgstr "Cererea ta este în curs de procesare"
+
+#: templates/emails/customer-status-update.php:31
+msgid "We have started processing your return / withdrawal request. We will update you again when the refund is completed."
+msgstr "Am început procesarea cererii tale de retur / retragere. Te vom anunța din nou când rambursarea este finalizată."
+
+#. translators: %s: customer name
+#: templates/emails/customer-status-update.php:56
+#, php-format
+msgid "Hello %s,"
+msgstr "Bună %s,"
+
+#: templates/emails/customer-status-update.php:100
+msgid "If you have questions, reply to this email or contact the store."
+msgstr "Dacă ai întrebări, răspunde la acest email sau contactează magazinul."
 
 #: blocks/withdrawal-button/edit.js:19
 msgid "Request withdrawal"
 msgstr "Cerere retragere"
 
+#: blocks/withdrawal-button/edit.js:25
+msgid "Settings"
+msgstr "Setări"
 
-msgid "New return / withdrawal request"
-msgstr "Cerere nouă de retur / retragere"
+#: blocks/withdrawal-button/edit.js:31
+msgid "Button label"
+msgstr "Eticheta butonului"
 
-msgid "A customer submitted a return / withdrawal request on your store."
-msgstr "Un client a trimis o cerere de retur / retragere pe magazinul tău."
+#: blocks/withdrawal-button/edit.js:39
+msgid "Text displayed on the withdrawal trigger button."
+msgstr "Textul afișat pe butonul de retragere."
 
-msgid "Customer details"
-msgstr "Detalii client"
+#: blocks/withdrawal-button/edit.js:55
+msgid "Formularul de retragere va fi afișat aici pe frontend."
+msgstr ""
 
-msgid "View request in admin"
-msgstr "Vezi cererea în admin"
+#: blocks/withdrawal-button/block.json
+msgctxt "block title"
+msgid "Retragere Contract"
+msgstr ""
 
-msgid "New withdrawal request – order %s"
-msgstr "Cerere nouă de retragere – comanda %s"
+#: blocks/withdrawal-button/block.json
+msgctxt "block description"
+msgid "Afișează butonul și formularul de retragere din contract conform directivei UE."
+msgstr ""
 
-msgid "Shop notification email could not be sent."
-msgstr "Emailul de notificare către magazin nu a putut fi trimis."
+#: blocks/withdrawal-button/block.json
+msgctxt "block keyword"
+msgid "withdrawal"
+msgstr ""
 
-msgid "Address"
-msgstr "Adresă"
+#: blocks/withdrawal-button/block.json
+msgctxt "block keyword"
+msgid "retragere"
+msgstr ""
 
-msgid "Update on your return / withdrawal – order %s"
-msgstr "Actualizare la cererea ta de retur / retragere – comanda %s"
+#: blocks/withdrawal-button/block.json
+msgctxt "block keyword"
+msgid "woocommerce"
+msgstr ""
 
-msgid "Your refund has been completed"
-msgstr "Rambursarea ta a fost finalizată"
+#: blocks/withdrawal-button/block.json
+msgctxt "block keyword"
+msgid "EU"
+msgstr ""
 
-msgid "Good news — your return / withdrawal request has been refunded. The money should appear according to your bank or card provider timelines."
-msgstr "Veste bună — cererea ta de retur / retragere a fost rambursată. Banii ar trebui să apară în funcție de termenele băncii sau ale emitentului cardului."
-
-msgid "Your request is being processed"
-msgstr "Cererea ta este în curs de procesare"
-
-msgid "We have started processing your return / withdrawal request. We will update you again when the refund is completed."
-msgstr "Am început procesarea cererii tale de retur / retragere. Te vom anunța din nou când rambursarea este finalizată."
-
-msgid "Hello %s,"
-msgstr "Bună %s,"
-
-msgid "If you have questions, reply to this email or contact the store."
-msgstr "Dacă ai întrebări, răspunde la acest email sau contactează magazinul."
-
-msgid "Customer status update email could not be sent."
-msgstr "Emailul de actualizare a statusului către client nu a putut fi trimis."
+#: blocks/withdrawal-button/block.json
+msgctxt "block keyword"
+msgid "contract"
+msgstr ""

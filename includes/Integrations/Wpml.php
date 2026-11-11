@@ -43,7 +43,7 @@ final class Wpml {
 	 * @return void
 	 */
 	public function register_strings(): void {
-		foreach ( Legal_String_Catalog::all() as $name => $string ) {
+		foreach ( Legal_String_Catalog::effective() as $name => $string ) {
 			do_action(
 				'wpml_register_single_string',
 				Legal_String_Catalog::CONTEXT,

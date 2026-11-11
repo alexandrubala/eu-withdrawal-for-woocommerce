@@ -279,6 +279,7 @@
 .eu-withdrawal__summary dd,
 .eu-withdrawal__receipt dd {
 	margin: 0;
+	overflow-wrap: anywhere;
 }
 
 .eu-withdrawal__uuid {

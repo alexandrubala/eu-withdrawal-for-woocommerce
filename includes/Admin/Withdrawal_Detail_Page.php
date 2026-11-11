@@ -13,6 +13,7 @@ use EUWithdrawal\Data\Withdrawal_Repository;
 use EUWithdrawal\Domain\Event_Type;
 use EUWithdrawal\Domain\Request_Type;
 use EUWithdrawal\Domain\Withdrawal_Status;
+use EUWithdrawal\Integrations\Legal_String_Catalog;
 use EUWithdrawal\Services\Attachment_Uploader;
 use EUWithdrawal\Services\Email_Service;
 use EUWithdrawal\WooCommerce\Hpos_Compatibility;
@@ -149,6 +150,17 @@ final class Withdrawal_Detail_Page {
 			$request_fields[ __( 'Account holder', 'eu-withdrawal-for-woocommerce' ) ] = (string) ( $request['refund_account_name'] ?? '—' );
 		}
 
+		$reason_label   = (string) ( $request['reason_label'] ?? '' );
+		$product_opened = Legal_String_Catalog::product_opened_label( (string) ( $request['product_opened'] ?? '' ) );
+
+		if ( '' !== $reason_label ) {
+			$request_fields[ __( 'Return reason', 'eu-withdrawal-for-woocommerce' ) ] = $reason_label;
+		}
+
+		if ( '' !== $product_opened ) {
+			$request_fields[ __( 'Product opened', 'eu-withdrawal-for-woocommerce' ) ] = $product_opened;
+		}
+
 		$this->render_section(
 			__( 'Request', 'eu-withdrawal-for-woocommerce' ),
 			$request_fields
@@ -171,7 +183,7 @@ final class Withdrawal_Detail_Page {
 
 		if ( ! empty( $request['reason'] ) ) {
 			$this->render_section(
-				__( 'Reason', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Additional details', 'eu-withdrawal-for-woocommerce' ),
 				array(
 					'' => nl2br( esc_html( (string) $request['reason'] ) ),
 				),
@@ -450,7 +462,7 @@ final class Withdrawal_Detail_Page {
 
 			echo '<tr>';
 			echo '<td>' . $image . esc_html( (string) ( $product['name'] ?? '' ) ) . $attrs . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo '<td>' . esc_html( (string) ( $product['sku'] ?? '—' ) ) . '</td>';
+			echo '<td>' . esc_html( '' !== (string) ( $product['sku'] ?? '' ) ? (string) $product['sku'] : '—' ) . '</td>';
 			echo '<td>' . $price . '</td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo '<td>' . esc_html( (string) ( $product['quantity'] ?? '' ) ) . '</td>';
 			echo '</tr>';

@@ -30,13 +30,7 @@ $return_days     = Settings::return_days();
 	<h2 class="eu-withdrawal__heading"><?php echo esc_html( Legal_String_Catalog::translate( 'withdrawal_request_heading' ) ); ?></h2>
 	<p class="eu-withdrawal__intro">
 		<?php
-		echo esc_html(
-			sprintf(
-				/* translators: %d: number of days */
-				Legal_String_Catalog::translate( 'withdrawal_intro_days' ),
-				$return_days
-			)
-		);
+		echo esc_html( Legal_String_Catalog::format( 'withdrawal_intro_days', $return_days ) );
 		?>
 	</p>
 
@@ -53,9 +47,8 @@ $return_days     = Settings::return_days();
 					<option value="<?php echo esc_attr( (string) $order->get_id() ); ?>">
 						<?php
 						echo esc_html(
-							sprintf(
-								/* translators: 1: order number, 2: formatted date, 3: formatted total */
-								__( 'Order #%1$s — %2$s — %3$s', 'eu-withdrawal-for-woocommerce' ),
+							Legal_String_Catalog::format(
+								'order_option_label',
 								$order->get_order_number(),
 								wc_format_datetime( $order->get_date_created() ),
 								wp_strip_all_tags( $order->get_formatted_order_total() )
@@ -68,7 +61,9 @@ $return_days     = Settings::return_days();
 		</p>
 		<input type="hidden" name="name" value="<?php echo esc_attr( $name ); ?>" />
 		<input type="hidden" name="email" value="<?php echo esc_attr( $email ); ?>" />
-		<input type="hidden" name="phone" value="<?php echo esc_attr( $phone ); ?>" />
+		<?php if ( Settings::field_enabled( 'phone' ) ) : ?>
+			<input type="hidden" name="phone" value="<?php echo esc_attr( $phone ); ?>" />
+		<?php endif; ?>
 	<?php else : ?>
 		<?php if ( $is_logged_in && empty( $eligible_orders ) ) : ?>
 			<p class="eu-withdrawal__note">
@@ -124,19 +119,21 @@ $return_days     = Settings::return_days();
 			/>
 		</p>
 
-		<p class="eu-withdrawal__field">
-			<label for="eu-withdrawal-phone">
-				<?php echo esc_html( Legal_String_Catalog::translate( 'phone' ) ); ?>
-				<span class="eu-withdrawal__optional"><?php echo esc_html( Legal_String_Catalog::translate( 'optional' ) ); ?></span>
-			</label>
-			<input
-				type="tel"
-				id="eu-withdrawal-phone"
-				name="phone"
-				value="<?php echo esc_attr( $phone ); ?>"
-				autocomplete="tel"
-			/>
-		</p>
+		<?php if ( Settings::field_enabled( 'phone' ) ) : ?>
+			<p class="eu-withdrawal__field">
+				<label for="eu-withdrawal-phone">
+					<?php echo esc_html( Legal_String_Catalog::translate( 'phone' ) ); ?>
+					<span class="eu-withdrawal__optional"><?php echo esc_html( Legal_String_Catalog::translate( 'optional' ) ); ?></span>
+				</label>
+				<input
+					type="tel"
+					id="eu-withdrawal-phone"
+					name="phone"
+					value="<?php echo esc_attr( $phone ); ?>"
+					autocomplete="tel"
+				/>
+			</p>
+		<?php endif; ?>
 	<?php endif; ?>
 
 	<p class="eu-withdrawal__actions">

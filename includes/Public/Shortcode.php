@@ -9,6 +9,7 @@ namespace EUWithdrawal\PublicArea;
 
 use EUWithdrawal\Integrations\Legal_String_Catalog;
 use EUWithdrawal\Services\Order_Validator;
+use EUWithdrawal\Services\Settings;
 use EUWithdrawal\Utils\Template_Loader;
 
 defined( 'ABSPATH' ) || exit;
@@ -143,6 +144,7 @@ final class Shortcode {
 				$name = $user->display_name;
 			}
 			$email           = (string) $user->user_email;
+			$phone           = Settings::field_enabled( 'phone' ) ? trim( (string) get_user_meta( $user->ID, 'billing_phone', true ) ) : '';
 			$eligible_orders = self::$order_validator instanceof Order_Validator
 				? self::$order_validator->get_eligible_orders_for_customer( get_current_user_id() )
 				: array();

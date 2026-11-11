@@ -35,6 +35,8 @@ final class Withdrawal_Repository {
 			'customer_phone'      => $this->nullable_string( $data['customer_phone'] ?? null ),
 			'products_json'       => $this->nullable_string( $data['products_json'] ?? null ),
 			'reason'              => $this->nullable_string( $data['reason'] ?? null ),
+			'reason_label'        => $this->nullable_string( mb_substr( (string) ( $data['reason_label'] ?? '' ), 0, 200 ) ),
+			'product_opened'      => $this->nullable_string( $data['product_opened'] ?? null ),
 			'attachments_json'    => $this->nullable_string( $data['attachments_json'] ?? null ),
 			'request_type'        => (string) ( $data['request_type'] ?? 'refund' ),
 			'refund_iban'         => $this->nullable_string( $data['refund_iban'] ?? null ),
@@ -48,6 +50,8 @@ final class Withdrawal_Repository {
 		);
 
 		$formats = array(
+			'%s',
+			'%s',
 			'%s',
 			'%d',
 			'%s',

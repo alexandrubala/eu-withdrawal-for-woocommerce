@@ -9,6 +9,7 @@ namespace EUWithdrawal\Admin;
 
 use EUWithdrawal\Data\Withdrawal_Repository;
 use EUWithdrawal\Domain\Withdrawal_Status;
+use EUWithdrawal\Integrations\Legal_String_Catalog;
 use EUWithdrawal\WooCommerce\Hpos_Compatibility;
 
 defined( 'ABSPATH' ) || exit;
@@ -113,6 +114,18 @@ final class Order_Meta_Box {
 			echo '<span class="eu-wd-status eu-wd-status--' . esc_attr( $status ) . '">' . esc_html( Withdrawal_Status::label( $status ) ) . '</span></p>';
 			echo '<p><strong>' . esc_html__( 'Customer', 'eu-withdrawal-for-woocommerce' ) . ':</strong> ' . esc_html( (string) ( $request['customer_name'] ?? '' ) ) . '</p>';
 			echo '<p><strong>' . esc_html__( 'Submitted', 'eu-withdrawal-for-woocommerce' ) . ':</strong> ' . esc_html( $this->format_datetime( (string) ( $request['submitted_at'] ?? '' ) ) ) . '</p>';
+
+			$reason_label   = (string) ( $request['reason_label'] ?? '' );
+			$product_opened = Legal_String_Catalog::product_opened_label( (string) ( $request['product_opened'] ?? '' ) );
+
+			if ( '' !== $reason_label ) {
+				echo '<p><strong>' . esc_html__( 'Return reason', 'eu-withdrawal-for-woocommerce' ) . ':</strong> ' . esc_html( $reason_label ) . '</p>';
+			}
+
+			if ( '' !== $product_opened ) {
+				echo '<p><strong>' . esc_html__( 'Product opened', 'eu-withdrawal-for-woocommerce' ) . ':</strong> ' . esc_html( $product_opened ) . '</p>';
+			}
+
 			printf(
 				'<p><a class="button button-secondary" href="%1$s">%2$s</a></p>',
 				esc_url( $detail_url ),

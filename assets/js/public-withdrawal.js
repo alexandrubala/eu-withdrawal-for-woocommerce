@@ -254,7 +254,8 @@
 		var list = input.closest('.eu-withdrawal__photos');
 		var preview = list ? list.querySelector('.eu-withdrawal__photo-preview') : null;
 		var files = input.files ? Array.prototype.slice.call(input.files) : [];
-		var maxPhotos = parseInt(config.maxPhotos, 10) || 5;
+		// The input comes from the AJAX step, so its limit is never served from a page cache.
+		var maxPhotos = parseInt(input.dataset.maxPhotos || config.maxPhotos, 10) || 5;
 		var maxBytes = parseInt(config.maxPhotoBytes, 10) || 5242880;
 
 		if (!preview) {
@@ -269,7 +270,7 @@
 		}
 
 		if (files.length > maxPhotos) {
-			showError(config.i18n.tooManyPhotos || config.i18n.genericError);
+			showError(input.dataset.tooManyPhotos || config.i18n.tooManyPhotos || config.i18n.genericError);
 			input.value = '';
 			preview.hidden = true;
 			return false;

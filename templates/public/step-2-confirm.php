@@ -12,6 +12,7 @@
 
 use EUWithdrawal\Domain\Request_Type;
 use EUWithdrawal\Integrations\Legal_String_Catalog;
+use EUWithdrawal\Services\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -40,10 +41,12 @@ $session_token = $session_token ?? '';
 			<dt><?php echo esc_html( Legal_String_Catalog::translate( 'order_number' ) ); ?></dt>
 			<dd><?php echo esc_html( $input->order_number ); ?></dd>
 		</div>
+		<?php if ( Settings::field_enabled( 'request_box' ) ) : ?>
 		<div class="eu-withdrawal__summary-row">
 			<dt><?php echo esc_html( Legal_String_Catalog::translate( 'request_type_legend' ) ); ?></dt>
 			<dd><?php echo esc_html( Request_Type::label( $input->request_type ) ); ?></dd>
 		</div>
+		<?php endif; ?>
 		<?php if ( '' !== $input->phone ) : ?>
 		<div class="eu-withdrawal__summary-row">
 			<dt><?php echo esc_html( Legal_String_Catalog::translate( 'phone' ) ); ?></dt>
@@ -60,9 +63,21 @@ $session_token = $session_token ?? '';
 			<dd><?php echo esc_html( $input->refund_account_name ); ?></dd>
 		</div>
 		<?php endif; ?>
+		<?php if ( '' !== $input->reason_label ) : ?>
+		<div class="eu-withdrawal__summary-row">
+			<dt><?php echo esc_html( Legal_String_Catalog::translate( 'return_reason' ) ); ?></dt>
+			<dd><?php echo esc_html( $input->reason_label ); ?></dd>
+		</div>
+		<?php endif; ?>
+		<?php if ( '' !== $input->product_opened ) : ?>
+		<div class="eu-withdrawal__summary-row">
+			<dt><?php echo esc_html( Legal_String_Catalog::translate( 'product_opened' ) ); ?></dt>
+			<dd><?php echo esc_html( Legal_String_Catalog::product_opened_label( $input->product_opened ) ); ?></dd>
+		</div>
+		<?php endif; ?>
 		<?php if ( '' !== $input->reason ) : ?>
 		<div class="eu-withdrawal__summary-row">
-			<dt><?php echo esc_html( Legal_String_Catalog::translate( 'reason_for_withdrawal' ) ); ?></dt>
+			<dt><?php echo esc_html( Legal_String_Catalog::translate( 'additional_details' ) ); ?></dt>
 			<dd><?php echo esc_html( $input->reason ); ?></dd>
 		</div>
 		<?php endif; ?>

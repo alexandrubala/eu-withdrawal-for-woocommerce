@@ -154,7 +154,7 @@ final class Ajax {
 
 			$name  = $fields['name'];
 			$email = $fields['email'];
-			$phone = $fields['phone'];
+			$phone = Settings::field_enabled( 'phone' ) ? $fields['phone'] : '';
 
 			if ( '' === $name ) {
 				$name = trim( $order->get_formatted_billing_full_name() );
@@ -164,7 +164,7 @@ final class Ajax {
 				$email = (string) $order->get_billing_email();
 			}
 
-			if ( '' === $phone ) {
+			if ( '' === $phone && Settings::field_enabled( 'phone' ) ) {
 				$phone = (string) $order->get_billing_phone();
 			}
 
@@ -220,6 +220,7 @@ final class Ajax {
 					'courier_text'    => Settings::courier_instructions_html(),
 					'refund_note'     => (string) Settings::get( 'refund_note', '' ),
 					'days_remaining'  => $this->order_validator->days_remaining( $order ),
+					'show_phone_field' => $this->can_edit_phone_on_details() && '' === $fields['phone'],
 				)
 			);
 
@@ -304,9 +305,18 @@ final class Ajax {
 
 			$courier_notes = Settings::courier_instructions_html();
 
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- validated inside Attachment_Uploader.
-			$files   = isset( $_FILES['reason_photos'] ) && is_array( $_FILES['reason_photos'] ) ? $_FILES['reason_photos'] : array();
-			$upload  = $this->attachment_uploader->process( $files, $input->attachments );
+			$upload = array(
+				'ids'   => array(),
+				'error' => '',
+			);
+
+			if ( Settings::field_enabled( 'photos' ) ) {
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- validated inside Attachment_Uploader.
+				$files  = isset( $_FILES['reason_photos'] ) && is_array( $_FILES['reason_photos'] ) ? $_FILES['reason_photos'] : array();
+				$upload = $this->attachment_uploader->process( $files, $input->attachments );
+			} else {
+				$this->attachment_uploader->delete_attachments( $input->attachments );
+			}
 
 			if ( '' !== $upload['error'] ) {
 				wp_send_json_error(
@@ -324,7 +334,10 @@ final class Ajax {
 					'refund_iban'         => $iban,
 					'refund_account_name' => $account_name,
 					'courier_notes'       => $courier_notes,
-					'reason'              => (string) $fields['reason'],
+					'reason'              => Settings::field_enabled( 'details' ) ? (string) $fields['reason'] : '',
+					'reason_label'        => Settings::field_enabled( 'reason' ) ? (string) $fields['reason_label'] : '',
+					'product_opened'      => Settings::field_enabled( 'product_opened' ) ? (string) $fields['product_opened'] : '',
+					'phone'               => $this->can_edit_phone_on_details() && isset( $_POST['phone'] ) ? (string) $fields['phone'] : $input->phone,
 					'attachments'         => $upload['ids'],
 				)
 			);
@@ -514,6 +527,22 @@ final class Ajax {
 		}
 
 		return $this->order_validator->validate( $fields['order_number'], $fields['email'] );
+	}
+
+	/**
+	 * Whether the details step may collect a phone number.
+	 *
+	 * Only for logged-in customers without a phone on their account; everyone
+	 * else provides it in step 1 or has it on file.
+	 *
+	 * @return bool
+	 */
+	private function can_edit_phone_on_details(): bool {
+		if ( ! Settings::field_enabled( 'phone' ) || ! is_user_logged_in() ) {
+			return false;
+		}
+
+		return '' === trim( (string) get_user_meta( get_current_user_id(), 'billing_phone', true ) );
 	}
 
 	/**

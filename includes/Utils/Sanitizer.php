@@ -8,6 +8,7 @@
 namespace EUWithdrawal\Utils;
 
 use EUWithdrawal\Domain\Request_Type;
+use EUWithdrawal\Services\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -64,6 +65,8 @@ final class Sanitizer {
 		$iban = strtoupper( preg_replace( '/\s+/', '', wp_unslash( (string) ( $source['refund_iban'] ?? '' ) ) ) ?? '' );
 		$iban = sanitize_text_field( $iban );
 
+		$product_opened = sanitize_key( wp_unslash( (string) ( $source['product_opened'] ?? '' ) ) );
+
 		return array(
 			'request_type'        => $type,
 			'product_items'       => $item_keys,
@@ -71,6 +74,9 @@ final class Sanitizer {
 			'refund_iban'         => $iban,
 			'refund_account_name' => sanitize_text_field( wp_unslash( (string) ( $source['refund_account_name'] ?? '' ) ) ),
 			'reason'              => sanitize_textarea_field( wp_unslash( (string) ( $source['reason'] ?? '' ) ) ),
+			'reason_label'        => Settings::match_reason_option( wp_unslash( (string) ( $source['reason_label'] ?? '' ) ) ),
+			'product_opened'      => in_array( $product_opened, array( 'yes', 'no' ), true ) ? $product_opened : '',
+			'phone'               => mb_substr( sanitize_text_field( wp_unslash( (string) ( $source['phone'] ?? '' ) ) ), 0, 50 ),
 		);
 	}
 

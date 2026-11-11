@@ -7,17 +7,14 @@
 
 namespace EUWithdrawal\Services;
 
+use EUWithdrawal\Integrations\Legal_String_Catalog;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Attachment_Uploader
  */
 final class Attachment_Uploader {
-
-	/**
-	 * Maximum number of photos per request.
-	 */
-	public const MAX_FILES = 5;
 
 	/**
 	 * Maximum file size in bytes (5 MB).
@@ -72,14 +69,12 @@ final class Attachment_Uploader {
 			);
 		}
 
-		if ( count( $normalized ) > self::MAX_FILES ) {
+		$max_photos = Settings::max_photos();
+
+		if ( count( $normalized ) > $max_photos ) {
 			return array(
 				'ids'   => $keep_ids,
-				'error' => sprintf(
-					/* translators: %d: maximum number of photos */
-					__( 'You can upload a maximum of %d photos.', 'eu-withdrawal-for-woocommerce' ),
-					self::MAX_FILES
-				),
+				'error' => Legal_String_Catalog::format( 'photos_limit_error', $max_photos ),
 			);
 		}
 

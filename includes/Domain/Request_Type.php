@@ -7,6 +7,8 @@
 
 namespace EUWithdrawal\Domain;
 
+use EUWithdrawal\Integrations\Legal_String_Catalog;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -45,9 +47,9 @@ final class Request_Type {
 	public static function label( string $type ): string {
 		switch ( $type ) {
 			case self::RETURN:
-				return __( 'Return product', 'eu-withdrawal-for-woocommerce' );
+				return Legal_String_Catalog::translate( 'request_type_return' );
 			case self::REFUND:
-				return __( 'Refund / withdrawal', 'eu-withdrawal-for-woocommerce' );
+				return Legal_String_Catalog::translate( 'request_type_refund' );
 			default:
 				return $type;
 		}

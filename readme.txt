@@ -4,7 +4,7 @@ Tags: woocommerce, eu directive, withdrawal, refund, compliance
 Requires at least: 6.4
 Tested up to: 6.6
 Requires PHP: 8.0
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -143,6 +143,14 @@ All personal data remains **100% under the control of the online store owner** o
 
 == Changelog ==
 
+= 1.4.0 =
+* New optional fields in the request form: return reason (editable list) and "product opened" (yes / no). The existing free-text field is now "Additional details".
+* Read-only customer and order summary at the top of the details step; logged-in customers without a phone on their account can add one there.
+* New "Form fields" settings: show or hide the return reason, product opened, additional details, photos, phone, SKU, customer summary and the "Refund / withdrawal" box, and set the maximum number of photos (1–5).
+* New "Form texts" settings: edit every customer-facing text in the catalog. Empty means default; a text with different placeholders is refused.
+* The new data appears in the confirmation step, admin detail page, order meta box, customer and shop emails, CSV export and the protected REST list. Photos are now included in the emails and CSV export.
+* DB schema bump: `reason_label` and `product_opened` columns. Existing settings and requests are kept.
+
 = 1.2.0 =
 * Photo upload on withdrawal requests (JPG, PNG, GIF, WebP, max 5 MB) with validation and admin display.
 * DB schema bump for attachment storage on withdrawal requests.
@@ -157,6 +165,9 @@ All personal data remains **100% under the control of the online store owner** o
 * Initial release. Fully compliant with EU Directive 2023/2673 Article 11a.
 
 == Upgrade Notice ==
+
+= 1.4.0 =
+Adds configurable form fields and editable form texts. The database is upgraded automatically; existing settings and requests are kept.
 
 = 1.2.0 =
 Adds optional photo attachments to withdrawal requests. Existing installs run a light DB upgrade on next load.

@@ -43,7 +43,7 @@ final class Polylang {
 	 * @return void
 	 */
 	public function register_strings(): void {
-		foreach ( Legal_String_Catalog::all() as $name => $string ) {
+		foreach ( Legal_String_Catalog::effective() as $name => $string ) {
 			pll_register_string(
 				$name,
 				$string,

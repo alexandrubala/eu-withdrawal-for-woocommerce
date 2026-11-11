@@ -7,6 +7,9 @@
 
 namespace EUWithdrawal\PublicArea;
 
+use EUWithdrawal\Integrations\Legal_String_Catalog;
+use EUWithdrawal\Services\Settings;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -72,11 +75,11 @@ final class Frontend {
 					'sessionExpired'=> __( 'Your session has expired. Please start again.', 'eu-withdrawal-for-woocommerce' ),
 					'selectProduct' => __( 'Please select at least one product.', 'eu-withdrawal-for-woocommerce' ),
 					'loading'       => __( 'Processing…', 'eu-withdrawal-for-woocommerce' ),
-					'tooManyPhotos' => __( 'You can upload a maximum of 5 photos.', 'eu-withdrawal-for-woocommerce' ),
+					'tooManyPhotos' => Legal_String_Catalog::format( 'photos_limit_error', Settings::max_photos() ),
 					'photoTooLarge' => __( 'Each photo must be at most 5 MB.', 'eu-withdrawal-for-woocommerce' ),
 					'photoType'     => __( 'Only JPG, PNG, GIF, or WebP images are allowed.', 'eu-withdrawal-for-woocommerce' ),
 				),
-				'maxPhotos'   => 5,
+				'maxPhotos'   => Settings::max_photos(),
 				'maxPhotoBytes' => 5242880,
 			)
 		);

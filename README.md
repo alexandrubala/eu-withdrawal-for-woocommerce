@@ -5,7 +5,7 @@
 **Requires at least:** 6.4  
 **Tested up to:** 6.6  
 **Requires PHP:** 8.0  
-**Stable tag:** 1.3.0  
+**Stable tag:** 1.4.0  
 **License:** [GPLv2 or later](https://www.gnu.org/licenses/gpl-2.0.html)
 
 Complete Art. 11a withdrawal compliance for WooCommerce: multi-step refund / withdrawal flow, HMAC audit log, email proof, guest checkout & HPOS.
@@ -96,6 +96,13 @@ Go to **WooCommerce → Retururi – setări** and fill in:
 
 **Tip:** After saving settings, link the “Returns & withdrawals” page from your footer, terms, or order confirmation emails so customers can find it easily.
 
+### Form fields and texts (optional)
+
+Under **WooCommerce → Retururi – setări**:
+
+* **Form fields** — show or hide the return reason, product opened, additional details, photos, phone, SKU, customer summary and the "Refund / withdrawal" box; set the maximum number of photos (1–5); edit the list of return reasons, one per line. A hidden field is not displayed, validated or saved. The return reason, product opened, additional details and photos can never be made mandatory: EU law does not require consumers to justify a withdrawal.
+* **Form texts** — change any customer-facing text, grouped by stage (button, step 1, details, confirmation, success, emails, My Account). Leave a field empty to use the default. Placeholders such as `%d` or `%1$s` must stay the same as in the default text; otherwise the text is refused and a notice appears next to the field.
+
 ### After setup
 
 * Visit **WooCommerce → Contract Withdrawals** to review incoming requests.
@@ -109,7 +116,7 @@ Go to **WooCommerce → Retururi – setări** and fill in:
 **Logged-in customers** open **My Account → Returns & withdrawals**. **Guests** use the same page / shortcode / block with **order number + billing email**.
 
 1. **Choose an eligible order** — Orders still inside the return window (e.g. 14 days) are listed. The customer selects the order and continues.
-2. **Request details** — Request type is **Refund / withdrawal**. The customer selects products and quantities, reads return shipping instructions (courier + shop return address), completes **IBAN** and **account holder name** when required, and may add a reason and photos.
+2. **Request details** — A read-only summary shows the customer and order data. Request type is **Refund / withdrawal**. The customer selects products and quantities, may choose a return reason, say whether the product was opened, add details and photos, reads return shipping instructions (courier + shop return address), and completes **IBAN** and **account holder name** when required.
 3. **Confirm and submit** — The customer reviews the summary (personal details, IBAN, products, courier instructions) and submits the request.
 4. **Request received** — On-screen confirmation shows date, time, and the **request UUID**. Emails go out: confirmation to the customer + notification to the shop (WooCommerce → Emails → New order recipients).
 
@@ -207,7 +214,7 @@ When a customer submits a withdrawal request, the plugin may store:
 * **IP address** — captured at submission for abuse prevention and audit integrity
 * **Order number** — to link the withdrawal request to the originating WooCommerce order
 * **IBAN and account holder** — when IBAN collection is enabled for refunds
-* **Selected products / quantities, reason, and optional photos** — as submitted by the customer
+* **Selected products / quantities, return reason, product opened, additional details, and optional photos** — as submitted by the customer
 * **Shipping / billing address from the order** — shown in admin for fulfilment of the return
 
 All such data is stored **exclusively in your WordPress site's local database**, in a dedicated custom audit table designed to be immutable and tamper-evident (HMAC audit log).
@@ -246,6 +253,15 @@ Merchants manage a request with customer address, full IBAN, linked order, produ
 
 ## Changelog
 
+### 1.4.0
+
+* New optional fields in the request form: **return reason** (editable list) and **product opened** (yes / no). The existing free-text field is now **Additional details**.
+* Read-only customer and order summary at the top of the details step; logged-in customers without a phone on their account can add one there.
+* New **Form fields** settings: show or hide the return reason, product opened, additional details, photos, phone, SKU, customer summary and the "Refund / withdrawal" box, and set the maximum number of photos (1–5).
+* New **Form texts** settings: edit every customer-facing text in the catalog. Empty means default; a text with different placeholders is refused.
+* The new data appears in the confirmation step, admin detail page, order meta box, customer and shop emails, CSV export and the protected REST list. Photos are now included in the emails and CSV export.
+* DB schema bump: `reason_label` and `product_opened` columns. Existing settings and requests are kept.
+
 ### 1.3.0
 
 * Customer status emails when a request is marked processed or refunded.
@@ -271,6 +287,10 @@ Merchants manage a request with customer address, full IBAN, linked order, produ
 * Initial release. Fully compliant with EU Directive 2023/2673 Article 11a.
 
 ## Upgrade Notice
+
+### 1.4.0
+
+Adds configurable form fields and editable form texts. The database is upgraded automatically; existing settings and requests are kept.
 
 ### 1.3.0
 

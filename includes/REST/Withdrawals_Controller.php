@@ -194,6 +194,8 @@ final class Withdrawals_Controller {
 			'status'         => $status,
 			'status_label'   => Withdrawal_Status::label( $status ),
 			'reason'         => (string) ( $item['reason'] ?? '' ),
+			'reason_label'   => (string) ( $item['reason_label'] ?? '' ),
+			'product_opened' => (string) ( $item['product_opened'] ?? '' ),
 			'attachments'    => Attachment_Uploader::decode_ids( (string) ( $item['attachments_json'] ?? '' ) ),
 			'products'       => $this->decode_products( (string) ( $item['products_json'] ?? '' ) ),
 			'locale'         => (string) ( $item['locale'] ?? '' ),

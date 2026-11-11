@@ -99,6 +99,20 @@ final class Step1_Input {
 	public string $courier_notes;
 
 	/**
+	 * Selected return reason, as displayed at submission time.
+	 *
+	 * @var string
+	 */
+	public string $reason_label;
+
+	/**
+	 * Whether the product was opened: yes | no | empty.
+	 *
+	 * @var string
+	 */
+	public string $product_opened;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string                           $name                Customer name.
@@ -113,6 +127,8 @@ final class Step1_Input {
 	 * @param string                           $refund_account_name Account holder.
 	 * @param string                           $courier_notes       Courier notes.
 	 * @param array<int, int>                  $attachments         Reason photo attachment IDs.
+	 * @param string                           $reason_label        Selected return reason.
+	 * @param string                           $product_opened      yes|no|empty.
 	 */
 	public function __construct(
 		string $name,
@@ -126,7 +142,9 @@ final class Step1_Input {
 		string $refund_iban = '',
 		string $refund_account_name = '',
 		string $courier_notes = '',
-		array $attachments = array()
+		array $attachments = array(),
+		string $reason_label = '',
+		string $product_opened = ''
 	) {
 		$this->name                = $name;
 		$this->email               = $email;
@@ -140,6 +158,8 @@ final class Step1_Input {
 		$this->refund_account_name = $refund_account_name;
 		$this->courier_notes       = $courier_notes;
 		$this->attachments         = $this->normalize_attachments( $attachments );
+		$this->reason_label        = $reason_label;
+		$this->product_opened      = $product_opened;
 	}
 
 	/**
@@ -161,6 +181,8 @@ final class Step1_Input {
 			'refund_account_name' => $this->refund_account_name,
 			'courier_notes'       => $this->courier_notes,
 			'attachments'         => $this->attachments,
+			'reason_label'        => $this->reason_label,
+			'product_opened'      => $this->product_opened,
 		);
 	}
 
@@ -195,7 +217,9 @@ final class Step1_Input {
 			(string) ( $data['refund_iban'] ?? '' ),
 			(string) ( $data['refund_account_name'] ?? '' ),
 			(string) ( $data['courier_notes'] ?? '' ),
-			$attachments
+			$attachments,
+			(string) ( $data['reason_label'] ?? '' ),
+			(string) ( $data['product_opened'] ?? '' )
 		);
 	}
 

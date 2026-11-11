@@ -7,6 +7,7 @@
 
 namespace EUWithdrawal\Services;
 
+use EUWithdrawal\Integrations\Legal_String_Catalog;
 use EUWithdrawal\Utils\Template_Loader;
 
 defined( 'ABSPATH' ) || exit;
@@ -28,11 +29,7 @@ final class Email_Service {
 			return false;
 		}
 
-		$subject = sprintf(
-			/* translators: %s: withdrawal request UUID */
-			__( 'Withdrawal request confirmation – %s', 'eu-withdrawal-for-woocommerce' ),
-			(string) ( $template_args['request_uuid'] ?? '' )
-		);
+		$subject = Legal_String_Catalog::format( 'email_subject_confirmation', (string) ( $template_args['request_uuid'] ?? '' ) );
 
 		$body = Template_Loader::load_email( 'customer-confirmation.php', $template_args );
 
@@ -61,11 +58,7 @@ final class Email_Service {
 			return false;
 		}
 
-		$subject = sprintf(
-			/* translators: %s: order number */
-			__( 'Update on your return / withdrawal – order %s', 'eu-withdrawal-for-woocommerce' ),
-			(string) ( $template_args['order_number'] ?? '' )
-		);
+		$subject = Legal_String_Catalog::format( 'email_subject_status', (string) ( $template_args['order_number'] ?? '' ) );
 
 		$body = Template_Loader::load_email( 'customer-status-update.php', $template_args );
 
@@ -91,11 +84,7 @@ final class Email_Service {
 			return false;
 		}
 
-		$subject = sprintf(
-			/* translators: %s: order number */
-			__( 'New withdrawal request – order %s', 'eu-withdrawal-for-woocommerce' ),
-			(string) ( $template_args['order_number'] ?? '' )
-		);
+		$subject = Legal_String_Catalog::format( 'email_subject_admin', (string) ( $template_args['order_number'] ?? '' ) );
 
 		$body = Template_Loader::load_email( 'admin-notification.php', $template_args );
 

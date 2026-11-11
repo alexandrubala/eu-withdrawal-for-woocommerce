@@ -9,6 +9,7 @@ namespace EUWithdrawal\Services;
 
 use EUWithdrawal\Data\Withdrawal_Repository;
 use EUWithdrawal\Domain\Withdrawal_Status;
+use EUWithdrawal\Integrations\Legal_String_Catalog;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -76,7 +77,10 @@ final class Export_Service {
 				__( 'IBAN', 'eu-withdrawal-for-woocommerce' ),
 				__( 'Account holder', 'eu-withdrawal-for-woocommerce' ),
 				__( 'Status', 'eu-withdrawal-for-woocommerce' ),
-				__( 'Reason', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Return reason', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Product opened', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Additional details', 'eu-withdrawal-for-woocommerce' ),
+				__( 'Photos', 'eu-withdrawal-for-woocommerce' ),
 				__( 'Products', 'eu-withdrawal-for-woocommerce' ),
 				__( 'Submitted At', 'eu-withdrawal-for-woocommerce' ),
 			)
@@ -98,7 +102,10 @@ final class Export_Service {
 					(string) ( $item['refund_iban'] ?? '' ),
 					(string) ( $item['refund_account_name'] ?? '' ),
 					Withdrawal_Status::label( $status ),
+					(string) ( $item['reason_label'] ?? '' ),
+					Legal_String_Catalog::product_opened_label( (string) ( $item['product_opened'] ?? '' ) ),
 					(string) ( $item['reason'] ?? '' ),
+					$this->format_photos_for_csv( (string) ( $item['attachments_json'] ?? '' ) ),
 					$this->format_products_for_csv( (string) ( $item['products_json'] ?? '' ) ),
 					(string) ( $item['submitted_at'] ?? '' ),
 				)
@@ -237,6 +244,22 @@ final class Export_Service {
 		$result = $this->withdrawal_repository->query( $query_args );
 
 		return is_array( $result['items'] ) ? $result['items'] : array();
+	}
+
+	/**
+	 * Format stored attachments as a list of photo URLs.
+	 *
+	 * @param string $json Stored attachments JSON.
+	 * @return string
+	 */
+	private function format_photos_for_csv( string $json ): string {
+		$ids = Attachment_Uploader::decode_ids( $json );
+
+		if ( empty( $ids ) ) {
+			return '';
+		}
+
+		return implode( '; ', wp_list_pluck( ( new Attachment_Uploader() )->describe( $ids ), 'url' ) );
 	}
 
 	/**

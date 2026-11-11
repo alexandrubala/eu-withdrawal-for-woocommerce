@@ -7,6 +7,8 @@
 
 namespace EUWithdrawal\Services;
 
+use EUWithdrawal\Integrations\Legal_String_Catalog;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -20,19 +22,52 @@ final class Settings {
 	public const OPTION_KEY = 'eu_withdrawal_settings';
 
 	/**
+	 * Form fields the shop can show or hide (stored as field_{name}).
+	 */
+	public const FIELD_TOGGLES = array(
+		'reason',
+		'product_opened',
+		'details',
+		'photos',
+		'phone',
+		'sku',
+		'summary',
+		'request_box',
+	);
+
+	/**
+	 * Upper bound for reason photos per request.
+	 */
+	public const MAX_PHOTOS_LIMIT = 5;
+
+	/**
+	 * Length of the reason_label database column.
+	 */
+	public const REASON_MAX_LENGTH = 200;
+
+	/**
 	 * Default settings.
 	 *
 	 * @return array<string, mixed>
 	 */
 	public static function defaults(): array {
-		return array(
+		$defaults = array(
 			'return_days'           => 14,
 			'courier_name'          => '',
 			'courier_instructions'  => '',
 			'return_address'        => '',
 			'require_iban'          => 'always',
 			'refund_note'           => '',
+			'max_photos'            => self::MAX_PHOTOS_LIMIT,
+			'reason_options'        => '',
+			'custom_texts'          => array(),
 		);
+
+		foreach ( self::FIELD_TOGGLES as $field ) {
+			$defaults[ 'field_' . $field ] = '1';
+		}
+
+		return $defaults;
 	}
 
 	/**
@@ -142,6 +177,97 @@ final class Settings {
 	}
 
 	/**
+	 * Whether a configurable form field is shown.
+	 *
+	 * @param string $field Field name from {@see self::FIELD_TOGGLES}.
+	 * @return bool
+	 */
+	public static function field_enabled( string $field ): bool {
+		return '0' !== (string) self::get( 'field_' . $field, '1' );
+	}
+
+	/**
+	 * Maximum reason photos per request (1–5).
+	 *
+	 * @return int
+	 */
+	public static function max_photos(): int {
+		return min( self::MAX_PHOTOS_LIMIT, max( 1, (int) self::get( 'max_photos', self::MAX_PHOTOS_LIMIT ) ) );
+	}
+
+	/**
+	 * Shop overrides for catalog texts, keyed by catalog key.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function custom_texts(): array {
+		$texts = self::get( 'custom_texts', array() );
+
+		return is_array( $texts ) ? $texts : array();
+	}
+
+	/**
+	 * Return reasons offered to the customer.
+	 *
+	 * @return array<int, string>
+	 */
+	public static function reason_options(): array {
+		$options = self::parse_reason_options( (string) self::get( 'reason_options', '' ) );
+
+		if ( ! empty( $options ) ) {
+			return $options;
+		}
+
+		foreach ( Legal_String_Catalog::DEFAULT_REASON_KEYS as $key ) {
+			$options[] = Legal_String_Catalog::translate( $key );
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Return the matching reason from the current list, or an empty string.
+	 *
+	 * @param string $value Submitted value.
+	 * @return string
+	 */
+	public static function match_reason_option( string $value ): string {
+		$value = sanitize_text_field( $value );
+
+		if ( '' === $value ) {
+			return '';
+		}
+
+		foreach ( self::reason_options() as $option ) {
+			if ( sanitize_text_field( $option ) === $value ) {
+				return $option;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Split the reason setting into clean, unique, column-sized lines.
+	 *
+	 * @param string $raw One option per line.
+	 * @return array<int, string>
+	 */
+	private static function parse_reason_options( string $raw ): array {
+		$options = array();
+
+		foreach ( preg_split( '/\R/u', $raw ) ?: array() as $line ) {
+			$line = mb_substr( sanitize_text_field( $line ), 0, self::REASON_MAX_LENGTH );
+
+			if ( '' !== $line ) {
+				$options[] = $line;
+			}
+		}
+
+		return array_values( array_unique( $options ) );
+	}
+
+	/**
 	 * Build courier instructions text (filterable).
 	 *
 	 * @return string
@@ -187,11 +313,12 @@ final class Settings {
 	/**
 	 * Persist settings array.
 	 *
-	 * @param array<string, mixed> $settings Settings to save.
-	 * @return void
+	 * @param array<string, mixed> $settings Settings to save (already unslashed).
+	 * @return array<string, string> Rejected texts, keyed by catalog key.
 	 */
-	public static function update( array $settings ): void {
-		$clean = self::defaults();
+	public static function update( array $settings ): array {
+		$current = self::all();
+		$clean   = self::defaults();
 
 		$clean['return_days'] = max( 1, absint( $settings['return_days'] ?? 14 ) );
 		$clean['courier_name'] = sanitize_text_field( (string) ( $settings['courier_name'] ?? '' ) );
@@ -202,6 +329,82 @@ final class Settings {
 		$iban = sanitize_key( (string) ( $settings['require_iban'] ?? 'always' ) );
 		$clean['require_iban'] = in_array( $iban, array( 'always', 'non_card', 'never' ), true ) ? $iban : 'always';
 
+		foreach ( self::FIELD_TOGGLES as $field ) {
+			$key = 'field_' . $field;
+
+			// An unticked box must reach this point as an explicit "0"; a missing key keeps the stored value.
+			$clean[ $key ] = array_key_exists( $key, $settings )
+				? ( '1' === (string) $settings[ $key ] ? '1' : '0' )
+				: (string) $current[ $key ];
+		}
+
+		$max_photos = trim( (string) ( $settings['max_photos'] ?? $current['max_photos'] ) );
+		$clean['max_photos'] = '' === $max_photos
+			? self::MAX_PHOTOS_LIMIT
+			: min( self::MAX_PHOTOS_LIMIT, max( 1, absint( $max_photos ) ) );
+
+		$clean['reason_options'] = implode(
+			"\n",
+			self::parse_reason_options( (string) ( $settings['reason_options'] ?? $current['reason_options'] ) )
+		);
+
+		$previous_texts = self::custom_texts();
+		$rejected       = array();
+
+		$clean['custom_texts'] = $previous_texts;
+
+		if ( isset( $settings['custom_texts'] ) && is_array( $settings['custom_texts'] ) ) {
+			$clean['custom_texts'] = self::clean_custom_texts( $settings['custom_texts'], $previous_texts, $rejected );
+		}
+
 		update_option( self::OPTION_KEY, $clean, false );
+
+		return $rejected;
+	}
+
+	/**
+	 * Validate submitted catalog texts.
+	 *
+	 * Empty or default-identical values are dropped so the translated default
+	 * keeps applying. A text with the wrong placeholders is refused and the
+	 * previously saved value stays.
+	 *
+	 * @param array<string, mixed>  $submitted Submitted texts keyed by catalog key.
+	 * @param array<string, string> $previous  Currently saved texts.
+	 * @param array<string, string> $rejected  Receives refused texts.
+	 * @return array<string, string>
+	 */
+	private static function clean_custom_texts( array $submitted, array $previous, array &$rejected ): array {
+		$defaults = Legal_String_Catalog::all();
+		$clean    = array();
+
+		foreach ( $defaults as $key => $default ) {
+			if ( ! array_key_exists( $key, $submitted ) ) {
+				if ( isset( $previous[ $key ] ) ) {
+					$clean[ $key ] = $previous[ $key ];
+				}
+				continue;
+			}
+
+			// Not sanitize_text_field(): it deletes "%" followed by two hex characters, such as "%da".
+			$text = wp_strip_all_tags( wp_check_invalid_utf8( (string) $submitted[ $key ] ), true );
+
+			if ( '' === $text || $text === $default ) {
+				continue;
+			}
+
+			if ( Legal_String_Catalog::has_matching_placeholders( $key, $text ) ) {
+				$clean[ $key ] = $text;
+				continue;
+			}
+
+			$rejected[ $key ] = $text;
+
+			if ( isset( $previous[ $key ] ) ) {
+				$clean[ $key ] = $previous[ $key ];
+			}
+		}
+
+		return $clean;
 	}
 }
